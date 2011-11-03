@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1A7146158C80027E291 /* ScriptingBridge.framework */; };
 		3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1AB146158CE0027E291 /* OpenGL.framework */; };
 		3D34A2A01461594F0027E291 /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3D34A1C11461594E0027E291 /* install.xml */; };
@@ -25,16 +26,21 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.m */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
-		3D386CA8145F027400665327 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D386CA0145F01D600665327 /* ofxCocoaPlugins.framework */; };
-		3D386CAA145F031500665327 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D386CA0145F01D600665327 /* ofxCocoaPlugins.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3D386C9F145F01D600665327 /* PBXContainerItemProxy */ = {
+		3D268E6114629DBD009A366D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 3D386C94145F01D600665327 /* ofxCocoaPlugins.xcodeproj */;
+			containerPortal = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = DDA7FFD8144F1C3800F81C9E;
+			remoteInfo = ofxCocoaPlugins;
+		};
+		3D268E6614629E98009A366D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DDA7FFD7144F1C3800F81C9E;
 			remoteInfo = ofxCocoaPlugins;
 		};
 /* End PBXContainerItemProxy section */
@@ -46,7 +52,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3D386CAA145F031500665327 /* ofxCocoaPlugins.framework in Copy Files (Framework) */,
 			);
 			name = "Copy Files (Framework)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ofxCocoaPlugins.xcodeproj; path = ofxCocoaPlugins/ofxCocoaPlugins.xcodeproj; sourceTree = "<group>"; };
 		3D34A1A7146158C80027E291 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = SDKs/MacOSX10.6.sdk/System/Library/Frameworks/ScriptingBridge.framework; sourceTree = DEVELOPER_DIR; };
 		3D34A1AB146158CE0027E291 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		3D34A1C11461594E0027E291 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
@@ -156,7 +162,6 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lrAppDelegate.m; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		3D386C94145F01D600665327 /* ofxCocoaPlugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ofxCocoaPlugins.xcodeproj; path = ../ofxCocoaPlugins/ofxCocoaPlugins.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,9 +170,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D386C65145EF95C00665327 /* Cocoa.framework in Frameworks */,
-				3D386CA8145F027400665327 /* ofxCocoaPlugins.framework in Frameworks */,
 				3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */,
 				3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */,
+				3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */,
 				3D34A2DE1461594F0027E291 /* opencv.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,6 +180,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D268E5714629DBD009A366D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3D34A1C01461594E0027E291 /* ofxOpenCv */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,7 +447,7 @@
 			children = (
 				3D386C8C145F012200665327 /* Project.xcconfig */,
 				3D34A1C01461594E0027E291 /* ofxOpenCv */,
-				3D386C94145F01D600665327 /* ofxCocoaPlugins.xcodeproj */,
+				3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */,
 				3D386C6A145EF95C00665327 /* Livingroom */,
 				3D386C63145EF95C00665327 /* Frameworks */,
 				3D386C61145EF95C00665327 /* Products */,
@@ -493,14 +506,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3D386C95145F01D600665327 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3D386CA0145F01D600665327 /* ofxCocoaPlugins.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -516,6 +521,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				3D268E6714629E98009A366D /* PBXTargetDependency */,
 			);
 			name = Livingroom;
 			productName = Livingroom;
@@ -542,8 +548,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 3D386C95145F01D600665327 /* Products */;
-					ProjectRef = 3D386C94145F01D600665327 /* ofxCocoaPlugins.xcodeproj */;
+					ProductGroup = 3D268E5714629DBD009A366D /* Products */;
+					ProjectRef = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -554,11 +560,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		3D386CA0145F01D600665327 /* ofxCocoaPlugins.framework */ = {
+		3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = ofxCocoaPlugins.framework;
-			remoteRef = 3D386C9F145F01D600665327 /* PBXContainerItemProxy */;
+			remoteRef = 3D268E6114629DBD009A366D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -596,6 +602,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3D268E6714629E98009A366D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ofxCocoaPlugins;
+			targetProxy = 3D268E6614629E98009A366D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3D386C6D145EF95C00665327 /* InfoPlist.strings */ = {
