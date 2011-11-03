@@ -23,7 +23,7 @@
 		3D386C6F145EF95C00665327 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C6D145EF95C00665327 /* InfoPlist.strings */; };
 		3D386C71145EF95C00665327 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C70145EF95C00665327 /* main.m */; };
 		3D386C75145EF95C00665327 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C73145EF95C00665327 /* Credits.rtf */; };
-		3D386C78145EF95C00665327 /* lrAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.m */; };
+		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
 /* End PBXBuildFile section */
@@ -159,7 +159,7 @@
 		3D386C72145EF95C00665327 /* Livingroom-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Livingroom-Prefix.pch"; sourceTree = "<group>"; };
 		3D386C74145EF95C00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		3D386C76145EF95C00665327 /* lrAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lrAppDelegate.h; sourceTree = "<group>"; };
-		3D386C77145EF95C00665327 /* lrAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = lrAppDelegate.m; sourceTree = "<group>"; };
+		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -487,7 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				3D386C76145EF95C00665327 /* lrAppDelegate.h */,
-				3D386C77145EF95C00665327 /* lrAppDelegate.m */,
+				3D386C77145EF95C00665327 /* lrAppDelegate.mm */,
 				3D386C79145EF95D00665327 /* MainMenu.xib */,
 				3D386C6B145EF95C00665327 /* Supporting Files */,
 			);
@@ -590,7 +590,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D386C71145EF95C00665327 /* main.m in Sources */,
-				3D386C78145EF95C00665327 /* lrAppDelegate.m in Sources */,
+				3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */,
 				3D34A30F146159500027E291 /* ofxCvColorImage.cpp in Sources */,
 				3D34A310146159500027E291 /* ofxCvContourFinder.cpp in Sources */,
 				3D34A311146159500027E291 /* ofxCvFloatImage.cpp in Sources */,
@@ -643,13 +643,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3D386C8C145F012200665327 /* Project.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -662,7 +664,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -671,19 +673,22 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3D386C8C145F012200665327 /* Project.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -691,8 +696,8 @@
 		3D386C7F145EF95D00665327 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Livingroom/Livingroom-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
@@ -714,7 +719,7 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -722,8 +727,8 @@
 		3D386C80145EF95D00665327 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Livingroom/Livingroom-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
@@ -745,7 +750,7 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
