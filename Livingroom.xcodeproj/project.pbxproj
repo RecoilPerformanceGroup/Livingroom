@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
+		3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1A7146158C80027E291 /* ScriptingBridge.framework */; };
 		3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1AB146158CE0027E291 /* OpenGL.framework */; };
 		3D34A2A01461594F0027E291 /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3D34A1C11461594E0027E291 /* install.xml */; };
@@ -52,6 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */,
 			);
 			name = "Copy Files (Framework)";
 			runOnlyForDeploymentPostprocessing = 0;
