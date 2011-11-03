@@ -17,7 +17,7 @@
     ocp = [[ofxCocoaPlugins alloc] initWithAppDelegate:self];
     [ocp addHeader:@"Header"];
     
-    [ocp addPlugin:[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Bla", nil]];
+ //   [ocp addPlugin:[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Bla", nil]];
     [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
     
