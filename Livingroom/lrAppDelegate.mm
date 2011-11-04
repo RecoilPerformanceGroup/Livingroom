@@ -9,6 +9,8 @@
 
 #import "lrAppDelegate.h"
 
+#import "PolygonWorld.h"
+
 @implementation lrAppDelegate
 @synthesize window;
 
@@ -18,6 +20,7 @@
     [ocp addHeader:@"Header"];
     
     [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Bla", nil]]];
+    [ocp addPlugin:[[PolygonWorld alloc] init]];
   //  [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
     
