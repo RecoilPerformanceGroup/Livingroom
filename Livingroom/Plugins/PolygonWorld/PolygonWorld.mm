@@ -56,9 +56,55 @@ using namespace OpenMesh;
 //----------------
 //
 
--(void)draw:(NSDictionary *)drawingInformation{
-}
 
+-(void)draw:(NSDictionary *)drawingInformation{
+       ofBackground(0);
+ofSetColor(255, 255, 255,255);
+    
+    ofFill();
+    
+    ofRect(0,0,1.0,1.0); 
+    
+    glPushMatrix();
+    
+    glScaled(0.003,0.003,1);
+    
+    
+    MyMesh* drawMesh = &mesh;
+    
+    
+    MyMesh::ConstFaceIter    fIt(drawMesh->faces_begin()), fEnd(drawMesh->faces_end());
+    
+    
+    MyMesh::ConstFaceVertexIter fvIt, fvEnd;
+    
+    ofEnableAlphaBlending();
+    
+    
+    
+    ofSetColor(255, 255, 255);
+    
+    int i=0;
+    for (; fIt!=fEnd; ++fIt)
+    {
+        ofSetColor((0.5*(sin(i*1234.123191))+1.2)*100,100);
+        glBegin(GL_POLYGON);
+        fvIt = drawMesh->cfv_iter(fIt.handle()); 
+        fvEnd = drawMesh->cfv_end(fIt.handle());
+        
+        for(; fvIt != fvEnd; ++fvIt){
+            glVertex3fv( &drawMesh->point(fvIt)[0] );
+        }
+        
+        glEnd();
+        i++;
+    }
+    // cout<<"-- end --"<<endl;
+    
+    
+    glPopMatrix();
+    
+}
 //
 //----------------
 //
