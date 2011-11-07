@@ -1,13 +1,25 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Polygon_2.h>
+
+//#include <CGAL/Projection_traits_xy_3.h>
+#include <CGAL/Constrained_Delaunay_triangulation_2.h>
+
 
 #import "PolygonWorld.h"
 
-//#include <CGAL/Polygon_2.h>
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef K::Point_2 Point2;
+typedef CGAL::Polygon_2<K> Polygon_2;
 
-//typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+//typedef CGAL::Projection_traits_xy_3<K>  Gt;
+typedef CGAL::Constrained_Delaunay_triangulation_2<K> Delaunay;
 
-//typedef K::Point_2 cPoint;
-//typedef CGAL::Polygon_2<K> Polygon_2;
+typedef Delaunay::Edge_iterator  Edge_iterator;
+
+
+Polygon_2 pgn;
+Delaunay dt;
+
 
 @implementation PolygonWorld
 
@@ -26,9 +38,9 @@
 
 
 -(void)setup{
-//    cPoint points[] = { cPoint(0,0), cPoint(5.1,0), cPoint(1,1), cPoint(0.5,6)};
-//    Polygon_2 pgn(points, points+4);
-
+    mode = 0;
+    
+    pgn = Polygon_2();
 }
 
 //
@@ -45,7 +57,7 @@
 
 
 -(void)draw:(NSDictionary *)drawingInformation{
-      
+    
 }
 //
 //----------------
@@ -54,78 +66,68 @@
 
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
-//    ofBackground(0);
-//    
-//    
-//    
-//    
-//    MyMesh::ConstFaceIter    fIt(mesh.faces_begin()), fEnd(mesh.faces_end());
-//    
-//    
-//    MyMesh::ConstFaceVertexIter fvIt;
-//    
-//    ofEnableAlphaBlending();
-//    
-//    
-//    
-//    ofSetColor(255, 255, 255);
-//    
-//    
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//    glBegin(GL_TRIANGLES);
-//    for (; fIt!=fEnd; ++fIt)
-//    {
-//        fvIt = mesh.cfv_iter(fIt.handle()); 
-//        glVertex3fv( &mesh.point(fvIt)[0] );
-//        //    cout<<mesh.point(fvIt)[0]<<"  "<<mesh.point(fvIt)[1]<<endl;
-//        ++fvIt;
-//        glVertex3fv( &mesh.point(fvIt)[0] );
-//        //     cout<<mesh.point(fvIt)[0]<<"  "<<mesh.point(fvIt)[1]<<endl;
-//        ++fvIt;
-//        glVertex3fv( &mesh.point(fvIt)[0] );
-//        //  cout<<mesh.point(fvIt)[0]<<"  "<<mesh.point(fvIt)[1]<<endl;
-//        //    cout<<" ---- "<<endl;
-//    }
-//    // cout<<"-- end --"<<endl;
-//    glEnd();
-//    
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-//    
-//    
-//    ofSetColor(255,0,0);
-//    ofCircle(p1.x,p1.y, 10);
-//    
-//    ofSetColor(0,255,0);
-//    ofCircle(p2.x,p2.y, 10);
-//    ofCircle(p3.x,p3.y, 10);
-//    
-//    
     
+    cW = ofGetWidth();
+    cH = ofGetHeight();
+    
+    ofBackground(0, 0, 0);
+    glScaled(ofGetWidth(), ofGetHeight(),1);
+    
+    
+    if(mode == 0){
+        glColor3f(255,255,255);
+        
+        glBegin(GL_LINE_STRIP);
+        
+        for(int i=0;i<pgn.size();i++){
+            glVertex2d(pgn[i].x() , pgn[i].y());
+        }
+        
+        glEnd();
+    }
+    
+    if(mode == 1){
+        glColor3f(255,0,255);
+
+        Edge_iterator eit =dt.edges_begin();
+        
+        glBegin(GL_LINES);
+
+        for ( ; eit !=dt.edges_end(); ++eit) {
+            glVertex2d(dt.segment(eit).source().x() , dt.segment(eit).source().y());
+            glVertex2d(dt.segment(eit).target().x() , dt.segment(eit).target().y());
+        }      
+        
+        glEnd();
+    }
     
 }
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-//    MyMesh::ConstVertexIter    vIt(mesh.vertices_begin()), vEnd(mesh.vertices_end());
-//    
-//    MyMesh::Point * closestPoint;
-//    MyMesh::VertexHandle closestVertex;
-//    BOOL found = NO;
-//    float l = 0;
-//    
-//    for (; vIt!=vEnd; ++vIt){
-//        if(!found || (mesh.point(vIt) - MyMesh::Point(x,y,0)).length() < l){
-//            l =  (mesh.point(vIt) -  MyMesh::Point(x,y,0)).length();
-//            closestPoint = &mesh.point(vIt);
-//            cout<<"New "<<l<<endl;
-//            cout<<mesh.point(vIt)[0]<<"  "<<mesh.point(vIt)[1]<<endl;
-//            found = YES;
-//            closestVertex = vIt;
-//            
-//            p1 = ofVec2f((*closestPoint)[0],(*closestPoint)[1]);
-//        }
-//    }
-//    
-
+    x /= cW;
+    y /= cH;
+    
+    pgn.push_back(Point2(x,y));
 }
 
+- (IBAction)delaunay:(id)sender {
+    mode = 1;
+    
+    dt.clear();
+    
+/*    for(int i=0;i<pgn.size()-1;i++){
+        dt.insert_constraint(pgn[i], pgn[i+1]);
+    }   
+  */  
+    
+    dt.insert(pgn.vertices_begin(), pgn.vertices_end());
+
+    
+    cout<<"Delunæ: "<<dt.is_valid()<<endl;
+}
+
+- (IBAction)clear:(id)sender {
+    mode = 0;
+    pgn.clear();
+}
 @end
