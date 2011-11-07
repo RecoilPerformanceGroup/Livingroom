@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
-		3D2FC2361462FDE60028BC01 /* libOpenMeshCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2FC2341462FDE60028BC01 /* libOpenMeshCore.a */; };
-		3D2FC2371462FDE60028BC01 /* libOpenMeshTools.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2FC2351462FDE60028BC01 /* libOpenMeshTools.a */; };
 		3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */; };
 		3D2FC23E1462FEDC0028BC01 /* PolygonWorld.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */; };
 		3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1A7146158C80027E291 /* ScriptingBridge.framework */; };
@@ -22,6 +20,7 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
+		3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,8 +56,6 @@
 
 /* Begin PBXFileReference section */
 		3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ofxCocoaPlugins.xcodeproj; path = ofxCocoaPlugins/ofxCocoaPlugins.xcodeproj; sourceTree = "<group>"; };
-		3D2FC2341462FDE60028BC01 /* libOpenMeshCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOpenMeshCore.a; sourceTree = "<group>"; };
-		3D2FC2351462FDE60028BC01 /* libOpenMeshTools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOpenMeshTools.a; sourceTree = "<group>"; };
 		3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonWorld.h; sourceTree = "<group>"; };
 		3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolygonWorld.mm; sourceTree = "<group>"; };
 		3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PolygonWorld.xib; sourceTree = "<group>"; };
@@ -78,6 +75,7 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCGAL.8.0.0.dylib; path = /usr/local/lib/libCGAL.8.0.0.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,8 +87,7 @@
 				3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */,
 				3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */,
 				3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */,
-				3D2FC2361462FDE60028BC01 /* libOpenMeshCore.a in Frameworks */,
-				3D2FC2371462FDE60028BC01 /* libOpenMeshTools.a in Frameworks */,
+				3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,19 +105,10 @@
 		3D2FC2321462FDE60028BC01 /* libs */ = {
 			isa = PBXGroup;
 			children = (
-				3D2FC2331462FDE60028BC01 /* OpenMesh */,
+				3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */,
 			);
 			name = libs;
 			path = Livingroom/libs;
-			sourceTree = "<group>";
-		};
-		3D2FC2331462FDE60028BC01 /* OpenMesh */ = {
-			isa = PBXGroup;
-			children = (
-				3D2FC2341462FDE60028BC01 /* libOpenMeshCore.a */,
-				3D2FC2351462FDE60028BC01 /* libOpenMeshTools.a */,
-			);
-			path = OpenMesh;
 			sourceTree = "<group>";
 		};
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
@@ -353,7 +341,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -378,7 +366,7 @@
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -395,16 +383,18 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
 					"$(OF_PATH)/addons/ofxOpenCv/src",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",
 					"$(OF_PATH)/libs",
-					"\"$(SRCROOT)/Livingroom/libs/OpenMesh\"/**",
 				);
 				INFOPLIST_FILE = "Livingroom/Livingroom-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
 					"$(inherited)",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
@@ -414,7 +404,6 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
-					"\"$(SRCROOT)/Livingroom/libs/OpenMesh\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
@@ -428,16 +417,18 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
 					"$(OF_PATH)/addons/ofxOpenCv/src",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",
 					"$(OF_PATH)/libs",
-					"\"$(SRCROOT)/Livingroom/libs/OpenMesh\"/**",
 				);
 				INFOPLIST_FILE = "Livingroom/Livingroom-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/local/lib,
 					"$(inherited)",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
@@ -447,7 +438,6 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
-					"\"$(SRCROOT)/Livingroom/libs/OpenMesh\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
