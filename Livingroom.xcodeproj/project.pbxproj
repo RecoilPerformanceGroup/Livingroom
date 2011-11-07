@@ -20,8 +20,6 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
-		3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */; };
-		3DB57F8B14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,8 +74,6 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
-		3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCGAL.8.0.0.dylib; path = /usr/local/lib/libCGAL.8.0.0.dylib; sourceTree = "<absolute>"; };
-		3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCGAL_Core.8.0.0.dylib; path = /usr/local/lib/libCGAL_Core.8.0.0.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,8 +85,6 @@
 				3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */,
 				3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */,
 				3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */,
-				3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */,
-				3DB57F8B14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,16 +97,6 @@
 				3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		3D2FC2321462FDE60028BC01 /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */,
-				3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */,
-			);
-			name = libs;
-			path = Livingroom/libs;
 			sourceTree = "<group>";
 		};
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
@@ -137,7 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				3D386C8C145F012200665327 /* Project.xcconfig */,
-				3D2FC2321462FDE60028BC01 /* libs */,
 				3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */,
 				3D386C6A145EF95C00665327 /* Livingroom */,
 				3D386C63145EF95C00665327 /* Frameworks */,
@@ -333,6 +316,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_OPENMP_SUPPORT = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -352,6 +336,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "$(OF_CORE_LIBS)";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -365,6 +351,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_OPENMP_SUPPORT = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_OBJC_GC = required;
@@ -377,6 +364,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "$(OF_CORE_LIBS)";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -386,8 +375,10 @@
 			buildSettings = {
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					/opt/local/include,
+					/usr/local/include,
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
 					"$(OF_PATH)/addons/ofxOpenCv/src",
@@ -408,6 +399,22 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/usr/local/lib/libCGAL.dylib,
+					/opt/local/lib/libgmpxx.dylib,
+					/opt/local/lib/libmpfr.dylib,
+					/opt/local/lib/libgmp.dylib,
+					"/opt/local/lib/libboost_thread-mt.dylib",
+					/usr/local/lib/libCGAL.dylib,
+					/opt/local/lib/libgmpxx.dylib,
+					/opt/local/lib/libmpfr.dylib,
+					/opt/local/lib/libgmp.dylib,
+					"/opt/local/lib/libboost_thread-mt.dylib",
+					"$(OF_CORE_LIBS)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
@@ -420,8 +427,11 @@
 			buildSettings = {
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					/opt/local/include,
+					/usr/local/include,
 					"$(OF_CORE_HEADERS)",
 					"ofxCocoaPlugins/src/CorePlugins/**",
 					"$(OF_PATH)/addons/ofxOpenCv/src",
@@ -442,6 +452,22 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
 					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/usr/local/lib/libCGAL.dylib,
+					/opt/local/lib/libgmpxx.dylib,
+					/opt/local/lib/libmpfr.dylib,
+					/opt/local/lib/libgmp.dylib,
+					"/opt/local/lib/libboost_thread-mt.dylib",
+					/usr/local/lib/libCGAL.dylib,
+					/opt/local/lib/libgmpxx.dylib,
+					/opt/local/lib/libmpfr.dylib,
+					/opt/local/lib/libgmp.dylib,
+					"/opt/local/lib/libboost_thread-mt.dylib",
+					"$(OF_CORE_LIBS)",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.7;
