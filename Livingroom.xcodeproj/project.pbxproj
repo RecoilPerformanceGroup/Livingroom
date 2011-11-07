@@ -21,6 +21,7 @@
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
 		3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */; };
+		3DB57F8B14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCGAL.8.0.0.dylib; path = /usr/local/lib/libCGAL.8.0.0.dylib; sourceTree = "<absolute>"; };
+		3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCGAL_Core.8.0.0.dylib; path = /usr/local/lib/libCGAL_Core.8.0.0.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */,
 				3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */,
 				3DB57F8914680D9000F79CD6 /* libCGAL.8.0.0.dylib in Frameworks */,
+				3DB57F8B14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				3DB57F8814680D9000F79CD6 /* libCGAL.8.0.0.dylib */,
+				3DB57F8A14680EE600F79CD6 /* libCGAL_Core.8.0.0.dylib */,
 			);
 			name = libs;
 			path = Livingroom/libs;

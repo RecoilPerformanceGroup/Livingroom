@@ -1,5 +1,13 @@
 #import "PolygonWorld.h"
 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+//#include <CGAL/Polygon_2.h>
+
+//typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+
+//typedef K::Point_2 cPoint;
+//typedef CGAL::Polygon_2<K> Polygon_2;
+
 @implementation PolygonWorld
 
 - (id)init{
@@ -17,6 +25,9 @@
 
 
 -(void)setup{
+//    cPoint points[] = { cPoint(0,0), cPoint(5.1,0), cPoint(1,1), cPoint(0.5,6)};
+//    Polygon_2 pgn(points, points+4);
+
 }
 
 //
