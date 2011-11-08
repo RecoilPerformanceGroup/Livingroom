@@ -6,10 +6,11 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "PolyEngine.h"
+
 #import <ofxCocoaPlugins/Plugin.h>
 #import <Foundation/Foundation.h>
 
-@class PolyEngine;
 @interface PolyAnimator : NSObject{
     PolyEngine * engine;
 }

@@ -37,11 +37,15 @@ Mesher * mesher;
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     ofBackground(0, 0, 0);
+    ofSetColor(0,0,0);
+
     glScaled(ofGetWidth(), ofGetHeight(),1);
-    [polyEngine controlDraw:drawingInformation];
     
     cW = ofGetWidth();
     cH = ofGetHeight();
+
+    [polyEngine controlDraw:drawingInformation];
+
 }
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{

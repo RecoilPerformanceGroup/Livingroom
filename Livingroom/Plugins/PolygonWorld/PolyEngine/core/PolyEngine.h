@@ -1,9 +1,8 @@
 //#import "PolyInclude.h"
 #import "lrAppDelegate.h"
 #import <Foundation/Foundation.h>
+#import "PolyData.h"
 
-
-@class PolyData;
 @class PolyRender, PolyInput, PolyAnimator;
 
 @interface PolyEngine : NSObject{

@@ -9,5 +9,13 @@
 #import "PolyData.h"
 
 @implementation PolyData
+@synthesize arr;
+
+-(id)init{
+    if(self = [super init]){
+        arr = new Arrangement_2;
+    }
+    return self;
+}
 
 @end

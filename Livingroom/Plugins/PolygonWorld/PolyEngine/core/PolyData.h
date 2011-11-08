@@ -10,8 +10,9 @@
 #import <Foundation/Foundation.h>
 
 @interface PolyData : NSObject{
-    Arrangement_2   arr;
-
+    Arrangement_2 * arr;
 }
+
+@property (readonly) Arrangement_2 * arr;
 
 @end
