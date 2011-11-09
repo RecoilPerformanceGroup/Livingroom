@@ -18,6 +18,10 @@
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
 }
+- (void)update:(NSDictionary *)drawingInformation{
+    
+}
+
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
 }

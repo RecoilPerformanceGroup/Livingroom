@@ -24,6 +24,11 @@
 
 }
 
+-(void)update:(NSDictionary *)drawingInformation{
+    [polyEngine update:drawingInformation];
+
+}
+
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     ofBackground(0, 0, 0);
     ofSetColor(0,0,0);

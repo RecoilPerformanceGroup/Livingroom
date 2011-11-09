@@ -14,6 +14,8 @@
 
 #import "PolyInputSimpleMouse.h"
 
+#import "PolyAnimatorSimplePushPop.h"
+
 @implementation PolyEngine
 @synthesize arrangement;
 
@@ -28,8 +30,8 @@
         [inputs setObject:[[PolyInputSimpleMouse alloc] initWithEngine:self] forKey:@"polyInputSimpleMouse"];
 
         
-        
         animators = [NSMutableDictionary dictionary];
+        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
 
     }
     return self;
