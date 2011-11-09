@@ -23,6 +23,6 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation;
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button;
-
+- (void) controlKeyPressed:(int)key modifier:(int)modifier;
 @end
 

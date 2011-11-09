@@ -109,8 +109,25 @@
         glEnd();
     }
     
-    glPolygonMode(GL_FRONT_AND_BACK , GL_POLYGON);
+    glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
     
+}
+
+- (void) controlKeyPressed:(int)key modifier:(int)modifier{
+    NSLog(@"Key %i",key);
+
+    
+    
+    if(key == 36){
+        for(int u=0;u<convexPolygons.size();u++){
+            CGAL::insert(*[[engine data] arr],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
+        }
+     //  
+    }
+    pointsBuffer.clear();
+    delauneys.clear();
+    convexPolygons.clear();
+
 }
 
 @end

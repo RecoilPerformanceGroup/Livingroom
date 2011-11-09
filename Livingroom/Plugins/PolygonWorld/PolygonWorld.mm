@@ -50,8 +50,12 @@ Mesher * mesher;
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
     [polyEngine controlMousePressed:x/cW y:y/cH button:button];
-
 }
+
+-(void)controlKeyPressed:(int)key modifier:(int)modifier{
+    [polyEngine controlKeyPressed:key modifier:modifier];
+}
+
 
 
 //

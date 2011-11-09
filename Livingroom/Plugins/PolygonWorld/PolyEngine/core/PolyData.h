@@ -15,4 +15,7 @@
 
 @property (readonly) Arrangement_2 * arr;
 
+-(Point_2) n_point;
+
+-(vector< vector<Point_2> >) hulls;
 @end
