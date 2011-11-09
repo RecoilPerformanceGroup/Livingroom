@@ -5,6 +5,7 @@
 @interface PolygonWorld : ofPlugin {
     
     int cW,cH;
+    float cMouseX,cMouseY;
     
     int mode;
 }
