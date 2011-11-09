@@ -15,11 +15,11 @@
 #import "PolyInputSimpleMouse.h"
 
 @implementation PolyEngine
-@synthesize data;
+@synthesize arrangement;
 
 -(id)init {
     if(self = [super init]){
-        data = [[PolyArrangement alloc] init];
+        arrangement = [[PolyArrangement alloc] init];
         
         renders = [NSMutableDictionary dictionary];
         [renders setObject:[[PolyRenderSimpleWireframe alloc] initWithEngine:self] forKey:@"simpleWire"];
