@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D071990146941D60057E0B9 /* PolyAnimator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D071987146941D60057E0B9 /* PolyAnimator.mm */; };
+		3D071991146941D60057E0B9 /* PolyData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D071989146941D60057E0B9 /* PolyData.mm */; };
+		3D071992146941D60057E0B9 /* PolyEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198B146941D60057E0B9 /* PolyEngine.mm */; };
+		3D071993146941D60057E0B9 /* PolyInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198D146941D60057E0B9 /* PolyInput.mm */; };
+		3D071994146941D60057E0B9 /* PolyRender.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198F146941D60057E0B9 /* PolyRender.mm */; };
+		3D07199A1469423E0057E0B9 /* PolyRenderSimpleWireframe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */; };
 		3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */; };
@@ -20,6 +26,7 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
+		3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +61,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3D07198414693F930057E0B9 /* PolyInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInclude.h; sourceTree = "<group>"; };
+		3D071986146941D60057E0B9 /* PolyAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimator.h; sourceTree = "<group>"; };
+		3D071987146941D60057E0B9 /* PolyAnimator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimator.mm; sourceTree = "<group>"; };
+		3D071988146941D60057E0B9 /* PolyData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyData.h; sourceTree = "<group>"; };
+		3D071989146941D60057E0B9 /* PolyData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyData.mm; sourceTree = "<group>"; };
+		3D07198A146941D60057E0B9 /* PolyEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyEngine.h; sourceTree = "<group>"; };
+		3D07198B146941D60057E0B9 /* PolyEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyEngine.mm; sourceTree = "<group>"; };
+		3D07198C146941D60057E0B9 /* PolyInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInput.h; sourceTree = "<group>"; };
+		3D07198D146941D60057E0B9 /* PolyInput.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInput.mm; sourceTree = "<group>"; };
+		3D07198E146941D60057E0B9 /* PolyRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRender.h; sourceTree = "<group>"; };
+		3D07198F146941D60057E0B9 /* PolyRender.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRender.mm; sourceTree = "<group>"; };
+		3D0719981469423E0057E0B9 /* PolyRenderSimpleWireframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRenderSimpleWireframe.h; sourceTree = "<group>"; };
+		3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderSimpleWireframe.mm; sourceTree = "<group>"; };
 		3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ofxCocoaPlugins.xcodeproj; path = ofxCocoaPlugins/ofxCocoaPlugins.xcodeproj; sourceTree = "<group>"; };
 		3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonWorld.h; sourceTree = "<group>"; };
 		3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolygonWorld.mm; sourceTree = "<group>"; };
@@ -74,6 +94,8 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouse.h; sourceTree = "<group>"; };
+		3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputSimpleMouse.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +113,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D07197414693DDC0057E0B9 /* PolyEngine */ = {
+			isa = PBXGroup;
+			children = (
+				3D071995146942090057E0B9 /* animators */,
+				3D071996146942090057E0B9 /* inputs */,
+				3D071997146942090057E0B9 /* renders */,
+				3D071985146941D60057E0B9 /* core */,
+				3D07198414693F930057E0B9 /* PolyInclude.h */,
+			);
+			path = PolyEngine;
+			sourceTree = "<group>";
+		};
+		3D071985146941D60057E0B9 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				3D07198A146941D60057E0B9 /* PolyEngine.h */,
+				3D07198B146941D60057E0B9 /* PolyEngine.mm */,
+				3D071988146941D60057E0B9 /* PolyData.h */,
+				3D071989146941D60057E0B9 /* PolyData.mm */,
+				3D071986146941D60057E0B9 /* PolyAnimator.h */,
+				3D071987146941D60057E0B9 /* PolyAnimator.mm */,
+				3D07198C146941D60057E0B9 /* PolyInput.h */,
+				3D07198D146941D60057E0B9 /* PolyInput.mm */,
+				3D07198E146941D60057E0B9 /* PolyRender.h */,
+				3D07198F146941D60057E0B9 /* PolyRender.mm */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		3D071995146942090057E0B9 /* animators */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = animators;
+			path = Livingroom/Plugins/PolygonWorld/PolyEngine/animators;
+			sourceTree = SOURCE_ROOT;
+		};
+		3D071996146942090057E0B9 /* inputs */ = {
+			isa = PBXGroup;
+			children = (
+				3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouse.h */,
+				3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */,
+			);
+			name = inputs;
+			path = Livingroom/Plugins/PolygonWorld/PolyEngine/inputs;
+			sourceTree = SOURCE_ROOT;
+		};
+		3D071997146942090057E0B9 /* renders */ = {
+			isa = PBXGroup;
+			children = (
+				3D0719981469423E0057E0B9 /* PolyRenderSimpleWireframe.h */,
+				3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */,
+			);
+			name = renders;
+			path = Livingroom/Plugins/PolygonWorld/PolyEngine/renders;
+			sourceTree = SOURCE_ROOT;
+		};
 		3D268E5714629DBD009A366D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +189,7 @@
 		3D2FC2391462FE3E0028BC01 /* PolygonWorld */ = {
 			isa = PBXGroup;
 			children = (
+				3D07197414693DDC0057E0B9 /* PolyEngine */,
 				3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */,
 				3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */,
 				3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */,
@@ -267,6 +347,13 @@
 				3D386C71145EF95C00665327 /* main.m in Sources */,
 				3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */,
 				3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */,
+				3D071990146941D60057E0B9 /* PolyAnimator.mm in Sources */,
+				3D071991146941D60057E0B9 /* PolyData.mm in Sources */,
+				3D071992146941D60057E0B9 /* PolyEngine.mm in Sources */,
+				3D071993146941D60057E0B9 /* PolyInput.mm in Sources */,
+				3D071994146941D60057E0B9 /* PolyRender.mm in Sources */,
+				3D07199A1469423E0057E0B9 /* PolyRenderSimpleWireframe.mm in Sources */,
+				3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouse.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
