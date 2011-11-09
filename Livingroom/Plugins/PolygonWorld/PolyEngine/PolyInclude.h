@@ -14,7 +14,7 @@
 #include <CGAL/Arrangement_2.h>
 
 
-//#include <CGAL/Polygon_2.h>
+#include <CGAL/Polygon_2.h>
 //
 ////#include <CGAL/Projection_traits_xy_3.h>
 //#include <CGAL/Constrained_Delaunay_triangulation_2.h>
@@ -24,6 +24,7 @@
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 typedef CGAL::Arr_segment_traits_2<Kernel> Traits_2;
+typedef CGAL::Polygon_2<Kernel>     Polygon_2;
 typedef Traits_2::Point_2                  Point_2;
 typedef Traits_2::X_monotone_curve_2       Segment_2;
 typedef CGAL::Arrangement_2<Traits_2>      Arrangement_2;

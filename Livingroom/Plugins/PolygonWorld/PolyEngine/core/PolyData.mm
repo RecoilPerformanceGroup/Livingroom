@@ -45,23 +45,43 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //
 //-----------
 //
--(vector< vector<Point_2> >) hulls{
-   /* Arrangement_2 output;
+-(vector< Polygon_2>) hulls{
+    Arrangement_2 output;
     output.assign(*arr);
     
-    Arrangement_2::Edge_iterator eit = arr->edges_begin();
+    vector<Arrangement_2::Halfedge_handle> deleteHandles;
     
-    int i=0;
-    for( ; eit != arr->edges_end(); ++eit){
+    Arrangement_2::Edge_iterator eit = output.edges_begin();
+    
+    for( ; eit != output.edges_end(); ++eit){
         if(!eit->face()->is_unbounded() && !eit->twin()->face()->is_unbounded()){
-            
+            deleteHandles.push_back(eit);
         }
-        
-        cout<<i++<<endl;
     }
     
+    for(int i=0;i<deleteHandles.size();i++){
+        output.remove_edge(deleteHandles[i], false, false);
+    }
     
-    return vector< vector<Point_2> >();*/
+    vector< Polygon_2> ret;
+    
+    Arrangement_2::Face_iterator fit = output.faces_begin();
+    for( ; fit != output.faces_end(); ++fit){
+        Polygon_2 p;
+        
+        if(fit->number_of_outer_ccbs() == 1){
+            
+            Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+            Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+            do { 
+                p.push_back(hc->source()->point());
+                ++hc; 
+            } while (hc != ccb_start); 
+        }
+        
+        ret.push_back(p);
+    }
+    return ret;
 }
 
 

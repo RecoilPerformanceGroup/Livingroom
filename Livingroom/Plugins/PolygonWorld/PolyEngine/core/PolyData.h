@@ -17,5 +17,5 @@
 
 -(Point_2) n_point;
 
--(vector< vector<Point_2> >) hulls;
+-(vector< Polygon_2 >) hulls;
 @end
