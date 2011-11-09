@@ -96,6 +96,8 @@
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouse.h; sourceTree = "<group>"; };
 		3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputSimpleMouse.mm; sourceTree = "<group>"; };
+		7F287D93146AAE0D007E8346 /* PolyDataTraits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataTraits.h; sourceTree = "<group>"; };
+		7F287D94146ABCE7007E8346 /* PolyDataObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataObserver.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,8 @@
 				3D07198D146941D60057E0B9 /* PolyInput.mm */,
 				3D07198E146941D60057E0B9 /* PolyRender.h */,
 				3D07198F146941D60057E0B9 /* PolyRender.mm */,
+				7F287D93146AAE0D007E8346 /* PolyDataTraits.h */,
+				7F287D94146ABCE7007E8346 /* PolyDataObserver.h */,
 			);
 			path = core;
 			sourceTree = "<group>";

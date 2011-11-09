@@ -11,6 +11,7 @@
     NSMutableDictionary * inputs;
     
     PolyArrangement * data;
+
 }
 
 -(PolyRender*) getRenderer:(NSString*)renderer;

@@ -14,6 +14,9 @@
 @implementation PolyInputSimpleMouse
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
+    
+    
+    
     NSLog(@"%f %f",x,y);
     
     //    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());

@@ -6,11 +6,13 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 #import "lrAppDelegate.h"
+#import "PolyDataObserver.h"
 
 #import <Foundation/Foundation.h>
 
 @interface PolyArrangement : NSObject{
     Arrangement_2 * arr;
+    PolyDataObserver * obs;
 }
 
 @property (readonly) Arrangement_2 * arr;
