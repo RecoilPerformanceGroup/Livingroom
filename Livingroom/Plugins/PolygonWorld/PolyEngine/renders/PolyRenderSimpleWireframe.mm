@@ -68,7 +68,20 @@
     glPointSize(1);
     
     
-    [[engine data] hulls];
+    ofSetColor(255,0,0);
+    glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+
+    vector< Polygon_2> hull = [[engine data] hulls];
+    
+    for(int i=0;i<hull.size();i++){
+        
+        glBegin(GL_POLYGON);
+        Polygon_2::Vertex_iterator vit = hull[i].vertices_begin();
+        for( ; vit != hull[i].vertices_end(); ++vit){
+            glVertex2d(vit->x(), vit->y());
+        }
+        glEnd();
+    }
 }
 
 @end
