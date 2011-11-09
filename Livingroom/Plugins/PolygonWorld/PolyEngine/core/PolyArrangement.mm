@@ -17,6 +17,7 @@
 -(id)init{
     if(self = [super init]){
         arr = new Arrangement_2;
+        obs = new PolyDataObserver(arr);
     }
     return self;
 }

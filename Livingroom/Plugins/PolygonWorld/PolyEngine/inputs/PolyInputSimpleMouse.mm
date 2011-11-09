@@ -14,67 +14,59 @@
 @implementation PolyInputSimpleMouse
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-    NSLog(@"%f %f",x,y);
-    
     //    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
     
     pointsBuffer.push_back(Point_2(x,y));
     
-    
-    
-    
-    
-    
-    if(pointsBuffer.size() > 2){
-        
+    //If 3 or more points, we can form a polygon
+    if(pointsBuffer.size() > 2){        
         subtractedPolygons.clear();
         delauneys.clear();
         convexPolygons.clear();
-        intR.clear();
+
         
-        //Create hull polygon
+        //Create some work polygons
         Polygon_2 subtractedPolygon = Polygon_2(pointsBuffer.begin(), pointsBuffer.end());
+        subtractedPolygons.push_back(Polygon_with_holes_2(subtractedPolygon));
         
+        //Must be simple (not self-intersecting)
         if(subtractedPolygon.is_simple()){
-            cout<<"Is simple"<<endl;
+            //Get the hull from arrangements
             vector< Polygon_2> hull = [[engine arrangement] hulls];
+
+            //For each hull, check the intersection
             for(int i=0; i<hull.size();i++){
                 if(CGAL::do_intersect(hull[i],subtractedPolygon)){ 
-                    CGAL::intersection (subtractedPolygon,hull[i], std::back_inserter(intR));
+                    //Create the intersection
+                    Pwh_list_2 intR;
+                    CGAL::intersection (subtractedPolygon,
+                                        hull[i], 
+                                        back_inserter(intR));
                     
-                    cout<<"Intersection size: "<<intR.size()<<endl;
-                    
-                    for(int u=0;u<intR.size();u++){
-                        cout<<"Is bounded: "<<!intR[u].is_unbounded()<<"Number holes: "<<intR[u].number_of_holes()<<endl;;
-                        cout<<" Vertices: "<<intR[u].outer_boundary().size()<<endl;
-                    }
-                    
+                    //Find the difference between the intersection, and the input
                     Pwh_list_2  intR2;
                     for(int u=0;u<intR.size();u++){
-                        //cout<<u<<": is_valid: "<<intR[u].outer_boundary().is_valid()<<endl;
+                        vector<Polygon_with_holes_2> copy = subtractedPolygons;
+                        subtractedPolygons.clear();
                         
-                        CGAL::symmetric_difference (intR[u].outer_boundary(), subtractedPolygon, std::back_inserter(subtractedPolygons));
+                        for(int j=0;j<copy.size();j++){
+                            CGAL::symmetric_difference(intR[u].outer_boundary(), 
+                                                       copy[j], 
+                                                       std::back_inserter(subtractedPolygons));
+                        }
                     }
-                    
-                    cout<<"subtractedPolygons size: "<<subtractedPolygons.size()<<endl;
-                    
-                } else {
-                    subtractedPolygons.push_back(Polygon_with_holes_2(subtractedPolygon));
                 }
             }
-            if(hull.size() == 0){
-                subtractedPolygons.push_back(Polygon_with_holes_2(subtractedPolygon));
-            }
             
+            //Partitionate the subtracted polygon
             for(int j=0;j<subtractedPolygons.size();j++){
-                Polygon_2 pgn = Polygon_2(subtractedPolygons[j].outer_boundary().vertices_begin(), subtractedPolygons[j].outer_boundary().vertices_end());
-                if(pgn.is_simple()){
-                    
+                Polygon_2 pgn = Polygon_2(subtractedPolygons[j].outer_boundary().vertices_begin(), 
+                                          subtractedPolygons[j].outer_boundary().vertices_end());
+                if(pgn.is_simple()){                    
                     //Hvis den vender forkert, vender vi den selv
                     if(pgn.orientation() == CGAL::CLOCKWISE){
                         pgn.reverse_orientation();
-                    }
-                    
+                    }                    
                     if(pgn.orientation() == CGAL::COUNTERCLOCKWISE){                
                         //Lav convexe polygoner
                         CGAL::optimal_convex_partition_2(pgn.vertices_begin(),
@@ -82,9 +74,11 @@
                                                          std::back_inserter(convexPolygons));
                         
                         
+                        //Create delaunay polygon
                         for(int i=0;i<convexPolygons.size();i++){
                             Delaunay dt;
-                            dt.insert(convexPolygons[i].vertices_begin(), convexPolygons[i].vertices_end());
+                            dt.insert(convexPolygons[i].vertices_begin(), 
+                                      convexPolygons[i].vertices_end());
                             delauneys.push_back(dt);
                         }
                     }
@@ -160,12 +154,9 @@
         Polygon_2::Vertex_iterator vit = subtractedPolygons[i].outer_boundary().vertices_begin();
         for( ; vit != subtractedPolygons[i].outer_boundary().vertices_end(); ++vit){
             glVertex2f(CGAL::to_double(vit->x()), CGAL::to_double(vit->y()));
-            
         }
         glEnd();
-    }
-    
-    
+    }   
 }
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
@@ -184,7 +175,6 @@
         subtractedPolygons.clear();
     delauneys.clear();
     convexPolygons.clear();
-    intR.clear();
 }
 
 @end

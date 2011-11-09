@@ -9,7 +9,6 @@
     NSMutableDictionary * renders;
     NSMutableDictionary * animators;
     NSMutableDictionary * inputs;
-    
     PolyArrangement * arrangement;
 }
 

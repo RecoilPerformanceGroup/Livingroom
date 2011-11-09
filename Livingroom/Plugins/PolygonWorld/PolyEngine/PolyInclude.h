@@ -14,9 +14,12 @@
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Arr_segment_traits_2.h>
 #include <CGAL/Arrangement_2.h>
+#include <CGAL/Arr_extended_dcel.h>
 
 
 #include <CGAL/Polygon_2.h>
+#include "PolyDataTraits.h"
+
 //
 ////#include <CGAL/Projection_traits_xy_3.h>
 //#include <CGAL/Constrained_Delaunay_triangulation_2.h>
@@ -31,7 +34,8 @@ typedef CGAL::Arr_segment_traits_2<Kernel> Traits_2;
 typedef CGAL::Polygon_2<Kernel>     Polygon_2;
 typedef Traits_2::Point_2                  Point_2;
 typedef Traits_2::X_monotone_curve_2       Segment_2;
-typedef CGAL::Arrangement_2<Traits_2>      Arrangement_2;
+typedef CGAL::Arr_extended_dcel<Traits_2,LRVertex_data, LRHalfedge_data, LRFace_data>      Dcel;
+typedef CGAL::Arrangement_2<Traits_2, Dcel>                     Arrangement_2;
 
 //typedef CGAL::Triangulation_vertex_base_2<K> Vb;
 //typedef CGAL::Delaunay_mesh_face_base_2<K> Fb;

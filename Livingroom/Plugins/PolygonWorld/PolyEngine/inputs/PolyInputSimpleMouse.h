@@ -36,7 +36,6 @@ typedef std::vector<Polygon_with_holes_2>                   Pwh_list_2;
     vector<PartPolygon_2> convexPolygons;
     vector<Delaunay> delauneys;
     
-    Pwh_list_2                  intR;
 
 
 }
