@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3D071990146941D60057E0B9 /* PolyAnimator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D071987146941D60057E0B9 /* PolyAnimator.mm */; };
-		3D071991146941D60057E0B9 /* PolyData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D071989146941D60057E0B9 /* PolyData.mm */; };
+		3D071991146941D60057E0B9 /* PolyArrangement.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D071989146941D60057E0B9 /* PolyArrangement.mm */; };
 		3D071992146941D60057E0B9 /* PolyEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198B146941D60057E0B9 /* PolyEngine.mm */; };
 		3D071993146941D60057E0B9 /* PolyInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198D146941D60057E0B9 /* PolyInput.mm */; };
 		3D071994146941D60057E0B9 /* PolyRender.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198F146941D60057E0B9 /* PolyRender.mm */; };
@@ -64,8 +64,8 @@
 		3D07198414693F930057E0B9 /* PolyInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInclude.h; sourceTree = "<group>"; };
 		3D071986146941D60057E0B9 /* PolyAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimator.h; sourceTree = "<group>"; };
 		3D071987146941D60057E0B9 /* PolyAnimator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimator.mm; sourceTree = "<group>"; };
-		3D071988146941D60057E0B9 /* PolyData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyData.h; sourceTree = "<group>"; };
-		3D071989146941D60057E0B9 /* PolyData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyData.mm; sourceTree = "<group>"; };
+		3D071988146941D60057E0B9 /* PolyArrangement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyArrangement.h; sourceTree = "<group>"; };
+		3D071989146941D60057E0B9 /* PolyArrangement.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyArrangement.mm; sourceTree = "<group>"; };
 		3D07198A146941D60057E0B9 /* PolyEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyEngine.h; sourceTree = "<group>"; };
 		3D07198B146941D60057E0B9 /* PolyEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyEngine.mm; sourceTree = "<group>"; };
 		3D07198C146941D60057E0B9 /* PolyInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInput.h; sourceTree = "<group>"; };
@@ -130,8 +130,8 @@
 			children = (
 				3D07198A146941D60057E0B9 /* PolyEngine.h */,
 				3D07198B146941D60057E0B9 /* PolyEngine.mm */,
-				3D071988146941D60057E0B9 /* PolyData.h */,
-				3D071989146941D60057E0B9 /* PolyData.mm */,
+				3D071988146941D60057E0B9 /* PolyArrangement.h */,
+				3D071989146941D60057E0B9 /* PolyArrangement.mm */,
 				3D071986146941D60057E0B9 /* PolyAnimator.h */,
 				3D071987146941D60057E0B9 /* PolyAnimator.mm */,
 				3D07198C146941D60057E0B9 /* PolyInput.h */,
@@ -348,7 +348,7 @@
 				3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */,
 				3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */,
 				3D071990146941D60057E0B9 /* PolyAnimator.mm in Sources */,
-				3D071991146941D60057E0B9 /* PolyData.mm in Sources */,
+				3D071991146941D60057E0B9 /* PolyArrangement.mm in Sources */,
 				3D071992146941D60057E0B9 /* PolyEngine.mm in Sources */,
 				3D071993146941D60057E0B9 /* PolyInput.mm in Sources */,
 				3D071994146941D60057E0B9 /* PolyRender.mm in Sources */,

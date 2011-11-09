@@ -11,7 +11,5 @@
     
     PolyEngine * polyEngine;
 }
-- (IBAction)delaunay:(id)sender;
-- (IBAction)clear:(id)sender;
 
 @end

@@ -1,7 +1,7 @@
 //#import "PolyInclude.h"
 #import "lrAppDelegate.h"
 #import <Foundation/Foundation.h>
-#import "PolyData.h"
+#import "PolyArrangement.h"
 
 @class PolyRender, PolyInput, PolyAnimator;
 
@@ -10,14 +10,14 @@
     NSMutableDictionary * animators;
     NSMutableDictionary * inputs;
     
-    PolyData * data;
+    PolyArrangement * data;
 }
 
 -(PolyRender*) getRenderer:(NSString*)renderer;
 -(PolyInput*) getInput:(NSString*)renderer;
 -(PolyAnimator*) getAnimator:(NSString*)renderer;
 
-@property (readonly) PolyData * data;
+@property (readonly) PolyArrangement * data;
 
 
 

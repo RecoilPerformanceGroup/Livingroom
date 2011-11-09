@@ -1,5 +1,5 @@
 //
-//  PolyData.h
+//  PolyArrangement.h
 //  Livingroom
 //
 //  Created by Livingroom on 08/11/11.
@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PolyData : NSObject{
+@interface PolyArrangement : NSObject{
     Arrangement_2 * arr;
 }
 

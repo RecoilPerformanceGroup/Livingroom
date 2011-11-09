@@ -1,17 +1,17 @@
 //
-//  PolyData.m
+//  PolyArrangement.m
 //  Livingroom
 //
 //  Created by Livingroom on 08/11/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "PolyData.h"
+#import "PolyArrangement.h"
 #include <CGAL/convex_hull_2.h>
 
 
 
-@implementation PolyData
+@implementation PolyArrangement
 @synthesize arr;
 
 -(id)init{

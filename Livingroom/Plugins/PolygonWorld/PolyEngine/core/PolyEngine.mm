@@ -8,7 +8,7 @@
 
 #import "PolyEngine.h"
 
-#import "PolyData.h"
+#import "PolyArrangement.h"
 
 #import "PolyRenderSimpleWireframe.h"
 
@@ -19,7 +19,7 @@
 
 -(id)init {
     if(self = [super init]){
-        data = [[PolyData alloc] init];
+        data = [[PolyArrangement alloc] init];
         
         renders = [NSMutableDictionary dictionary];
         [renders setObject:[[PolyRenderSimpleWireframe alloc] initWithEngine:self] forKey:@"simpleWire"];
