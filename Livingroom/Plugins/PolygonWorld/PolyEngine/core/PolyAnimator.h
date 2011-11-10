@@ -17,5 +17,6 @@
 
 -(id) initWithEngine:(PolyEngine*)engine;
 -(void)controlDraw:(NSDictionary *)drawingInformation;
+- (void)update:(NSDictionary *)drawingInformation;
 
 @end

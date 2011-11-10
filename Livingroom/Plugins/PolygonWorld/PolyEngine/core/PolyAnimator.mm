@@ -19,5 +19,7 @@
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
 }
-
+- (void)update:(NSDictionary *)drawingInformation{
+    
+}
 @end
