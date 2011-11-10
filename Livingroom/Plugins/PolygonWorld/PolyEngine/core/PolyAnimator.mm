@@ -17,6 +17,9 @@
     return self;
 }
 
+-(void)draw:(NSDictionary *)drawingInformation{
+}
+
 -(void)controlDraw:(NSDictionary *)drawingInformation{
 
 }

@@ -11,4 +11,5 @@
 @interface PolyRenderSimpleWireframe : PolyRender{
     
 }
+
 @end
