@@ -19,8 +19,8 @@ struct LRVertex_data {
     ofColor color;
     
     //SpringsAnimator
-    ofVec2f springF;
-    ofVec2f springV;
+    ofVec2f springF             = ofVec2f(0,0);
+    ofVec2f springV             = ofVec2f(0,0);
 };
 
 // --------
@@ -31,7 +31,7 @@ struct LRHalfedge_data {
     ofColor color;
     
     //SpringsAnimator
-    float springOptimalLength;
+    float springOptimalLength   = -1;
 };
 
 // ----

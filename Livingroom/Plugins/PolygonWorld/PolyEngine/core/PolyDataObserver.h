@@ -26,7 +26,7 @@ public:
     virtual void before_split_face (Face_handle,
                                     Halfedge_handle e)
     {
-        std::cout << "-> The insertion of :  [ " << e->curve()
+        std::cout << " -> The insertion of :  [ " << e->curve()
         << " ]  causes a face to split." << std::endl;
     }
     
@@ -34,8 +34,16 @@ public:
                                     Face_handle,
                                     Halfedge_handle e)
     {
-        std::cout << "-> The removal of :  [ " << e->curve()
+        std::cout << " -> The removal of :  [ " << e->curve()
         << " ]  causes two faces to merge." << std::endl;
+    }
+    
+
+    virtual void after_create_edge ( Halfedge_handle e){
+        //Constructor code
+        
+        //Springs
+       // e->data().springOptimalLength = -1;
     }
     
 };

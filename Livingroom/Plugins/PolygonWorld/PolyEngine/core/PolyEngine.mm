@@ -72,7 +72,11 @@
 - (void) draw:(NSDictionary*)drawingInformation{
     for(NSString* p in renders){
         [[renders objectForKey:p] draw:drawingInformation];
-    }        
+    }  
+    
+    for(NSString* p in animators){
+        [[animators objectForKey:p] draw:drawingInformation];
+    } 
 }
 - (void) update:(NSDictionary*)drawingInformation{
     for(NSString* p in renders){
@@ -103,10 +107,24 @@
     for(NSString* p in inputs){
         [[inputs objectForKey:p] controlMousePressed:x y:y button:button];
     }   
+    for(NSString* p in animators){
+        [[animators objectForKey:p] controlMousePressed:x y:y button:button];
+    }   
 }
 
-//- (void) controlMouseReleased:(float) x y:(float)y;
-//- (void) controlMouseDragged:(float) x y:(float)y button:(int)button;
+- (void) controlMouseReleased:(float) x y:(float)y{
+    for(NSString* p in inputs){
+        [[inputs objectForKey:p] controlMouseReleased:x y:y];
+    }   
+    for(NSString* p in animators){
+        [[animators objectForKey:p] controlMouseReleased:x y:y];
+    }    
+}
+- (void) controlMouseDragged:(float) x y:(float)y button:(int)button{
+    for(NSString* p in animators){
+        [[animators objectForKey:p] controlMouseDragged:x y:y button:button];
+    }   
+}
 //- (void) controlMouseScrolled:(NSEvent *)theEvent;
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{

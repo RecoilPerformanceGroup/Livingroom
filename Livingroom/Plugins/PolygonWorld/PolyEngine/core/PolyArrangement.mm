@@ -100,6 +100,10 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     out_file.close();
 }
 
+//
+//-------------
+//
+
 -(void) loadArrangement{
     arr = new Arrangement_2();
     

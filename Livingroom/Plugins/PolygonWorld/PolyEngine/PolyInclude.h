@@ -49,5 +49,9 @@ typedef CGAL::Arrangement_2<Traits_2, Dcel>                     Arrangement_2;
 //typedef CDT::Vertex_handle Vertex_handle;
 //typedef CDT::Point Point2;
 
+static ofVec2f pointToVec(Point_2 p){
+    return ofVec2f(CGAL::to_double(p.x()),CGAL::to_double(p.y()));
+}
+
 
 #endif

@@ -8,6 +8,10 @@
 
 #import "PolyAnimator.h"
 
-@interface PolyAnimatorSprings : PolyAnimator
+@interface PolyAnimatorSprings : PolyAnimator{
+    BOOL mousePressed;
+    
+    ofVec2f mouse;
+}
 
 @end

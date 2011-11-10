@@ -45,12 +45,27 @@
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
     [polyEngine controlMousePressed:x/cW y:y/cH button:button];
 }
+-(void)controlMouseReleased:(float)x y:(float)y{
+    [polyEngine controlMouseReleased:x/cW y:y/cH];
+}
 
 -(void)controlKeyPressed:(int)key modifier:(int)modifier{
     [polyEngine controlKeyPressed:key modifier:modifier];
 }
 
 -(void)controlMouseMoved:(float)x y:(float)y {
+    x /= cW;
+    y /= cH;
+    
+    cMouseX = x;
+    cMouseY = y;
+
+}
+    
+-(void)controlMouseDragged:(float)x y:(float)y button:(int)button {
+    
+    [polyEngine controlMouseDragged:x/cW y:y/cH button:button];
+    
     x /= cW;
     y /= cH;
     

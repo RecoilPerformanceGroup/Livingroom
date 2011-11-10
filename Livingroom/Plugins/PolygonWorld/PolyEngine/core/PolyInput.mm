@@ -25,7 +25,9 @@
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
 }
-
+- (void) controlMouseReleased:(float) x y:(float)y{
+    
+}
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
 }
 
