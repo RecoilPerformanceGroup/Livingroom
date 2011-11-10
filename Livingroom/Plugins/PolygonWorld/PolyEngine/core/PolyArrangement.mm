@@ -9,6 +9,8 @@
 #import "PolyArrangement.h"
 #include <CGAL/convex_hull_2.h>
 
+#include <CGAL/IO/Arr_iostream.h>
+#include <fstream>
 
 
 @implementation PolyArrangement
@@ -87,5 +89,25 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     return ret;
 }
 
+//
+//-------------
+//
+
+-(void) saveArrangement{
+    std::ofstream    out_file ("arr_ex_io.dat");
+    
+    out_file << *arr;
+    out_file.close();
+}
+
+-(void) loadArrangement{
+    arr = new Arrangement_2();
+    
+    std::ifstream    in_file ("arr_ex_io.dat");
+    
+    in_file >> *arr;
+    in_file.close();
+
+}
 
 @end

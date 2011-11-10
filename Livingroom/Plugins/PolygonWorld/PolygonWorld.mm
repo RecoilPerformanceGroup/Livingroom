@@ -58,4 +58,13 @@
     cMouseY = y;
 }
 
+- (IBAction)saveArrangement:(id)sender {
+    [[polyEngine arrangement] saveArrangement];
+}
+
+- (IBAction)loadArrangement:(id)sender {
+    [[globalController openglLock] lock];
+    [[polyEngine arrangement] loadArrangement];
+        [[globalController openglLock] unlock];
+}
 @end

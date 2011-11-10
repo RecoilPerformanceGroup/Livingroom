@@ -25,6 +25,10 @@ struct LRVertex_data {
     float crackAmount = 0.0;
     int crackEdgeCount = 2;    
     
+    //SpringsAnimator
+    ofVec2f springF;
+    ofVec2f springV;
+
 };
 
 // --------
@@ -36,6 +40,9 @@ struct LRHalfedge_data {
 
     // Cracks
     float crackAmount = 0.0;
+    
+    //SpringsAnimator
+    float springOptimalLength;
 
 };
 

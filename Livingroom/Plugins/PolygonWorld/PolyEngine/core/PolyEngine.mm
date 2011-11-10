@@ -15,6 +15,7 @@
 #import "PolyInputSimpleMouse.h"
 
 #import "PolyAnimatorSimplePushPop.h"
+#import "PolyAnimatorSprings.h"
 
 #import "PolyAnimatorCracks.h"
 
@@ -34,6 +35,8 @@
         animators = [NSMutableDictionary dictionary];
         [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
         [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
+//        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
+        [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
 
     }
     return self;
