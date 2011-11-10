@@ -12,10 +12,6 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     ofSetColor(255,0,0);
     
-    
-    
-    
-    
     glPointSize(5);
     glBegin(GL_POINTS);
     Arrangement_2::Vertex_iterator vit = [[engine data] arr]->vertices_begin();    
@@ -24,8 +20,6 @@
         
     }    
     glEnd();   
-    
-  
     
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
 

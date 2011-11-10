@@ -27,8 +27,6 @@
         inputs = [NSMutableDictionary dictionary];
         [inputs setObject:[[PolyInputSimpleMouse alloc] initWithEngine:self] forKey:@"polyInputSimpleMouse"];
 
-        
-        
         animators = [NSMutableDictionary dictionary];
 
     }
