@@ -64,7 +64,8 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
         output.remove_edge(deleteHandles[i], false, false);
     }
     
-    vector< Polygon_2> ret;
+    vector< Polygon_2> ret = vector< Polygon_2>();
+    ret.clear();
     
     Arrangement_2::Face_iterator fit = output.faces_begin();
     for( ; fit != output.faces_end(); ++fit){
@@ -80,7 +81,8 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
             } while (hc != ccb_start); 
         }
         
-        ret.push_back(p);
+        if(!p.is_empty())
+            ret.push_back(p);
     }
     return ret;
 }

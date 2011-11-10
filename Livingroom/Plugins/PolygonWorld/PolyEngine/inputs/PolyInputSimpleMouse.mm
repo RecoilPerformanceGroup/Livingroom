@@ -14,42 +14,74 @@
 @implementation PolyInputSimpleMouse
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-    
-    
-    
-    NSLog(@"%f %f",x,y);
-    
     //    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
     
     pointsBuffer.push_back(Point_2(x,y));
     
-    
-    
-    
-    if(pointsBuffer.size() > 3){
-        //Lav en polygon, så vi kan lave nogle check på den
-        PartPolygon_2 pgn(pointsBuffer.begin(), pointsBuffer.end());
+    //If 3 or more points, we can form a polygon
+    if(pointsBuffer.size() > 2){        
+        subtractedPolygons.clear();
+        delauneys.clear();
+        convexPolygons.clear();
+
         
-        if(pgn.is_simple()){
-            
-            //Hvis den vender forkert, vender vi den selv
-            if(pgn.orientation() == CGAL::CLOCKWISE){
-                pgn.reverse_orientation();
+        //Create some work polygons
+        Polygon_2 subtractedPolygon = Polygon_2(pointsBuffer.begin(), pointsBuffer.end());
+        subtractedPolygons.push_back(Polygon_with_holes_2(subtractedPolygon));
+        
+        //Must be simple (not self-intersecting)
+        if(subtractedPolygon.is_simple()){
+            //Get the hull from arrangements
+            vector< Polygon_2> hull = [[engine arrangement] hulls];
+
+            //For each hull, check the intersection
+            for(int i=0; i<hull.size();i++){
+                if(CGAL::do_intersect(hull[i],subtractedPolygon)){ 
+                    //Create the intersection
+                    Pwh_list_2 intR;
+                    CGAL::intersection (subtractedPolygon,
+                                        hull[i], 
+                                        back_inserter(intR));
+                    
+                    //Find the difference between the intersection, and the input
+                    Pwh_list_2  intR2;
+                    for(int u=0;u<intR.size();u++){
+                        vector<Polygon_with_holes_2> copy = subtractedPolygons;
+                        subtractedPolygons.clear();
+                        
+                        for(int j=0;j<copy.size();j++){
+                            CGAL::symmetric_difference(intR[u].outer_boundary(), 
+                                                       copy[j], 
+                                                       std::back_inserter(subtractedPolygons));
+                        }
+                    }
+                }
             }
             
-            if(pgn.orientation() == CGAL::COUNTERCLOCKWISE){                
-                //Lav convexe polygoner
-                convexPolygons.clear();
-                CGAL::optimal_convex_partition_2(pgn.vertices_begin(),
-                                                 pgn.vertices_end(),
-                                                 std::back_inserter(convexPolygons));
-                
-                delauneys.clear();
-                
-                for(int i=0;i<convexPolygons.size();i++){
-                    Delaunay dt;
-                    dt.insert(convexPolygons[i].vertices_begin(), convexPolygons[i].vertices_end());
-                    delauneys.push_back(dt);
+            //Partitionate the subtracted polygon
+            for(int j=0;j<subtractedPolygons.size();j++){
+                Polygon_2 pgn = Polygon_2(subtractedPolygons[j].outer_boundary().vertices_begin(), 
+                                          subtractedPolygons[j].outer_boundary().vertices_end());
+                if(pgn.is_simple()){                    
+                    //Hvis den vender forkert, vender vi den selv
+                    if(pgn.orientation() == CGAL::CLOCKWISE){
+                        pgn.reverse_orientation();
+                    }                    
+                    if(pgn.orientation() == CGAL::COUNTERCLOCKWISE){                
+                        //Lav convexe polygoner
+                        CGAL::optimal_convex_partition_2(pgn.vertices_begin(),
+                                                         pgn.vertices_end(),
+                                                         std::back_inserter(convexPolygons));
+                        
+                        
+                        //Create delaunay polygon
+                        for(int i=0;i<convexPolygons.size();i++){
+                            Delaunay dt;
+                            dt.insert(convexPolygons[i].vertices_begin(), 
+                                      convexPolygons[i].vertices_end());
+                            delauneys.push_back(dt);
+                        }
+                    }
                 }
             }
         }
@@ -78,7 +110,7 @@
     glLineWidth(2);
     glBegin(GL_POLYGON);
     for(int i=0;i<pointsBuffer.size();i++){
-        glVertex2f(pointsBuffer[i].x(), pointsBuffer[i].y());
+        glVertex2f(CGAL::to_double(pointsBuffer[i].x()), CGAL::to_double(pointsBuffer[i].y()));
     }
     glEnd();
     
@@ -91,8 +123,8 @@
         glBegin(GL_LINES);
         
         for ( ; eit !=delauneys[i].edges_end(); ++eit) {
-            glVertex2d(delauneys[i].segment(eit).source().x() , delauneys[i].segment(eit).source().y());
-            glVertex2d(delauneys[i].segment(eit).target().x() , delauneys[i].segment(eit).target().y());
+            glVertex2d(CGAL::to_double(delauneys[i].segment(eit).source().x()) , CGAL::to_double(delauneys[i].segment(eit).source().y()));
+            glVertex2d(CGAL::to_double(delauneys[i].segment(eit).target().x()) , CGAL::to_double(delauneys[i].segment(eit).target().y()));
         }      
         
         glEnd();
@@ -107,30 +139,42 @@
         
         PartPolygon_2::Vertex_iterator vit = convexPolygons[u].vertices_begin();
         for( ; vit != convexPolygons[u].vertices_end(); ++vit){
-            glVertex2f(vit->x(), vit->y());
+            glVertex2f(CGAL::to_double(vit->x()), CGAL::to_double(vit->y()));
         }
         glEnd();
     }
     
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
     
+    ofEnableAlphaBlending();
+    ofSetColor(255,255,0,100);
+    
+    for(int i=0;i<subtractedPolygons.size();i++){
+        glBegin(GL_POLYGON);
+        Polygon_2::Vertex_iterator vit = subtractedPolygons[i].outer_boundary().vertices_begin();
+        for( ; vit != subtractedPolygons[i].outer_boundary().vertices_end(); ++vit){
+            glVertex2f(CGAL::to_double(vit->x()), CGAL::to_double(vit->y()));
+        }
+        glEnd();
+    }   
 }
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
     NSLog(@"Key %i",key);
-
+    
+    
     
     
     if(key == 36){
         for(int u=0;u<convexPolygons.size();u++){
-            CGAL::insert(*[[engine data] arr],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
+            CGAL::insert(*[[engine arrangement] arr],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
         }
-     //  
+        //  
     }
     pointsBuffer.clear();
+        subtractedPolygons.clear();
     delauneys.clear();
     convexPolygons.clear();
-
 }
 
 @end

@@ -9,16 +9,14 @@
     NSMutableDictionary * renders;
     NSMutableDictionary * animators;
     NSMutableDictionary * inputs;
-    
-    PolyArrangement * data;
-
+    PolyArrangement * arrangement;
 }
 
 -(PolyRender*) getRenderer:(NSString*)renderer;
 -(PolyInput*) getInput:(NSString*)renderer;
 -(PolyAnimator*) getAnimator:(NSString*)renderer;
 
-@property (readonly) PolyArrangement * data;
+@property (readonly) PolyArrangement * arrangement;
 
 
 
