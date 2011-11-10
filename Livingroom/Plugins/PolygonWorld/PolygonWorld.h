@@ -11,5 +11,7 @@
     
     PolyEngine * polyEngine;
 }
+- (IBAction)saveArrangement:(id)sender;
+- (IBAction)loadArrangement:(id)sender;
 
 @end

@@ -27,6 +27,7 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
+		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
 		3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,8 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		3D956F98146BFB5200A59811 /* PolyAnimatorSprings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSprings.h; sourceTree = "<group>"; };
+		3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSprings.mm; sourceTree = "<group>"; };
 		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouse.h; sourceTree = "<group>"; };
 		3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputSimpleMouse.mm; sourceTree = "<group>"; };
 		7F287D93146AAE0D007E8346 /* PolyDataTraits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataTraits.h; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 			children = (
 				3D16C0A4146AEC9800718ADC /* PolyAnimatorSimplePushPop.h */,
 				3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */,
+				3D956F98146BFB5200A59811 /* PolyAnimatorSprings.h */,
+				3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */,
 			);
 			name = animators;
 			path = Livingroom/Plugins/PolygonWorld/PolyEngine/animators;
@@ -364,6 +369,7 @@
 				3D07199A1469423E0057E0B9 /* PolyRenderSimpleWireframe.mm in Sources */,
 				3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouse.mm in Sources */,
 				3D16C0A6146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm in Sources */,
+				3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

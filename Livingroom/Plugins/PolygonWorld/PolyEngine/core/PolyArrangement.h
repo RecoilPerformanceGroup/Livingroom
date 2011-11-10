@@ -20,4 +20,7 @@
 -(Point_2) n_point;
 
 -(vector< Polygon_2 >) hulls;
+
+-(void) saveArrangement;
+-(void) loadArrangement;
 @end
