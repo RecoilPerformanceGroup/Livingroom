@@ -11,12 +11,12 @@
 #import "PolyArrangement.h"
 
 #import "PolyRenderSimpleWireframe.h"
+#import "PolyRenderCracks.h"
 
 #import "PolyInputSimpleMouse.h"
 
 #import "PolyAnimatorSimplePushPop.h"
 #import "PolyAnimatorSprings.h"
-
 #import "PolyAnimatorCracks.h"
 
 @implementation PolyEngine
@@ -28,14 +28,14 @@
         
         renders = [NSMutableDictionary dictionary];
         [renders setObject:[[PolyRenderSimpleWireframe alloc] initWithEngine:self] forKey:@"simpleWire"];
+        [renders setObject:[[PolyRenderCracks alloc] initWithEngine:self] forKey:@"cracks"];
 
         inputs = [NSMutableDictionary dictionary];
         [inputs setObject:[[PolyInputSimpleMouse alloc] initWithEngine:self] forKey:@"polyInputSimpleMouse"];
 
         animators = [NSMutableDictionary dictionary];
-        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
-        [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
 //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
+        [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
         [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
 
     }

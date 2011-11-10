@@ -14,8 +14,8 @@
 @implementation PolyInputSimpleMouse
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-    //    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
-    
+//    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
+        
     pointsBuffer.push_back(Point_2(x,y));
     
         
@@ -118,9 +118,6 @@
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
     NSLog(@"Key %i",key);
-    
-    
-    
     
     if(key == 36){
         //If 3 or more points, we can form a polygon

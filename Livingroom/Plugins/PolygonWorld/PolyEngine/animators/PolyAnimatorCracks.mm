@@ -11,13 +11,24 @@
 @implementation PolyAnimatorCracks
 
 -(void)update:(NSDictionary *)drawingInformation{
-//    cout << "hep" << endl;
     
     Arrangement_2::Vertex_iterator vit = [[engine arrangement] arr]->vertices_begin();    
     for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
-        cout << ": " << vit->data().crackAmount << endl;
-        vit->data().crackAmount+=0.1;
+        
+//        vit->data().crackAmount+=0.1;
+        
     } 
+    
+    Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();    
+    
+    for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+        
+        eit->data().crackAmount = (eit->data().crackAmount*0.85) + (ofRandom(0.0,1.0)*.15);
+        cout << eit->data().crackAmount << endl; 
+    }      
+    
+    glEnd();   
+
         
 }
 

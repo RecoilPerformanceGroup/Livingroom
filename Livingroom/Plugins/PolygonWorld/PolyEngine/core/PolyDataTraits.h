@@ -21,7 +21,7 @@
 struct LRVertex_data {
     ofColor color;
     
-    // Cracks
+    //CracksAnimator
     float crackAmount = 0.0;
     int crackEdgeCount = 2;    
     
@@ -38,7 +38,7 @@ struct LRVertex_data {
 struct LRHalfedge_data {
     ofColor color;
 
-    // Cracks
+    //CracksAnimator
     float crackAmount = 0.0;
     
     //SpringsAnimator
