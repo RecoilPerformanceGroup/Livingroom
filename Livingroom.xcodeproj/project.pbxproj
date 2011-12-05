@@ -30,6 +30,11 @@
 		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
+		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
+		7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263734148D33C10055DCFA /* MGScopeBar.m */; };
+		7F26374D148D33C10055DCFA /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7F26373A148D33C10055DCFA /* ReadMe.txt */; };
+		7F26374E148D33C10055DCFA /* Source Code License.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7F26373B148D33C10055DCFA /* Source Code License.rtf */; };
+		7F26374F148D33C10055DCFA /* TODO in Resources */ = {isa = PBXBuildFile; fileRef = 7F26373C148D33C10055DCFA /* TODO */; };
 		7F6D575B146BFEE8006F8CF0 /* PolyAnimatorCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */; };
 		7F6D5778146C0F91006F8CF0 /* PolyRenderCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D5777146C0F91006F8CF0 /* PolyRenderCracks.mm */; };
 /* End PBXBuildFile section */
@@ -90,6 +95,14 @@
 		3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ofxCocoaPlugins.framework; path = ofxCocoaPlugins/build/Debug/ofxCocoaPlugins.framework; sourceTree = "<group>"; };
 		3D9715CF148D180D009A8068 /* PolyModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyModule.h; sourceTree = "<group>"; };
 		3D9715D0148D180D009A8068 /* PolyModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyModule.mm; sourceTree = "<group>"; };
+		7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
+		7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGRecessedPopUpButtonCell.m; sourceTree = "<group>"; };
+		7F263733148D33C10055DCFA /* MGScopeBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBar.h; sourceTree = "<group>"; };
+		7F263734148D33C10055DCFA /* MGScopeBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGScopeBar.m; sourceTree = "<group>"; };
+		7F263739148D33C10055DCFA /* MGScopeBarDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBarDelegateProtocol.h; sourceTree = "<group>"; };
+		7F26373A148D33C10055DCFA /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
+		7F26373B148D33C10055DCFA /* Source Code License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "Source Code License.rtf"; sourceTree = "<group>"; };
+		7F26373C148D33C10055DCFA /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		7F287D93146AAE0D007E8346 /* PolyDataTraits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataTraits.h; sourceTree = "<group>"; };
 		7F287D94146ABCE7007E8346 /* PolyDataObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataObserver.h; sourceTree = "<group>"; };
 		7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCracks.h; sourceTree = "<group>"; };
@@ -222,6 +235,7 @@
 		3D386C63145EF95C00665327 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7F26371F148D33C10055DCFA /* MGScopeBar */,
 				3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */,
 				3D386C64145EF95C00665327 /* Cocoa.framework */,
 				3D386C66145EF95C00665327 /* Other Frameworks */,
@@ -265,6 +279,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		7F26371F148D33C10055DCFA /* MGScopeBar */ = {
+			isa = PBXGroup;
+			children = (
+				7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */,
+				7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */,
+				7F263733148D33C10055DCFA /* MGScopeBar.h */,
+				7F263734148D33C10055DCFA /* MGScopeBar.m */,
+				7F263739148D33C10055DCFA /* MGScopeBarDelegateProtocol.h */,
+				7F26373A148D33C10055DCFA /* ReadMe.txt */,
+				7F26373B148D33C10055DCFA /* Source Code License.rtf */,
+				7F26373C148D33C10055DCFA /* TODO */,
+			);
+			path = MGScopeBar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -300,6 +329,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = 3D386C55145EF95C00665327;
 			productRefGroup = 3D386C61145EF95C00665327 /* Products */;
@@ -321,6 +351,9 @@
 				3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */,
 				3D386C8D145F012200665327 /* Project.xcconfig in Resources */,
 				3D2FC23E1462FEDC0028BC01 /* PolygonWorld.xib in Resources */,
+				7F26374D148D33C10055DCFA /* ReadMe.txt in Resources */,
+				7F26374E148D33C10055DCFA /* Source Code License.rtf in Resources */,
+				7F26374F148D33C10055DCFA /* TODO in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +379,8 @@
 				3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */,
 				7F6D5778146C0F91006F8CF0 /* PolyRenderCracks.mm in Sources */,
 				3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */,
+				7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */,
+				7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
