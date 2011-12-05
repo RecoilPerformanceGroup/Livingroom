@@ -1,6 +1,4 @@
-
 #import "PolyEngine.h"
-
 #import "PolygonWorld.h"
 #import <ofxCocoaPlugins/Keystoner.h>
 

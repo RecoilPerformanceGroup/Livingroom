@@ -24,7 +24,7 @@
     for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
         
         eit->data().crackAmount = (eit->data().crackAmount*0.85) + (ofRandom(0.0,1.0)*.15);
-        cout << eit->data().crackAmount << endl; 
+      //  cout << eit->data().crackAmount << endl; 
     }      
     
     glEnd();   
