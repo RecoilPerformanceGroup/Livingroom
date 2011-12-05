@@ -429,7 +429,8 @@
 	
 	if (proceed) {
 		// Disable screen updates.
-		NSDisableScreenUpdates();
+
+        NSDisableScreenUpdates();
 		
 		// See how many further groups we can expand or contract.
 		float theoreticalOccupiedWidth = currentOccupiedWidth;
@@ -652,7 +653,9 @@
 		}
 		
 		// Re-enable screen updates.
+
 		NSEnableScreenUpdates();
+        
 	}
 	
 	// Take note of our width for comparison next time.
