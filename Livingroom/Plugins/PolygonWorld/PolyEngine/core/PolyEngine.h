@@ -12,13 +12,13 @@
     PolyArrangement * arrangement;
 }
 
+
+@property (readonly) PolyArrangement * arrangement;
+@property (readonly) NSMutableArray * allModules;
+
 -(PolyRender*) getRenderer:(NSString*)renderer;
 -(PolyInput*) getInput:(NSString*)renderer;
 -(PolyAnimator*) getAnimator:(NSString*)renderer;
-
-@property (readonly) PolyArrangement * arrangement;
-
-
 
 - (void) setup;
 - (void) draw:(NSDictionary*)drawingInformation;

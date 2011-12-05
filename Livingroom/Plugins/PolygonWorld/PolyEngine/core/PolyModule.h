@@ -9,8 +9,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PolyModule : NSObject
+@interface PolyModule : NSObject {
+    NSMutableArray * parameters;
+}
 
+@property (readonly) NSMutableArray * parameters;
 
 - (id) initWithEngine:(PolyEngine*)engine;
 

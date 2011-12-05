@@ -9,5 +9,6 @@
 #import "PolyModule.h"
 
 @implementation PolyModule
+@synthesize parameters;
 
 @end

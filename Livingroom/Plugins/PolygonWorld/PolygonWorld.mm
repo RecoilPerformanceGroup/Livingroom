@@ -5,6 +5,8 @@
 #import <ofxCocoaPlugins/Keystoner.h>
 
 @implementation PolygonWorld
+@synthesize polyEngine;
+@synthesize modulesOutlineview;
 
 - (id)init{
     self = [super init];
@@ -13,6 +15,10 @@
     }
     
     return self;
+}
+
+-(void)awakeFromNib{
+    [modulesOutlineview expandItem:nil expandChildren:YES];
 }
 
 -(void)draw:(NSDictionary *)drawingInformation{

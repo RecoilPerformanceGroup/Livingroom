@@ -10,7 +10,12 @@
     float cMouseX,cMouseY;
     
     PolyEngine * polyEngine;
+    NSOutlineView *modulesOutlineview;
 }
+
+@property (readonly) PolyEngine * polyEngine;
+@property (assign) IBOutlet NSOutlineView *modulesOutlineview;
+
 - (IBAction)saveArrangement:(id)sender;
 - (IBAction)loadArrangement:(id)sender;
 

@@ -24,6 +24,8 @@
 
 -(id)init {
     if(self = [super init]){
+        [self willChangeValueForKey:@"allModules"];
+        
         arrangement = [[PolyArrangement alloc] init];
         
         renders = [NSMutableDictionary dictionary];
@@ -37,6 +39,8 @@
 //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
      //   [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
         [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
+        
+        [self didChangeValueForKey:@"allModules"];
 
     }
     return self;
@@ -53,6 +57,50 @@
 
 -(PolyAnimator*) getAnimator:(NSString*)renderer{
     return [animators objectForKey:renderer];    
+}
+
+-(NSMutableArray *)allModules{
+    NSMutableArray * arr = [[NSMutableArray alloc] init];
+    
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Inputs",@"name", nil];
+    NSMutableArray * children = [NSMutableArray array];
+    for(PolyModule * module in inputs){
+        NSMutableDictionary * child = [NSMutableDictionary dictionary];
+        [child setObject:[inputs objectForKey:module] forKey:@"module"];
+        [child setObject:module  forKey:@"name"];
+        [children addObject: child];
+    }
+    [dict setObject:children forKey:@"children"];
+    [arr addObject:dict];
+
+    
+    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Animators",@"name", nil];
+    children = [NSMutableArray array];
+    for(PolyModule * module in animators){
+        NSMutableDictionary * child = [NSMutableDictionary dictionary];
+        [child setObject:[animators objectForKey:module] forKey:@"module"];
+        [child setObject:module  forKey:@"name"];
+        [children addObject: child];
+    }
+    [dict setObject:children forKey:@"children"];
+    [arr addObject:dict];
+
+    
+    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Renders",@"name", nil];
+    children = [NSMutableArray array];
+    for(PolyModule * module in renders){
+        NSMutableDictionary * child = [NSMutableDictionary dictionary];
+        [child setObject:[renders objectForKey:module] forKey:@"module"];
+        [child setObject:module  forKey:@"name"];
+        [children addObject: child];
+    }
+    [dict setObject:children forKey:@"children"];
+    [arr addObject:dict];
+
+    
+    
+    return arr;
+        
 }
 
 
