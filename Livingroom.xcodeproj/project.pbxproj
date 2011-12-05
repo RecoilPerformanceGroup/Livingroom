@@ -14,8 +14,6 @@
 		3D071994146941D60057E0B9 /* PolyRender.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198F146941D60057E0B9 /* PolyRender.mm */; };
 		3D07199A1469423E0057E0B9 /* PolyRenderSimpleWireframe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */; };
 		3D16C0A6146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */; };
-		3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
-		3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */; };
 		3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */; };
 		3D2FC23E1462FEDC0028BC01 /* PolygonWorld.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */; };
 		3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1A7146158C80027E291 /* ScriptingBridge.framework */; };
@@ -29,26 +27,11 @@
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
 		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
 		3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouse.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */; };
+		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
+		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		7F6D575B146BFEE8006F8CF0 /* PolyAnimatorCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */; };
 		7F6D5778146C0F91006F8CF0 /* PolyRenderCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D5777146C0F91006F8CF0 /* PolyRenderCracks.mm */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		3D268E6114629DBD009A366D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DDA7FFD8144F1C3800F81C9E;
-			remoteInfo = ofxCocoaPlugins;
-		};
-		3D268E6614629E98009A366D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = DDA7FFD7144F1C3800F81C9E;
-			remoteInfo = ofxCocoaPlugins;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3D386CA9145F02F800665327 /* Copy Files (Framework) */ = {
@@ -57,7 +40,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3D2FC2251462AB8F0028BC01 /* ofxCocoaPlugins.framework in Copy Files (Framework) */,
+				3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */,
 			);
 			name = "Copy Files (Framework)";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,7 +63,6 @@
 		3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderSimpleWireframe.mm; sourceTree = "<group>"; };
 		3D16C0A4146AEC9800718ADC /* PolyAnimatorSimplePushPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSimplePushPop.h; sourceTree = "<group>"; };
 		3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSimplePushPop.mm; sourceTree = "<group>"; };
-		3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ofxCocoaPlugins.xcodeproj; path = ofxCocoaPlugins/ofxCocoaPlugins.xcodeproj; sourceTree = "<group>"; };
 		3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonWorld.h; sourceTree = "<group>"; };
 		3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolygonWorld.mm; sourceTree = "<group>"; };
 		3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PolygonWorld.xib; sourceTree = "<group>"; };
@@ -104,6 +86,7 @@
 		3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSprings.mm; sourceTree = "<group>"; };
 		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouse.h; sourceTree = "<group>"; };
 		3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouse.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputSimpleMouse.mm; sourceTree = "<group>"; };
+		3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ofxCocoaPlugins.framework; path = ofxCocoaPlugins/build/Debug/ofxCocoaPlugins.framework; sourceTree = "<group>"; };
 		7F287D93146AAE0D007E8346 /* PolyDataTraits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataTraits.h; sourceTree = "<group>"; };
 		7F287D94146ABCE7007E8346 /* PolyDataObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyDataObserver.h; sourceTree = "<group>"; };
 		7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCracks.h; sourceTree = "<group>"; };
@@ -120,7 +103,7 @@
 				3D386C65145EF95C00665327 /* Cocoa.framework in Frameworks */,
 				3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */,
 				3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */,
-				3D268E6514629E8D009A366D /* ofxCocoaPlugins.framework in Frameworks */,
+				3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,14 +177,6 @@
 			path = Livingroom/Plugins/PolygonWorld/PolyEngine/renders;
 			sourceTree = SOURCE_ROOT;
 		};
-		3D268E5714629DBD009A366D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,7 +200,6 @@
 			isa = PBXGroup;
 			children = (
 				3D386C8C145F012200665327 /* Project.xcconfig */,
-				3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */,
 				3D386C6A145EF95C00665327 /* Livingroom */,
 				3D386C63145EF95C00665327 /* Frameworks */,
 				3D386C61145EF95C00665327 /* Products */,
@@ -243,6 +217,7 @@
 		3D386C63145EF95C00665327 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */,
 				3D386C64145EF95C00665327 /* Cocoa.framework */,
 				3D386C66145EF95C00665327 /* Other Frameworks */,
 			);
@@ -300,7 +275,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				3D268E6714629E98009A366D /* PBXTargetDependency */,
 			);
 			name = Livingroom;
 			productName = Livingroom;
@@ -325,28 +299,12 @@
 			mainGroup = 3D386C55145EF95C00665327;
 			productRefGroup = 3D386C61145EF95C00665327 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3D268E5714629DBD009A366D /* Products */;
-					ProjectRef = 3D268E5614629DBD009A366D /* ofxCocoaPlugins.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				3D386C5F145EF95C00665327 /* Livingroom */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		3D268E6214629DBD009A366D /* ofxCocoaPlugins.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ofxCocoaPlugins.framework;
-			remoteRef = 3D268E6114629DBD009A366D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3D386C5E145EF95C00665327 /* Resources */ = {
@@ -386,14 +344,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		3D268E6714629E98009A366D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = ofxCocoaPlugins;
-			targetProxy = 3D268E6614629E98009A366D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3D386C6D145EF95C00665327 /* InfoPlist.strings */ = {
@@ -488,6 +438,10 @@
 		3D386C7F145EF95D00665327 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ofxCocoaPlugins/build/Debug\"",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -540,6 +494,10 @@
 		3D386C80145EF95D00665327 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ofxCocoaPlugins/build/Debug\"",
+				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";

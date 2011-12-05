@@ -19,7 +19,6 @@
         vit->data().springF = ofVec2f(0,0);
     }
     
-    
     Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();        
     for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
         //Constructor
@@ -88,7 +87,7 @@
 
 -(void)draw:(NSDictionary *)drawingInformation{
    // ofBackground(255);
-    //glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+   // glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
     
     Arrangement_2::Face_iterator fit = [[engine arrangement] arr]->faces_begin();        
@@ -118,9 +117,9 @@
                 ++hc; 
             } while (hc != ccb_start); 
             
-            float c = 1.0 - diff*30.0/i;
+           // float c = 1.0 - diff*30.0/i;
           //    float c = 0.1+diff*30.0/i;
-           // float c = -0.1+diff*10.0/i;
+           float c = -0.1+diff*10.0/i;
             
             //cout<<diff*100.0/i<<endl;
             glColor3f(c,c,c);
