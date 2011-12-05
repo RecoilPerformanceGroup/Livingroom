@@ -9,14 +9,10 @@
 
 #import <ofxCocoaPlugins/Plugin.h>
 #import <Foundation/Foundation.h>
+#import "PolyModule.h"
 
-@interface PolyRender : NSObject{
+@interface PolyRender : PolyModule{
     PolyEngine * engine;
 }
 
--(id) initWithEngine:(PolyEngine*)engine;
-
-- (void) draw:(NSDictionary*)drawingInformation;
-- (void)controlDraw:(NSDictionary *)drawingInformation;
-- (void)update:(NSDictionary *)drawingInformation;
 @end
