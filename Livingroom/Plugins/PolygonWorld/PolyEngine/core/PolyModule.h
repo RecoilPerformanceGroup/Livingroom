@@ -8,12 +8,16 @@
 #import "PolyEngine.h"
 
 #import <Foundation/Foundation.h>
+#import "PolyNumberProperty.h"
 
-@interface PolyModule : NSObject {
-    NSMutableArray * parameters;
+@interface PolyModule : NSObject  <NSCoding, NSCopying>  {
+    NSMutableDictionary * properties;
+    
+    PolyEngine * engine;
+    
 }
 
-@property (readonly) NSMutableArray * parameters;
+@property (readonly) NSMutableDictionary * properties;
 
 - (id) initWithEngine:(PolyEngine*)engine;
 
@@ -25,4 +29,9 @@
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier;
 
+
+-(PolyNumberProperty*) addPropF:(NSString*)name;
+
 @end
+
+

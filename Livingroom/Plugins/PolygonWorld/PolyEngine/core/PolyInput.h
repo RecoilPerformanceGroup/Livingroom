@@ -14,7 +14,6 @@
 
 
 @interface PolyInput : PolyModule{
-    PolyEngine * engine;
 }
 
 

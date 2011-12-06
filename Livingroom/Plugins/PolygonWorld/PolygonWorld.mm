@@ -16,6 +16,8 @@
 @implementation PolygonWorld
 @synthesize polyEngine;
 @synthesize modulesOutlineview;
+@synthesize modulesTreeController;
+@synthesize propertiesDictController;
 
 
 - (void)awakeFromNib
@@ -26,79 +28,26 @@
 	self.groups = [NSMutableArray arrayWithCapacity:0];
 	scopeBar.delegate = self;
 	
-	// Add first group of items.
-	NSArray *items = [NSArray arrayWithObjects:
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"HereItem", ITEM_IDENTIFIER, 
-					   @"Here", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"ThereItem", ITEM_IDENTIFIER, 
-					   @"There", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"EverywhereItem", ITEM_IDENTIFIER, 
-					   @"Everywhere", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"SomewhereItem", ITEM_IDENTIFIER, 
-					   @"Somewhere", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"AnywhereItem", ITEM_IDENTIFIER, 
-					   @"Anywhere", ITEM_NAME, 
-					   nil], 
-					  nil];
-	
-	[self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-							@"Search:", GROUP_LABEL, 
-							[NSNumber numberWithBool:NO], GROUP_SEPARATOR, 
-							[NSNumber numberWithInt:MGRadioSelectionMode], GROUP_SELECTION_MODE, // single selection group.
-							items, GROUP_ITEMS, 
-							nil]];
-	
-	// Add second group of items.
-	items = [NSArray arrayWithObjects:
-			 [NSDictionary dictionaryWithObjectsAndKeys:
-			  @"ContentsItem", ITEM_IDENTIFIER, 
-			  @"Contents", ITEM_NAME, 
-			  nil], 
-			 [NSDictionary dictionaryWithObjectsAndKeys:
-			  @"FileNamesItem", ITEM_IDENTIFIER, 
-			  @"File Names", ITEM_NAME, 
-			  nil], 
-			 [NSDictionary dictionaryWithObjectsAndKeys:
-			  @"MetadataItem", ITEM_IDENTIFIER, 
-			  @"Metadata", ITEM_NAME, 
-			  nil], 
-			 nil];
-	
-	[self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-							// deliberately not specifying a label
-							[NSNumber numberWithBool:YES], GROUP_SEPARATOR, 
-							[NSNumber numberWithInt:MGMultipleSelectionMode], GROUP_SELECTION_MODE, // multiple selection group.
-							items, GROUP_ITEMS, 
-							nil]];
-	
+    
 	// Add third group of items.
-	items = [NSArray arrayWithObjects:
-			 [NSDictionary dictionaryWithObjectsAndKeys:
-			  @"AllFilesItem", ITEM_IDENTIFIER, 
-			  @"All Files", ITEM_NAME, 
-			  nil], 
-			 [NSDictionary dictionaryWithObjectsAndKeys:
-			  @"ImagesOnlyItem", ITEM_IDENTIFIER, 
-			  @"Images Only", ITEM_NAME, 
-			  nil], 
-			 nil];
-	
-	[self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-							@"Kind:", GROUP_LABEL, 
-							[NSNumber numberWithBool:YES], GROUP_SEPARATOR, 
-							[NSNumber numberWithInt:MGRadioSelectionMode], GROUP_SELECTION_MODE, // single selection group.
-							items, GROUP_ITEMS, 
-							nil]];
-	
+	/*items = [NSArray arrayWithObjects:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+     @"AllFilesItem", ITEM_IDENTIFIER, 
+     @"All Files", ITEM_NAME, 
+     nil], 
+     [NSDictionary dictionaryWithObjectsAndKeys:
+     @"ImagesOnlyItem", ITEM_IDENTIFIER, 
+     @"Images Only", ITEM_NAME, 
+     nil], 
+     nil];
+     
+     [self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+     @"Kind:", GROUP_LABEL, 
+     [NSNumber numberWithBool:YES], GROUP_SEPARATOR, 
+     [NSNumber numberWithInt:MGRadioSelectionMode], GROUP_SELECTION_MODE, // single selection group.
+     items, GROUP_ITEMS, 
+     nil]];
+     */
 	// Tell the scope bar to ask us for data (since we're the scope-bar's delegate).
 	[scopeBar reloadData];
 	
@@ -107,21 +56,28 @@
 	
 	// We'll also select the first item in our second group, which is a multiple-selection group.
 	// You can (and must) use this method to programmatically select/deselect items in the bar.
-	[scopeBar setSelected:YES forItem:@"ContentsItem" inGroup:1]; // remember that group-numbers are zero-based.
+    //	[scopeBar setSelected:YES forItem:@"ContentsItem" inGroup:1]; // remember that group-numbers are zero-based.
     
     
     
     //Outline view
     [modulesOutlineview expandItem:nil expandChildren:YES];
-
+    
+    //Tree controller
+    [modulesTreeController addObserver:self forKeyPath:@"selection" options:nil context:nil];
+    
 	
+    //  [propertiesDictController addObserver:self forKeyPath:@"arrangedObjects.value.sceneTokens" options:nil context:nil];
 }
+
+
 
 
 - (id)init{
     self = [super init];
     if (self) {
         polyEngine = [[PolyEngine alloc] init];
+        selectedTokens = [NSMutableSet set];
     }
     
     return self;
@@ -133,25 +89,25 @@
     
     ofColor(255,0,0,255);
     ofCircle(cMouseX, cMouseY, 0.01);
-
+    
 }
 
 -(void)update:(NSDictionary *)drawingInformation{
     [polyEngine update:drawingInformation];
-
+    
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     ofBackground(0, 0, 0);
     ofSetColor(0,0,0);
-
+    
     glScaled(ofGetWidth(), ofGetHeight(),1);
     
     cW = ofGetWidth();
     cH = ofGetHeight();
-
+    
     [polyEngine controlDraw:drawingInformation];
-
+    
 }
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
@@ -171,9 +127,9 @@
     
     cMouseX = x;
     cMouseY = y;
-
-}
     
+}
+
 -(void)controlMouseDragged:(float)x y:(float)y button:(int)button {
     
     [polyEngine controlMouseDragged:x/cW y:y/cH button:button];
@@ -185,6 +141,25 @@
     cMouseY = y;
 }
 
+-(NSMutableDictionary *)customProperties{
+    NSMutableDictionary * props = customProperties;
+
+//	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+    	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+    return props;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([(NSString*)context isEqualToString:@"customProperties"]){
+		NSArray * modulesArray = [customProperties objectForKey:@"modules"];
+        NSLog(@"%@",modulesArray);
+    }
+    //   NSLog(@"object %@",[[modulesTreeController selectedObjects] objectAtIndex:0] );
+    
+    //  NSLog(@"tokens: %@",  [polyEngine allSceneTokens]);
+    
+}
+
 - (IBAction)saveArrangement:(id)sender {
     [[polyEngine arrangement] saveArrangement];
 }
@@ -192,8 +167,36 @@
 - (IBAction)loadArrangement:(id)sender {
     [[globalController openglLock] lock];
     [[polyEngine arrangement] loadArrangement];
-        [[globalController openglLock] unlock];
+    [[globalController openglLock] unlock];
 }
+
+- (IBAction)setSceneTokens:(id)sender {
+    [self.groups removeAllObjects];
+    
+    
+    // Add first group of items.
+	NSMutableArray *items = [NSMutableArray array];	
+	// Add second group of items.
+    
+    for(NSString * tok in [polyEngine allSceneTokens]){
+        [items addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                           tok, ITEM_IDENTIFIER, 
+                           tok, ITEM_NAME, 
+                           nil]];
+    }
+    
+	[self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+							// deliberately not specifying a label
+							[NSNumber numberWithBool:NO], GROUP_SEPARATOR, 
+							[NSNumber numberWithInt:MGMultipleSelectionMode], GROUP_SELECTION_MODE, // multiple selection group.
+							items, GROUP_ITEMS, 
+							nil]];
+    
+    [scopeBar reloadData];
+    
+	
+}
+
 
 #pragma mark MGScopeBarDelegate methods
 
@@ -249,6 +252,7 @@
 
 - (NSImage *)scopeBar:(MGScopeBar *)scopeBar imageForItem:(NSString *)identifier inGroup:(int)groupNumber
 {
+    return nil;
 	// Optional method. If not implemented (or if you return nil), items will not have an image.
 	if (groupNumber == 0) {
 		return [NSImage imageNamed:@"NSComputer"];
@@ -275,6 +279,40 @@
 							   (selected) ? @"selected" : @"deselected", 
 							   groupNumber];
 	NSLog(@"%@", displayString);
+    
+    if(selected){
+        [selectedTokens addObject:identifier];
+    } else {
+        [selectedTokens removeObject:identifier];
+    }
+    if([selectedTokens count] > 0){
+        [propertiesDictController setFilterPredicate:nil];
+
+        NSLog(@"%@",selectedTokens);
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY value.sceneTokens in %@", selectedTokens];    
+        [propertiesDictController setFilterPredicate:predicate];
+//        [modulesTreeController fetch:self];
+    } else {
+        [propertiesDictController setFilterPredicate:nil];
+    }
+
+}
+
+#pragma mark Tableview
+
+-(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+    
+    if([[tableColumn identifier] isEqualToString:@"val"]){
+        id property = [[[propertiesDictController arrangedObjects] objectAtIndex:row] value];
+        if([property isKindOfClass:[NumberProperty class]]){
+            return [tableView makeViewWithIdentifier:@"slider" owner:self];
+        }
+        
+        
+        return [tableView makeViewWithIdentifier:@"textfield" owner:self];
+    } else {
+        return [tableView makeViewWithIdentifier:@"name" owner:self];
+    }
 }
 
 

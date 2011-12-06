@@ -10,12 +10,6 @@
 
 @implementation PolyAnimator
 
--(id) initWithEngine:(PolyEngine*)_engine{
-    if(self = [self init]){
-        engine = _engine;
-    } 
-    return self;
-}
 
 -(void)draw:(NSDictionary *)drawingInformation{
 }

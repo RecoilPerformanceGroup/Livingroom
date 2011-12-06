@@ -16,6 +16,9 @@
 @property (readonly) PolyArrangement * arrangement;
 @property (readonly) NSMutableArray * allModules;
 
+-(NSArray*) allSceneTokens;
+
+
 -(PolyRender*) getRenderer:(NSString*)renderer;
 -(PolyInput*) getInput:(NSString*)renderer;
 -(PolyAnimator*) getAnimator:(NSString*)renderer;

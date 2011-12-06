@@ -12,7 +12,6 @@
 #import "PolyModule.h"
 
 @interface PolyRender : PolyModule{
-    PolyEngine * engine;
 }
 
 @end
