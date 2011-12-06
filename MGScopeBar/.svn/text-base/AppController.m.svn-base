@@ -1,8 +1,13 @@
-#import "PolyEngine.h"
-#import "PolygonWorld.h"
-#import <ofxCocoaPlugins/Keystoner.h>
+//
+//  AppController.m
+//  MGScopeBar
+//
+//  Created by Matt Gemmell on 16/03/2008.
+//
 
+#import "AppController.h"
 #import "MGScopeBar.h"
+
 
 // Keys for our sample data.
 #define GROUP_LABEL				@"Label"			// string
@@ -13,9 +18,10 @@
 #define ITEM_NAME				@"Name"				// string
 
 
-@implementation PolygonWorld
-@synthesize polyEngine;
-@synthesize modulesOutlineview;
+@implementation AppController
+
+
+#pragma mark Setup and teardown
 
 
 - (void)awakeFromNib
@@ -35,18 +41,6 @@
 					  [NSDictionary dictionaryWithObjectsAndKeys:
 					   @"ThereItem", ITEM_IDENTIFIER, 
 					   @"There", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"EverywhereItem", ITEM_IDENTIFIER, 
-					   @"Everywhere", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"SomewhereItem", ITEM_IDENTIFIER, 
-					   @"Somewhere", ITEM_NAME, 
-					   nil], 
-					  [NSDictionary dictionaryWithObjectsAndKeys:
-					   @"AnywhereItem", ITEM_IDENTIFIER, 
-					   @"Anywhere", ITEM_NAME, 
 					   nil], 
 					  nil];
 	
@@ -108,92 +102,18 @@
 	// We'll also select the first item in our second group, which is a multiple-selection group.
 	// You can (and must) use this method to programmatically select/deselect items in the bar.
 	[scopeBar setSelected:YES forItem:@"ContentsItem" inGroup:1]; // remember that group-numbers are zero-based.
-    
-    
-    
-    //Outline view
-    [modulesOutlineview expandItem:nil expandChildren:YES];
-
 	
+	// Clear out the label field below the scope bar.
+	[labelField setStringValue:@""];
 }
 
 
-- (id)init{
-    self = [super init];
-    if (self) {
-        polyEngine = [[PolyEngine alloc] init];
-    }
-    
-    return self;
+- (void)dealloc
+{
+	self.groups = nil;
+	[super dealloc];
 }
 
--(void)draw:(NSDictionary *)drawingInformation{
-    ofBackground(0, 0, 0);
-    [polyEngine draw:drawingInformation];
-    
-    ofColor(255,0,0,255);
-    ofCircle(cMouseX, cMouseY, 0.01);
-
-}
-
--(void)update:(NSDictionary *)drawingInformation{
-    [polyEngine update:drawingInformation];
-
-}
-
--(void)controlDraw:(NSDictionary *)drawingInformation{    
-    ofBackground(0, 0, 0);
-    ofSetColor(0,0,0);
-
-    glScaled(ofGetWidth(), ofGetHeight(),1);
-    
-    cW = ofGetWidth();
-    cH = ofGetHeight();
-
-    [polyEngine controlDraw:drawingInformation];
-
-}
-
--(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-    [polyEngine controlMousePressed:x/cW y:y/cH button:button];
-}
--(void)controlMouseReleased:(float)x y:(float)y{
-    [polyEngine controlMouseReleased:x/cW y:y/cH];
-}
-
--(void)controlKeyPressed:(int)key modifier:(int)modifier{
-    [polyEngine controlKeyPressed:key modifier:modifier];
-}
-
--(void)controlMouseMoved:(float)x y:(float)y {
-    x /= cW;
-    y /= cH;
-    
-    cMouseX = x;
-    cMouseY = y;
-
-}
-    
--(void)controlMouseDragged:(float)x y:(float)y button:(int)button {
-    
-    [polyEngine controlMouseDragged:x/cW y:y/cH button:button];
-    
-    x /= cW;
-    y /= cH;
-    
-    cMouseX = x;
-    cMouseY = y;
-}
-
-- (IBAction)saveArrangement:(id)sender {
-    [[polyEngine arrangement] saveArrangement];
-}
-
-- (IBAction)loadArrangement:(id)sender {
-    [[globalController openglLock] lock];
-    [[polyEngine arrangement] loadArrangement];
-        [[globalController openglLock] unlock];
-}
 
 #pragma mark MGScopeBarDelegate methods
 
@@ -236,7 +156,7 @@
 
 - (MGScopeBarGroupSelectionMode)scopeBar:(MGScopeBar *)theScopeBar selectionModeForGroup:(int)groupNumber
 {
-	return (MGScopeBarGroupSelectionMode)[[[self.groups objectAtIndex:groupNumber] objectForKey:GROUP_SELECTION_MODE] intValue];
+	return [[[self.groups objectAtIndex:groupNumber] objectForKey:GROUP_SELECTION_MODE] intValue];
 }
 
 
@@ -266,6 +186,13 @@
 }
 
 
+- (NSView *)accessoryViewForScopeBar:(MGScopeBar *)scopeBar
+{
+	// Optional method. If not implemented (or if you return nil), the scope-bar will not have an accessory view.
+	return accessoryView;
+}
+
+
 - (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected 
 		 forItem:(NSString *)identifier inGroup:(int)groupNumber
 {
@@ -274,7 +201,8 @@
 							   [self scopeBar:theScopeBar titleOfItem:identifier inGroup:groupNumber], 
 							   (selected) ? @"selected" : @"deselected", 
 							   groupNumber];
-	NSLog(@"%@", displayString);
+	[labelField setStringValue:displayString];
+	//NSLog(@"%@", displayString);
 }
 
 
@@ -282,7 +210,6 @@
 
 
 @synthesize groups;
-
 
 
 @end
