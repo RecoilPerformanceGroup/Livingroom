@@ -12,24 +12,82 @@
 
 -(void)update:(NSDictionary *)drawingInformation{
     
-    Arrangement_2::Vertex_iterator vit = [[engine arrangement] arr]->vertices_begin();    
-    for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
-        
-//        vit->data().crackAmount+=0.1;
-        
-    } 
+    float pressure = 0.1;
     
-    Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();    
+    [[engine arrangement] cgalObjectClosestToPoint:Point_2(mouse.x, mouse.y)];
     
-    for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
-        
-        eit->data().crackAmount = (eit->data().crackAmount*0.85) + (ofRandom(0.0,1.0)*.15);
-      //  cout << eit->data().crackAmount << endl; 
-    }      
-    
-    glEnd();   
-
-        
 }
+
+
+- (void) controlMousePressed:(float) x y:(float)y button:(int)button{
+    mousePressed = YES;
+    mouse = ofVec2f(x,y);    
+}
+
+- (void) controlMouseMoved:(float) x y:(float)y{
+    mouse = ofVec2f(x,y);    
+}
+
+- (void) controlMouseReleased:(float) x y:(float)y{
+    mousePressed = NO;
+}
+
+-(void)controlMouseDragged:(float)x y:(float)y button:(int)button{
+    mouse = ofVec2f(x,y);
+}
+
+/**
+ -(void)addCrackAmount:float amount toVertex: Arrangement_2::Vertex v{
+ 
+ // add crack
+ 
+ vit->data().crackAmount+=0.1;
+ 
+ // if crack is > 1, distribute to the nearest halfedge with most crack
+ 
+ if(vit->data().crackAmount > 1.0){
+ 
+ Arrangement_2::Vertex vToPress;
+ float highestPressure = 0.0;
+ 
+ Arrangement_2::Halfedge_around_vertex_circulator eit = vit->vertex_begin();
+ 
+ for ( ; eit !=vit->vertex_begin(); ++eit) {
+ 
+ 
+ float pressure = eit->vertex()->data().crackAmount;
+ if(pressure > highestPressure){
+ vToPress = eit->vertex();
+ }
+ }
+ 
+ // if none of the vertices were a'crackin' we pick the 'middle' one
+ 
+ if(highestPressure == 0){
+ 
+ int numberVertices = vit.vertex_degree ()
+ 
+ eit = vit->vertex_begin();
+ 
+ for ( ; eit !=vit->vertex_begin(); ++eit) {
+ float pressure = eit->data().crackAmount;
+ if(pressure > highestPressure){
+ vToPress = eit;
+ }
+ }
+ 
+ }
+ 
+ Halfedge_around_vertex_circulator
+ 
+ vit->vertex_begin () 
+ 
+ 
+ }
+ 
+ 
+ }
+ 
+ **/
 
 @end

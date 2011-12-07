@@ -20,6 +20,10 @@
 -(Point_2) n_point;
 
 -(vector< Polygon_2 >) hulls;
+-(CGAL::Object) cgalObjectClosestToPoint: (Point_2) queryPoint;
+-(Arrangement_2::Vertex_const_handle) vertexClosestToPoint: (Point_2) queryPoint;
+-(Arrangement_2::Halfedge_const_handle) halfedgeClosestToPoint: (Point_2) queryPoint;
+-(Arrangement_2::Face_const_handle) faceClosestToPoint: (Point_2) queryPoint;
 
 -(void) saveArrangement;
 -(void) loadArrangement;

@@ -166,6 +166,9 @@
 }
 
 -(void)controlMouseMoved:(float)x y:(float)y {
+   
+    [polyEngine controlMouseMoved:x/cW y:y/cH];
+
     x /= cW;
     y /= cH;
     

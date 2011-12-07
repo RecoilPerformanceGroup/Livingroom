@@ -37,7 +37,7 @@
 
         animators = [NSMutableDictionary dictionary];
 //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
-     //   [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
+        [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
      //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
         
         [self didChangeValueForKey:@"allModules"];
@@ -153,7 +153,15 @@
     }      
 }
 
-//- (void) controlMouseMoved:(float) x y:(float)y;
+- (void) controlMouseMoved:(float) x y:(float)y {
+    for(NSString* p in inputs){
+        [[inputs objectForKey:p] controlMouseMoved:x y:y];
+    }   
+    for(NSString* p in animators){
+        [[animators objectForKey:p] controlMouseMoved:x y:y];
+    }   
+}
+
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
     for(NSString* p in inputs){
         [[inputs objectForKey:p] controlMousePressed:x y:y button:button];
