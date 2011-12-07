@@ -13,6 +13,18 @@
 
 @implementation PolyInputSimpleMouse
 
+
+-(id)init{
+    if(self = [super init]){
+        [[self addPropF:@"test1"] setMaxValue:100];
+        [[self addPropF:@"test2"] setMaxValue:100];
+        [[self addPropF:@"test3"] setMaxValue:100];
+        
+    }
+    
+    return self;
+}
+
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
 //    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
         

@@ -30,18 +30,20 @@
         
         renders = [NSMutableDictionary dictionary];
         [renders setObject:[[PolyRenderSimpleWireframe alloc] initWithEngine:self] forKey:@"simpleWire"];
-    //    [renders setObject:[[PolyRenderCracks alloc] initWithEngine:self] forKey:@"cracks"];
-
+        //    [renders setObject:[[PolyRenderCracks alloc] initWithEngine:self] forKey:@"cracks"];
+        
         inputs = [NSMutableDictionary dictionary];
-        [inputs setObject:[[PolyInputSimpleMouse alloc] initWithEngine:self] forKey:@"polyInputSimpleMouse"];
-
+        PolyInputSimpleMouse * m = [[PolyInputSimpleMouse alloc] initWithEngine:self];
+        [inputs setObject:m forKey:@"polyInputSimpleMouse"];
+        
         animators = [NSMutableDictionary dictionary];
 //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
         [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
      //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
+
         
         [self didChangeValueForKey:@"allModules"];
-
+        
     }
     return self;
 }
@@ -62,19 +64,25 @@
 -(NSMutableArray *)allModules{
     NSMutableArray * arr = [[NSMutableArray alloc] init];
     
-    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Inputs",@"name", nil];
+    NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                  @"Inputs",@"name",
+                                  [NSDictionary dictionary], @"properties", nil];
     NSMutableArray * children = [NSMutableArray array];
     for(PolyModule * module in inputs){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:[inputs objectForKey:module] forKey:@"module"];
         [child setObject:module  forKey:@"name"];
         [children addObject: child];
+        
+        //NSLog(@"%@", [[inputs objectForKey:module] properties]);
     }
     [dict setObject:children forKey:@"children"];
     [arr addObject:dict];
-
     
-    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Animators",@"name", nil];
+    
+    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+            @"Animators",@"name",
+            [NSDictionary dictionary], @"properties", nil];
     children = [NSMutableArray array];
     for(PolyModule * module in animators){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
@@ -84,9 +92,11 @@
     }
     [dict setObject:children forKey:@"children"];
     [arr addObject:dict];
-
     
-    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"Renders",@"name", nil];
+    
+    dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+            @"Renders",@"name",
+            [NSDictionary dictionary], @"properties", nil];
     children = [NSMutableArray array];
     for(PolyModule * module in renders){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
@@ -96,11 +106,27 @@
     }
     [dict setObject:children forKey:@"children"];
     [arr addObject:dict];
-
+    
     
     
     return arr;
-        
+    
+}
+
+-(NSArray*) allSceneTokens {
+    NSMutableArray * tokens = [NSMutableArray array];
+    for(NSDictionary * dict in [self allModules]){
+        for(PolyModule * module in [dict valueForKey:@"children"]){
+            for(PolyNumberProperty * prop in [[[module valueForKey:@"module"] valueForKey:@"properties"] allValues]){
+                for(NSString * tok in [prop sceneTokens]){
+                    if(![tokens containsObject:tok ]){
+                        [tokens addObject:tok];
+                    }                    
+                }
+            }
+        }
+    }
+    return tokens;
 }
 
 

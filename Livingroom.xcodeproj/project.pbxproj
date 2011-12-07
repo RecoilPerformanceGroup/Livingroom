@@ -30,6 +30,7 @@
 		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
+		3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8772A148E628300F7558C /* PolyNumberProperty.mm */; };
 		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
 		7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263734148D33C10055DCFA /* MGScopeBar.m */; };
 		7F26374D148D33C10055DCFA /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7F26373A148D33C10055DCFA /* ReadMe.txt */; };
@@ -95,6 +96,8 @@
 		3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ofxCocoaPlugins.framework; path = ofxCocoaPlugins/build/Debug/ofxCocoaPlugins.framework; sourceTree = "<group>"; };
 		3D9715CF148D180D009A8068 /* PolyModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyModule.h; sourceTree = "<group>"; };
 		3D9715D0148D180D009A8068 /* PolyModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyModule.mm; sourceTree = "<group>"; };
+		3DE87729148E628300F7558C /* PolyNumberProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolyNumberProperty.h; path = properties/PolyNumberProperty.h; sourceTree = "<group>"; };
+		3DE8772A148E628300F7558C /* PolyNumberProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PolyNumberProperty.mm; path = properties/PolyNumberProperty.mm; sourceTree = "<group>"; };
 		7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
 		7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGRecessedPopUpButtonCell.m; sourceTree = "<group>"; };
 		7F263733148D33C10055DCFA /* MGScopeBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBar.h; sourceTree = "<group>"; };
@@ -155,6 +158,8 @@
 				3D07198F146941D60057E0B9 /* PolyRender.mm */,
 				7F287D93146AAE0D007E8346 /* PolyDataTraits.h */,
 				7F287D94146ABCE7007E8346 /* PolyDataObserver.h */,
+				3DE87729148E628300F7558C /* PolyNumberProperty.h */,
+				3DE8772A148E628300F7558C /* PolyNumberProperty.mm */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 				3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */,
 				7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */,
 				7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */,
+				3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,7 +424,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3D386C8C145F012200665327 /* Project.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = NO;
@@ -452,7 +458,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3D386C8C145F012200665327 /* Project.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COPY_PHASE_STRIP = YES;
@@ -490,7 +496,6 @@
 					/opt/local/include,
 					/usr/local/include,
 					"$(OF_CORE_HEADERS)",
-					ofxCocoaPlugins/src/CorePlugins,
 					"$(OF_PATH)/addons/ofxOpenCv/src",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",
@@ -547,7 +552,6 @@
 					/opt/local/include,
 					/usr/local/include,
 					"$(OF_CORE_HEADERS)",
-					ofxCocoaPlugins/src/CorePlugins,
 					"$(OF_PATH)/addons/ofxOpenCv/src",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
 					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",

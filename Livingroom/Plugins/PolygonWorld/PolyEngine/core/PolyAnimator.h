@@ -14,7 +14,6 @@
 
 
 @interface PolyAnimator : PolyModule {
-    PolyEngine * engine;
 }
 
 
