@@ -101,13 +101,15 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     ofBackground(0, 0, 0);
     ofSetColor(0,0,0);
-    
-    glScaled(ofGetWidth(), ofGetHeight(),1);
-    
-    cW = ofGetWidth();
-    cH = ofGetHeight();
-    
-    [polyEngine controlDraw:drawingInformation];
+    glPushMatrix(); {
+        
+        glScaled(ofGetWidth(), ofGetHeight(),1);
+        
+        cW = ofGetWidth();
+        cH = ofGetHeight();
+        
+        [polyEngine controlDraw:drawingInformation];
+    } glPopMatrix();
     
 }
 
@@ -123,6 +125,9 @@
 }
 
 -(void)controlMouseMoved:(float)x y:(float)y {
+    
+    [polyEngine controlMouseMoved:x/cW y:y/cH];
+    
     x /= cW;
     y /= cH;
     
@@ -315,15 +320,15 @@
     }
     if([selectedTokens count] > 0){
         [propertiesDictController setFilterPredicate:nil];
-
+        
         NSLog(@"%@",selectedTokens);
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY value.sceneTokens in %@", selectedTokens];    
         [propertiesDictController setFilterPredicate:predicate];
-//        [modulesTreeController fetch:self];
+        //        [modulesTreeController fetch:self];
     } else {
         [propertiesDictController setFilterPredicate:nil];
     }
-
+    
 }
 
 #pragma mark Tableview

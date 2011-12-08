@@ -8,6 +8,11 @@
 
 #import "PolyAnimator.h"
 
-@interface PolyAnimatorCracks : PolyAnimator
+@interface PolyAnimatorCracks : PolyAnimator{
+
+    BOOL mousePressed;
+    ofVec2f mouse;
+
+}
 
 @end

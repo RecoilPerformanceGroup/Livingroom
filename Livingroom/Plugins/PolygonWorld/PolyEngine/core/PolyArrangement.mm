@@ -9,6 +9,8 @@
 #import "PolyArrangement.h"
 #include <CGAL/convex_hull_2.h>
 
+#include <CGAL/Arr_landmarks_point_location.h>
+
 #include <CGAL/IO/Arr_iostream.h>
 #include <fstream>
 
@@ -27,6 +29,23 @@
 //
 //-----------
 //
+
+
+- (Arrangement_2 *)arr
+{
+    @synchronized(self)
+    {
+        return arr;
+    }
+}
+- (void)setSomeRect:(Arrangement_2 *)aArr
+{
+    @synchronized(self)
+    {
+        arr = aArr;
+    }
+}
+
 
 CGAL::Cartesian_converter<Kernel,CGAL::Convex_hull_traits_2<Kernel> > converter;
 CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter2;
@@ -50,8 +69,10 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //
 -(vector< Polygon_2>) hulls{
     Arrangement_2 output;
-    output.assign(*arr);
-    
+    @synchronized(self)
+    {
+        output.assign(*arr);
+    }    
     vector<Arrangement_2::Halfedge_handle> deleteHandles;
     
     Arrangement_2::Edge_iterator eit = output.edges_begin();
@@ -89,6 +110,64 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     return ret;
 }
 
+#pragma mark Search Functions
+
+// should be implemented as in:
+// http://www.cgal.org/Manual/3.3/doc_html/cgal_manual/Arrangement_2/Chapter_main.html#Subsection_20.3.1
+
+-(CGAL::Object) cgalObjectAtPoint:(Point_2) queryPoint{
+    
+    @synchronized(self)
+    {
+
+        if(arr->is_valid()){
+            
+            typedef CGAL::Arr_landmarks_point_location<Arrangement_2>  Landmarks_pl;
+            
+            Landmarks_pl     pl;
+            
+            pl.attach (*arr);
+            
+            // Perform the point-location query.
+            CGAL::Object obj = pl.locate (queryPoint);
+            
+            Arrangement_2::Vertex_const_handle    v;
+            Arrangement_2::Halfedge_const_handle  e;
+            Arrangement_2::Face_const_handle      f;
+            
+            // std::cout << "The point " << queryPoint << " is located ";
+            if (CGAL::assign (f, obj)) {
+                // q is located inside a face:
+                if (f->is_unbounded())
+                    ;//    std::cout << "inside the unbounded face." << std::endl;
+                else
+                    ;//    std::cout << "inside a bounded face." << std::endl;
+                return obj;
+            }
+            else if (CGAL::assign (e, obj)) {
+                // q is located on an edge:
+                // std::cout << "on an edge: " << e->curve() << std::endl;
+                return obj;
+            }
+            else if (CGAL::assign (v, obj)) {
+                // q is located on a vertex:
+                if (v->is_isolated())
+                    ;//    std::cout << "on an isolated vertex: " << v->point() << std::endl;
+                else
+                    ;//    std::cout << "on a vertex: " << v->point() << std::endl;
+                return obj;
+            }
+            else {
+                CGAL_assertion_msg (false, "Invalid object.");
+                return;
+            }
+            
+        }
+    }
+    
+}
+
+
 //
 //-------------
 //
@@ -111,7 +190,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     
     in_file >> *arr;
     in_file.close();
-
+    
 }
 
 @end

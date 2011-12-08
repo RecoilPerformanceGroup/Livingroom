@@ -59,8 +59,10 @@
     
     glEnd();   
     
-    glPointSize(1);
+//TODO: HULLS is sllooowww
     
+/* 
+    glPointSize(1);
     
     ofSetColor(255,0,0);
     glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
@@ -76,6 +78,8 @@
         }
         glEnd();
     }
+*/
+    
 }
 
 @end

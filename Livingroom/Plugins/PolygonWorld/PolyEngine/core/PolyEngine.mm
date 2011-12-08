@@ -35,9 +35,10 @@
         PolyInputSimpleMouse * m = [[PolyInputSimpleMouse alloc] initWithEngine:self];
         [modules setObject:m forKey:@"simpleMouse"];
         
-        //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
-        //   [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
-        //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
+        animators = [NSMutableDictionary dictionary];
+//        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
+        [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
+     //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
         
         [self didChangeValueForKey:@"allModulesTree"];
         
@@ -174,7 +175,11 @@
     }   
 }
 
-- (void) controlMouseMoved:(float) x y:(float)y{}
+- (void) controlMouseMoved:(float) x y:(float)y {
+    for(PolyModule * module in [modules allValues]){
+        [module controlMouseMoved:x y:y];
+    }   
+}
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
     for(PolyModule * module in [modules allValues]){

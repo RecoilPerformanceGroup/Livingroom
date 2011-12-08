@@ -29,6 +29,10 @@
 - (void) controlMouseReleased:(float) x y:(float)y{
     
 }
+- (void) controlMouseMoved:(float) x y:(float)y{
+    
+}
+
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
 }
 
