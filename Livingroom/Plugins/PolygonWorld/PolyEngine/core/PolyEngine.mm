@@ -35,9 +35,8 @@
         PolyInputSimpleMouse * m = [[PolyInputSimpleMouse alloc] initWithEngine:self];
         [modules setObject:m forKey:@"simpleMouse"];
         
-        animators = [NSMutableDictionary dictionary];
 //        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
-        [animators setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"polyAnimatorCracks"];
+        [modules setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"cracks"];
      //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
         
         [self didChangeValueForKey:@"allModulesTree"];
