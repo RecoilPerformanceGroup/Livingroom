@@ -151,8 +151,8 @@
     NSMutableDictionary * props = customProperties;
     NSMutableArray * arr = [NSMutableArray array];
     [props setValue:arr forKey:@"modules"];
-//	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
-//    	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+    //	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+    //    	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
     
     for(NSString * moduleName in [[polyEngine modules] allKeys]){
         NSMutableDictionary * dict = [NSMutableDictionary dictionary];
@@ -168,24 +168,26 @@
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([(NSString*)context isEqualToString:@"customProperties"]){
 		NSArray * modulesArray = [customProperties objectForKey:@"modules"];
-        for(NSDictionary * moduleDict in modulesArray){
-            PolyModule * module = [[polyEngine modules]objectForKey:[moduleDict valueForKey:@"key"]];
-            if(module != nil){
-                for(NSString * propKey in [[moduleDict objectForKey:@"properties"] allKeys]){
-                    PolyNumberProperty * savedProp = [[moduleDict objectForKey:@"properties"] objectForKey:propKey];
-                    PolyNumberProperty * prop = [[module properties] objectForKey:propKey];
-                    if(prop != nil){
-                        [prop setValue:[savedProp valueForKey:@"value"] forKey:@"value"];
-                        [prop setValue:[savedProp valueForKey:@"sceneTokens"] forKey:@"sceneTokens"];
-                        [prop setValue:[savedProp valueForKey:@"minValue"] forKey:@"minValue"];
-                        [prop setValue:[savedProp valueForKey:@"maxValue"] forKey:@"maxValue"];
+        if(modulesArray != nil){
+            for(NSDictionary * moduleDict in modulesArray){
+                PolyModule * module = [[polyEngine modules]objectForKey:[moduleDict valueForKey:@"key"]];
+                if(module != nil){
+                    for(NSString * propKey in [[moduleDict objectForKey:@"properties"] allKeys]){
+                        PolyNumberProperty * savedProp = [[moduleDict objectForKey:@"properties"] objectForKey:propKey];
+                        PolyNumberProperty * prop = [[module properties] objectForKey:propKey];
+                        if(prop != nil){
+                            [prop setValue:[savedProp valueForKey:@"value"] forKey:@"value"];
+                            [prop setValue:[savedProp valueForKey:@"sceneTokens"] forKey:@"sceneTokens"];
+                            [prop setValue:[savedProp valueForKey:@"minValue"] forKey:@"minValue"];
+                            [prop setValue:[savedProp valueForKey:@"maxValue"] forKey:@"maxValue"];
+                        }
                     }
                 }
             }
-        }
+            [self setSceneTokens:self];
 
+        }
         
-        [self setSceneTokens:self];
     }
     //   NSLog(@"object %@",[[modulesTreeController selectedObjects] objectAtIndex:0] );
     
