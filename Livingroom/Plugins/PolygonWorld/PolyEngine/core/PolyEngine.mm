@@ -41,6 +41,10 @@
         
         [self didChangeValueForKey:@"allModulesTree"];
         
+        
+        for(NSString * key in [modules allKeys]){
+            [[modules objectForKey:key] setKey:key];
+        }
     }
     return self;
 }
@@ -86,7 +90,7 @@
     for(PolyModule * module in [self allInputModules] ){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
-        [child setObject:NSStringFromClass([module class])  forKey:@"name"];
+        [child setObject:[module key]  forKey:@"name"];
         [children addObject: child];
         
         //NSLog(@"%@", [[inputs objectForKey:module] properties]);
@@ -102,7 +106,7 @@
     for(PolyModule * module in [self allAnimatorModules]){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
-        [child setObject:NSStringFromClass([module class])  forKey:@"name"];
+        [child setObject:[module key]  forKey:@"name"];
         [children addObject: child];
     }
     [dict setObject:children forKey:@"children"];
@@ -116,7 +120,7 @@
     for(PolyModule * module in [self allRenderModules]){
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
-        [child setObject:NSStringFromClass([module class])  forKey:@"name"];
+        [child setObject:[module key]  forKey:@"name"];
         [children addObject: child];
     }
     [dict setObject:children forKey:@"children"];
@@ -170,7 +174,8 @@
     }   
 }
 
-//- (void) controlMouseMoved:(float) x y:(float)y;
+- (void) controlMouseMoved:(float) x y:(float)y{}
+
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
     for(PolyModule * module in [modules allValues]){
         [module  controlMousePressed:x y:y button:button];
@@ -189,7 +194,8 @@
         
     }   
 }
-//- (void) controlMouseScrolled:(NSEvent *)theEvent;
+
+- (void) controlMouseScrolled:(NSEvent *)theEvent{}
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
     for(PolyModule * module in [modules allValues]){
@@ -197,6 +203,6 @@
     }   
 }
 
-//- (void) controlKeyReleased:(int)key modifier:(int)modifier;
+- (void) controlKeyReleased:(int)key modifier:(int)modifier{}
 
 @end

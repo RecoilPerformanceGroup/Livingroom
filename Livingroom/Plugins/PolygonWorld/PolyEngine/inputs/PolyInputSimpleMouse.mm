@@ -128,10 +128,10 @@
      */
 }
 
-- (void) controlKeyPressed:(int)key modifier:(int)modifier{
-    NSLog(@"Key %i",key);
+- (void) controlKeyPressed:(int)_key modifier:(int)modifier{
+    NSLog(@"Key %i",_key);
     
-    if(key == 36){
+    if(_key == 36){
         //If 3 or more points, we can form a polygon
         if(pointsBuffer.size() > 2){        
             subtractedPolygons.clear();

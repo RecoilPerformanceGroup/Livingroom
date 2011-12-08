@@ -9,7 +9,7 @@
 #import "PolyModule.h"
 
 @implementation PolyModule
-@synthesize properties, type;
+@synthesize properties, type, key;
 
 
 -(id) initWithEngine:(PolyEngine*)_engine{

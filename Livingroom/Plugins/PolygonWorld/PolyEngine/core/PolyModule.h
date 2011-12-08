@@ -18,17 +18,21 @@ typedef enum _PolyModuleType {
 } PolyModuleType;
 
 
-@interface PolyModule : NSObject  <NSCoding, NSCopying>  {
+@interface PolyModule : NSObject  <NSCoding>  {
     NSMutableDictionary * properties;
     
     PolyEngine * engine;
     
     PolyModuleType type;
     
+    NSString * key;
+    
 }
 
 @property (readonly) NSMutableDictionary * properties;
 @property (readonly) PolyModuleType type;
+@property (readwrite, retain)     NSString * key;
+
 
 - (id) initWithEngine:(PolyEngine*)engine;
 
