@@ -5,6 +5,6 @@
     NSMutableArray * sceneTokens;
 }
 
-@property (readonly) NSMutableArray * sceneTokens;
+@property (readwrite, retain) NSMutableArray * sceneTokens;
 
 @end

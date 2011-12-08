@@ -10,17 +10,30 @@
 #import <Foundation/Foundation.h>
 #import "PolyNumberProperty.h"
 
+// Selection modes for the buttons within a group.
+typedef enum _PolyModuleType {
+    PolyTypeInput,
+    PolyTypeRender,
+    PolyTypeAnimator
+} PolyModuleType;
+
+
 @interface PolyModule : NSObject  <NSCoding, NSCopying>  {
     NSMutableDictionary * properties;
     
     PolyEngine * engine;
     
+    PolyModuleType type;
+    
 }
 
 @property (readonly) NSMutableDictionary * properties;
+@property (readonly) PolyModuleType type;
 
 - (id) initWithEngine:(PolyEngine*)engine;
 
+- (void) setup;
+- (void) draw:(NSDictionary *)drawingInformation;
 - (void) controlDraw:(NSDictionary *)drawingInformation;
 - (void) update:(NSDictionary *)drawingInformation;
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button;

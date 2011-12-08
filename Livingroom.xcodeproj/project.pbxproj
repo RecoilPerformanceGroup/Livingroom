@@ -490,30 +490,18 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/build/Debug\"",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					/opt/local/include,
 					/usr/local/include,
-					"$(OF_CORE_HEADERS)",
-					"$(OF_PATH)/addons/ofxOpenCv/src",
-					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
-					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",
-					"$(OF_PATH)/libs",
 				);
 				INFOPLIST_FILE = "Livingroom/Livingroom-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/opt/local/lib,
 					"$(inherited)",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/iphone\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/linux\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/linux64\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -545,31 +533,19 @@
 					"\"$(SRCROOT)/ofxCocoaPlugins/build/Debug\"",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					/opt/local/include,
 					/usr/local/include,
-					"$(OF_CORE_HEADERS)",
-					"$(OF_PATH)/addons/ofxOpenCv/src",
-					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include",
-					"$(OF_PATH)/addons/ofxOpenCv/libs/opencv/include/opencv",
-					"$(OF_PATH)/libs",
 				);
 				INFOPLIST_FILE = "Livingroom/Livingroom-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
 					/opt/local/lib,
 					"$(inherited)",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/iphone\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/linux\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/linux64\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/osx\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
-					"\"$(SRCROOT)/ofxCocoaPlugins/ofxCocoaPlugins/libs/openframeworks/addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

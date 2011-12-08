@@ -9,6 +9,12 @@
 #import "PolyInput.h"
 
 @implementation PolyInput
+-(id)init{
+    if(self = [super init]){
+        type = PolyTypeInput;
+    } 
+    return self;
+}
 
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
