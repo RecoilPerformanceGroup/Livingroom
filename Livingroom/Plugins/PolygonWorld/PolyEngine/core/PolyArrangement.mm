@@ -119,53 +119,88 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     
     @synchronized(self)
     {
-
-        if(arr->is_valid()){
-            
-            typedef CGAL::Arr_landmarks_point_location<Arrangement_2>  Landmarks_pl;
-            
-            Landmarks_pl     pl;
-            
-            pl.attach (*arr);
-            
-            // Perform the point-location query.
-            CGAL::Object obj = pl.locate (queryPoint);
-            
-            Arrangement_2::Vertex_const_handle    v;
-            Arrangement_2::Halfedge_const_handle  e;
-            Arrangement_2::Face_const_handle      f;
-            
-            // std::cout << "The point " << queryPoint << " is located ";
-            if (CGAL::assign (f, obj)) {
-                // q is located inside a face:
-                if (f->is_unbounded())
-                    ;//    std::cout << "inside the unbounded face." << std::endl;
-                else
-                    ;//    std::cout << "inside a bounded face." << std::endl;
-                return obj;
-            }
-            else if (CGAL::assign (e, obj)) {
-                // q is located on an edge:
-                // std::cout << "on an edge: " << e->curve() << std::endl;
-                return obj;
-            }
-            else if (CGAL::assign (v, obj)) {
-                // q is located on a vertex:
-                if (v->is_isolated())
-                    ;//    std::cout << "on an isolated vertex: " << v->point() << std::endl;
-                else
-                    ;//    std::cout << "on a vertex: " << v->point() << std::endl;
-                return obj;
-            }
-            else {
-                CGAL_assertion_msg (false, "Invalid object.");
-                return;
-            }
-            
-        }
+        typedef CGAL::Arr_landmarks_point_location<Arrangement_2>  Landmarks_pl;
+        
+        Landmarks_pl     pl;
+        
+        pl.attach (*arr);
+        
+        // Perform the point-location query.
+        CGAL::Object obj = pl.locate (queryPoint);
+        
+        { /** DEBUG BEGIN
+           
+           Arrangement_2::Vertex_const_handle    v;
+           Arrangement_2::Halfedge_const_handle  e;
+           Arrangement_2::Face_const_handle      f;
+           
+           // std::cout << "The point " << queryPoint << " is located ";
+           if (CGAL::assign (f, obj)) {
+           // q is located inside a face:
+           if (f->is_unbounded())
+           std::cout << "inside the unbounded face." << std::endl;
+           else
+           std::cout << "inside a bounded face." << std::endl;
+           }
+           else if (CGAL::assign (e, obj)) {
+           // q is located on an edge:
+           std::cout << "on an edge: " << e->curve() << std::endl;
+           }
+           else if (CGAL::assign (v, obj)) {
+           // q is located on a vertex:
+           if (v->is_isolated())
+           std::cout << "on an isolated vertex: " << v->point() << std::endl;
+           else
+           std::cout << "on a vertex: " << v->point() << std::endl;
+           }
+           else {
+           CGAL_assertion_msg (false, "Invalid object.");
+           }
+           
+           //DEBUG END **/ }
+        
+        return obj;
     }
-    
 }
+
+-(Arrangement_2::Vertex_const_handle) vertexAtPoint: (Point_2) queryPoint{
+    CGAL::Object obj = [self cgalObjectAtPoint:queryPoint];
+    
+    Arrangement_2::Vertex_const_handle    v;
+    
+    if (CGAL::assign (v, obj)) {
+        return v; // this will be a valid vertex handle
+    }
+    return v; 
+    // this is a default vertex handle, with pointers to NULL, 
+    // ALLWAYS check for v.is_valid() before assuming you've got something 
+}
+
+
+-(Arrangement_2::Halfedge_const_handle) halfedgeAtPoint: (Point_2) queryPoint{
+    CGAL::Object obj = [self cgalObjectAtPoint:queryPoint];
+    
+    Arrangement_2::Halfedge_const_handle  e;
+    
+    if (CGAL::assign (e, obj)) {
+        return e; // this will be a valid halfedge
+    }
+    return e; // this will be a default halfedge, with pointers to NULL, 
+    // ALLWAYS check if e.is_fictitious() before assuming you've got something
+}
+
+-(Arrangement_2::Face_const_handle) faceAtPoint: (Point_2) queryPoint{
+    CGAL::Object obj = [self cgalObjectAtPoint:queryPoint];
+    
+    Arrangement_2::Face_const_handle      f;
+    
+    if (CGAL::assign (f, obj)) {
+        return f; // this will be a valid face
+    }
+    return f; // this will be a default face, with pointers to NULL, 
+    // ALLWAYS check for f.is_valid() before assuming you've got something
+}
+
 
 
 //
