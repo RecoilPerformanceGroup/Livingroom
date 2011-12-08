@@ -9,7 +9,7 @@
 #import "PolyNumberProperty.h"
 
 @implementation PolyNumberProperty
-@synthesize sceneTokens;
+@synthesize sceneTokens, sortNumber;
 
 -(id) init{
     if(self = [super init]){

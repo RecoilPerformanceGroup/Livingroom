@@ -27,6 +27,7 @@ typedef enum _PolyModuleType {
     
     NSString * key;
     
+    int propertyCounter;
 }
 
 @property (readonly) NSMutableDictionary * properties;

@@ -29,38 +29,43 @@
         arrangement = [[PolyArrangement alloc] init];
         
         modules = [NSMutableDictionary dictionary];
-        [modules setObject:[[PolyRenderSimpleWireframe alloc] initWithEngine:self] forKey:@"simpleWire"];
-        //    [renders setObject:[[PolyRenderCracks alloc] initWithEngine:self] forKey:@"cracks"];
+
+        //
+        //Inputs
+        //
+        [self addModule:@"PolyInputSimpleMouse"];
+
+        //
+        //Animators
+        //   
+        [self addModule:@"PolyAnimatorCracks"];
+
+
+        //
+        //Renders
+        //
+        [self addModule:@"PolyRenderSimpleWireframe"];
         
-        PolyInputSimpleMouse * m = [[PolyInputSimpleMouse alloc] initWithEngine:self];
-        [modules setObject:m forKey:@"simpleMouse"];
         
-//        [animators setObject:[[PolyAnimatorSimplePushPop alloc] initWithEngine:self] forKey:@"polyAnimatorSimplePushPop"];
-        [modules setObject:[[PolyAnimatorCracks alloc] initWithEngine:self] forKey:@"cracks"];
-     //   [animators setObject:[[PolyAnimatorSprings alloc] initWithEngine:self] forKey:@"polyAnimatorSprings"];
-        
+
         [self didChangeValueForKey:@"allModulesTree"];
         
-        
-        for(NSString * key in [modules allKeys]){
-            [[modules objectForKey:key] setKey:key];
-        }
     }
     return self;
 }
 
-/*
- -(PolyRender*) getRenderer:(NSString*)renderer{
- return [renders objectForKey:renderer];
- }
+-(PolyModule*) addModule:(NSString*)module{
+    PolyModule * m = [[NSClassFromString(module) alloc] initWithEngine:self];
+    NSAssert1(m != nil, @"No class named %@",module);
+    NSString * name = [module stringByReplacingOccurrencesOfString:@"PolyInput" withString:@""];
+    name = [name stringByReplacingOccurrencesOfString:@"PolyAnimator" withString:@""];
+    name = [name stringByReplacingOccurrencesOfString:@"PolyRender" withString:@""];
+    [m setKey:name];    
+    [modules setObject:m forKey:name];    
  
- -(PolyInput*) getInput:(NSString*)renderer{
- return [inputs objectForKey:renderer];
- }
- 
- -(PolyAnimator*) getAnimator:(NSString*)renderer{
- return [animators objectForKey:renderer];    
- }*/
+    return m;
+}
+
 
 -(NSArray*) allInputModules {
     NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"type = %i",PolyTypeInput];
@@ -169,42 +174,42 @@
 }
 
 - (void) controlDraw:(NSDictionary*)drawingInformation{
-    for(PolyModule * module in [modules allValues]){
+   /* for(PolyModule * module in [modules allValues]){
         [module controlDraw:drawingInformation];
-    }   
+    }*/   
 }
 
 - (void) controlMouseMoved:(float) x y:(float)y {
-    for(PolyModule * module in [modules allValues]){
+   /* for(PolyModule * module in [modules allValues]){
         [module controlMouseMoved:x y:y];
-    }   
+    }  */ 
 }
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
-    for(PolyModule * module in [modules allValues]){
+/*    for(PolyModule * module in [modules allValues]){
         [module  controlMousePressed:x y:y button:button];
-    }   
+    }   */
 }
 
 - (void) controlMouseReleased:(float) x y:(float)y{
-    for(PolyModule * module in [modules allValues]){
+/*    for(PolyModule * module in [modules allValues]){
         [module controlMouseReleased:x y:y];
         
-    }   
+    }   */
 }
 - (void) controlMouseDragged:(float) x y:(float)y button:(int)button{
-    for(PolyModule * module in [modules allValues]){
+/*    for(PolyModule * module in [modules allValues]){
         [module controlMouseDragged:x y:y button:button];
         
-    }   
+    }   */
 }
 
 - (void) controlMouseScrolled:(NSEvent *)theEvent{}
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
-    for(PolyModule * module in [modules allValues]){
+/*    for(PolyModule * module in [modules allValues]){
         [module controlKeyPressed:key modifier:modifier];       
-    }   
+    }   */
 }
 
 - (void) controlKeyReleased:(int)key modifier:(int)modifier{}

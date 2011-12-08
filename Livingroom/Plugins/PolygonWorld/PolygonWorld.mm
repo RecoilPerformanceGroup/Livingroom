@@ -107,7 +107,7 @@
         
         cW = ofGetWidth();
         cH = ofGetHeight();
-        
+        [[self selectedModule] controlDraw:drawingInformation];
         [polyEngine controlDraw:drawingInformation];
     } glPopMatrix();
     
@@ -115,18 +115,25 @@
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
     [polyEngine controlMousePressed:x/cW y:y/cH button:button];
+    [[self selectedModule] controlMousePressed:x/cW y:y/cH button:button];
+
 }
 -(void)controlMouseReleased:(float)x y:(float)y{
     [polyEngine controlMouseReleased:x/cW y:y/cH];
+    [[self selectedModule] controlMouseReleased:x/cW y:y/cH];
+
 }
 
 -(void)controlKeyPressed:(int)key modifier:(int)modifier{
     [polyEngine controlKeyPressed:key modifier:modifier];
+    [[self selectedModule] controlKeyPressed:key modifier:modifier];
+
 }
 
 -(void)controlMouseMoved:(float)x y:(float)y {
     
     [polyEngine controlMouseMoved:x/cW y:y/cH];
+    [[self selectedModule] controlMouseMoved:x/cW y:y/cH];
     
     x /= cW;
     y /= cH;
@@ -139,6 +146,7 @@
 -(void)controlMouseDragged:(float)x y:(float)y button:(int)button {
     
     [polyEngine controlMouseDragged:x/cW y:y/cH button:button];
+    [[self selectedModule]controlMouseDragged:x/cW y:y/cH button:button];
     
     x /= cW;
     y /= cH;
@@ -314,7 +322,6 @@
 							   [self scopeBar:theScopeBar titleOfItem:identifier inGroup:groupNumber], 
 							   (selected) ? @"selected" : @"deselected", 
 							   groupNumber];
-	NSLog(@"%@", displayString);
     
     if(selected){
         [selectedTokens addObject:identifier];
@@ -324,7 +331,6 @@
     if([selectedTokens count] > 0){
         [propertiesDictController setFilterPredicate:nil];
         
-        NSLog(@"%@",selectedTokens);
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"ANY value.sceneTokens in %@", selectedTokens];    
         [propertiesDictController setFilterPredicate:predicate];
         //        [modulesTreeController fetch:self];
@@ -357,6 +363,14 @@
 
 @synthesize groups;
 
+- (PolyModule*) selectedModule{
+    return [[[modulesTreeController selectedObjects]objectAtIndex:0] valueForKey:@"module"]; 
+}
 
+- (NSArray *)propertiesSortDescriptor{
+    NSSortDescriptor * ageDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"value.sortNumber"
+                                                 ascending:YES] autorelease];
+    return [NSArray arrayWithObject:ageDescriptor];
+}
 
 @end

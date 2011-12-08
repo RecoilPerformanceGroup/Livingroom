@@ -9,7 +9,8 @@
 #import "PolyRender.h"
 
 @interface PolyRenderSimpleWireframe : PolyRender{
-    
+    int drawMode;
 }
+@property (readwrite) int drawMode;
 
 @end

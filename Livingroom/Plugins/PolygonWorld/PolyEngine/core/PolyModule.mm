@@ -15,7 +15,7 @@
 -(id) initWithEngine:(PolyEngine*)_engine{
     if(self = [self init]){
         engine = _engine;
-    
+        propertyCounter = 0;    
     } 
     return self;
 
@@ -34,6 +34,7 @@
     [p setName:name];
     [p setMinValue:0];
     [p setMaxValue:1.0];
+    [p setSortNumber:propertyCounter++];
     [properties setObject:p forKey:name];
     return p;
 }

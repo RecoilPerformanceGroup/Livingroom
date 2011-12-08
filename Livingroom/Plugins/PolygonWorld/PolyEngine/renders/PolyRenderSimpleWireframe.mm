@@ -8,6 +8,7 @@
 
 #import "PolyRenderSimpleWireframe.h"
 @implementation PolyRenderSimpleWireframe
+@synthesize drawMode;
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     ofSetColor(255,0,0);

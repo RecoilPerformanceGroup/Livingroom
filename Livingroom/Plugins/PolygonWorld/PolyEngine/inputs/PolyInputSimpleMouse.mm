@@ -16,8 +16,8 @@
 -(id)init{
     if(self = [super init]){
         [[self addPropF:@"test1"] setMaxValue:100.0];
-        [[self addPropF:@"test2"] setMaxValue:100.0];
         [[self addPropF:@"test3"] setMaxValue:100.0];
+        [[self addPropF:@"test2"] setMaxValue:100.0];
         
     }
     

@@ -3,7 +3,7 @@
 #import <ofxCocoaPlugins/Plugin.h>
 #import "MGScopeBarDelegateProtocol.h"
 
-@class PolyEngine;
+@class PolyEngine, PolyModule;
 
 @interface PolygonWorld : ofPlugin  <MGScopeBarDelegate, NSTableViewDelegate> {
     
@@ -24,10 +24,13 @@
 @property (assign) IBOutlet NSOutlineView *modulesOutlineview;
 @property (assign) IBOutlet NSTreeController *modulesTreeController;
 @property (assign) IBOutlet NSDictionaryController *propertiesDictController;
+@property (readonly) NSArray * propertiesSortDescriptor;
 
 - (IBAction)saveArrangement:(id)sender;
 - (IBAction)loadArrangement:(id)sender;
 - (IBAction)setSceneTokens:(id)sender;
+
+- (PolyModule*) selectedModule;
 
 @property(retain) NSMutableArray *groups;
 

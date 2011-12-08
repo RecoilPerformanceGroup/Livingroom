@@ -3,7 +3,7 @@
 #import <Foundation/Foundation.h>
 #import "PolyArrangement.h"
 
-@class PolyRender, PolyInput, PolyAnimator;
+@class PolyRender, PolyInput, PolyAnimator, PolyModule;
 
 @interface PolyEngine : NSObject{
     NSMutableDictionary * modules;
@@ -15,6 +15,8 @@
 @property (readonly) PolyArrangement * arrangement;
 @property (readonly) NSArray * allModulesTree;
 @property (readonly)     NSMutableDictionary * modules;
+
+-(PolyModule*) addModule:(NSString*)module;
 
 -(NSArray*) allSceneTokens;
 
