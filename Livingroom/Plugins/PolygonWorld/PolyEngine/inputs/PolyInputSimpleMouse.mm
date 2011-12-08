@@ -10,15 +10,14 @@
 #import "PolyInputSimpleMouse.h"
 
 
-
 @implementation PolyInputSimpleMouse
 
 
 -(id)init{
     if(self = [super init]){
-        [[self addPropF:@"test1"] setMaxValue:100];
-        [[self addPropF:@"test2"] setMaxValue:100];
-        [[self addPropF:@"test3"] setMaxValue:100];
+        [[self addPropF:@"test1"] setMaxValue:100.0];
+        [[self addPropF:@"test2"] setMaxValue:100.0];
+        [[self addPropF:@"test3"] setMaxValue:100.0];
         
     }
     
@@ -218,7 +217,9 @@
                                               Point_2(1,1));
 
   */                  
-                    CGAL::insert(*[[engine arrangement] arr],  delauneys[u].segment(vit, i));
+                    @synchronized([engine arrangement]){
+                        CGAL::insert(*[[engine arrangement] arr],  delauneys[u].segment(vit, i));
+                    }
 
 //                    [[engine arrangement] arr]->insert_in_face_interior(delauneys[u].segment(vit, i), [[engine arrangement] arr]->unbounded_face());
 

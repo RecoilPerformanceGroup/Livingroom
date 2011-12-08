@@ -115,12 +115,11 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 // should be implemented as in:
 // http://www.cgal.org/Manual/3.3/doc_html/cgal_manual/Arrangement_2/Chapter_main.html#Subsection_20.3.1
 
--(CGAL::Object) cgalObjectClosestToPoint:(Point_2) queryPoint{
+-(CGAL::Object) cgalObjectAtPoint:(Point_2) queryPoint{
     
     @synchronized(self)
     {
-        
-        
+
         if(arr->is_valid()){
             
             typedef CGAL::Arr_landmarks_point_location<Arrangement_2>  Landmarks_pl;
@@ -132,32 +131,30 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
             // Perform the point-location query.
             CGAL::Object obj = pl.locate (queryPoint);
             
-            // Print the result.
-            
             Arrangement_2::Vertex_const_handle    v;
             Arrangement_2::Halfedge_const_handle  e;
             Arrangement_2::Face_const_handle      f;
             
-            std::cout << "The point " << queryPoint << " is located ";
+            // std::cout << "The point " << queryPoint << " is located ";
             if (CGAL::assign (f, obj)) {
                 // q is located inside a face:
                 if (f->is_unbounded())
-                    std::cout << "inside the unbounded face." << std::endl;
+                    ;//    std::cout << "inside the unbounded face." << std::endl;
                 else
-                    std::cout << "inside a bounded face." << std::endl;
+                    ;//    std::cout << "inside a bounded face." << std::endl;
                 return obj;
             }
             else if (CGAL::assign (e, obj)) {
                 // q is located on an edge:
-                std::cout << "on an edge: " << e->curve() << std::endl;
+                // std::cout << "on an edge: " << e->curve() << std::endl;
                 return obj;
             }
             else if (CGAL::assign (v, obj)) {
                 // q is located on a vertex:
                 if (v->is_isolated())
-                    std::cout << "on an isolated vertex: " << v->point() << std::endl;
+                    ;//    std::cout << "on an isolated vertex: " << v->point() << std::endl;
                 else
-                    std::cout << "on a vertex: " << v->point() << std::endl;
+                    ;//    std::cout << "on a vertex: " << v->point() << std::endl;
                 return obj;
             }
             else {

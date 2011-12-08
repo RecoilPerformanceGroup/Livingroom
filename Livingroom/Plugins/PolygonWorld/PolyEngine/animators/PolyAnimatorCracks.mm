@@ -10,11 +10,17 @@
 
 @implementation PolyAnimatorCracks
 
+
+-(id)init{
+    if(self = [super init]){
+        [[self addPropF:@"pressure"] setMaxValue:100.0];
+    }
+    
+    return self;
+}
 -(void)update:(NSDictionary *)drawingInformation{
-    
-    float pressure = 0.1;
-    
-    [[engine arrangement] cgalObjectClosestToPoint:Point_2(mouse.x, mouse.y)];
+        
+  //  [[engine arrangement] cgalObjectAtPoint:Point_2(mouse.x, mouse.y)];
     
 }
 

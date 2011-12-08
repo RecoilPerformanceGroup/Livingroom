@@ -33,7 +33,7 @@
     [p setFloatValue:0];
     [p setName:name];
     [p setMinValue:0];
-    [p setMaxValue:1];
+    [p setMaxValue:1.0];
     [properties setObject:p forKey:name];
     return p;
 }
