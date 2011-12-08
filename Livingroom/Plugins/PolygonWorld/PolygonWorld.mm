@@ -185,7 +185,7 @@
                 }
             }
             [self setSceneTokens:self];
-
+            
         }
         
     }
@@ -220,13 +220,14 @@
                            nil]];
     }
     
-	[self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-							// deliberately not specifying a label
-							[NSNumber numberWithBool:NO], GROUP_SEPARATOR, 
-							[NSNumber numberWithInt:MGMultipleSelectionMode], GROUP_SELECTION_MODE, // multiple selection group.
-							items, GROUP_ITEMS, 
-							nil]];
-    
+    if([items count]> 0){
+        [self.groups addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                // deliberately not specifying a label
+                                [NSNumber numberWithBool:NO], GROUP_SEPARATOR, 
+                                [NSNumber numberWithInt:MGMultipleSelectionMode], GROUP_SELECTION_MODE, // multiple selection group.
+                                items, GROUP_ITEMS, 
+                                nil]];
+    }
     [scopeBar reloadData];
     
 	
