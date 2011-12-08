@@ -10,6 +10,12 @@
 
 @implementation PolyAnimator
 
+-(id)init{
+    if(self = [super init]){
+        type = PolyTypeAnimator;
+    } 
+    return self;
+}
 
 -(void)draw:(NSDictionary *)drawingInformation{
 }

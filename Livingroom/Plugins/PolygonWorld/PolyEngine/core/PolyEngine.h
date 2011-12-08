@@ -6,23 +6,23 @@
 @class PolyRender, PolyInput, PolyAnimator;
 
 @interface PolyEngine : NSObject{
-    NSMutableDictionary * renders;
-    NSMutableDictionary * animators;
-    NSMutableDictionary * inputs;
+    NSMutableDictionary * modules;
+
     PolyArrangement * arrangement;
 }
 
 
 @property (readonly) PolyArrangement * arrangement;
-@property (readonly) NSMutableArray * allModules;
+@property (readonly) NSArray * allModulesTree;
+@property (readonly)     NSMutableDictionary * modules;
 
 -(NSArray*) allSceneTokens;
 
-
+/*
 -(PolyRender*) getRenderer:(NSString*)renderer;
 -(PolyInput*) getInput:(NSString*)renderer;
 -(PolyAnimator*) getAnimator:(NSString*)renderer;
-
+*/
 - (void) setup;
 - (void) draw:(NSDictionary*)drawingInformation;
 - (void) update:(NSDictionary*)drawingInformation;

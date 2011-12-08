@@ -9,7 +9,7 @@
 #import "PolyModule.h"
 
 @implementation PolyModule
-@synthesize properties;
+@synthesize properties, type;
 
 
 -(id) initWithEngine:(PolyEngine*)_engine{
@@ -39,17 +39,26 @@
 }
 
 -(void) encodeWithCoder:(NSCoder *)coder{
-	[super encodeWithCoder:coder];
 	[coder encodeObject:properties forKey:@"properties"];
 }
 
 -(id) initWithCoder:(NSCoder *)coder{
-	[super initWithCoder:coder];
-	
 	properties = [coder decodeObjectForKey:@"properties"];
 	
 	return self;
 	
 }
+
+
+#pragma mark Empty Accesors
+
+- (void) setup{}
+- (void) draw:(NSDictionary *)drawingInformation{}
+- (void) controlDraw:(NSDictionary *)drawingInformation{}
+- (void) update:(NSDictionary *)drawingInformation{}
+- (void) controlMousePressed:(float) x y:(float)y button:(int)button{}
+- (void) controlMouseReleased:(float) x y:(float)y{}
+- (void) controlMouseDragged:(float) x y:(float)y button:(int)button{}
+- (void) controlKeyPressed:(int)key modifier:(int)modifier{}
 
 @end

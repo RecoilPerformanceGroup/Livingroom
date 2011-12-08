@@ -10,7 +10,12 @@
 
 @implementation PolyRender
 
-
+-(id)init{
+    if(self = [super init]){
+        type = PolyTypeRender;
+    } 
+    return self;
+}
 
 -(void)draw:(NSDictionary *)drawingInformation{
     

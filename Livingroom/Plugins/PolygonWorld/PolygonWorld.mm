@@ -1,4 +1,5 @@
 #import "PolyEngine.h"
+#import "PolyModule.h"
 #import "PolygonWorld.h"
 #import <ofxCocoaPlugins/Keystoner.h>
 
@@ -143,16 +144,43 @@
 
 -(NSMutableDictionary *)customProperties{
     NSMutableDictionary * props = customProperties;
-
+    NSMutableArray * arr = [NSMutableArray array];
+    [props setValue:arr forKey:@"modules"];
 //	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
-    	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+//    	[customProperties setObject:[polyEngine allModules] forKey:@"modules"];
+    
+    for(NSString * moduleName in [[polyEngine modules] allKeys]){
+        NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+        [dict setValue:moduleName forKey:@"key"];
+        [dict setValue:[[[polyEngine modules] objectForKey:moduleName] properties] forKey:@"properties"];
+        
+        [arr addObject:dict];
+    }
+    
     return props;
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([(NSString*)context isEqualToString:@"customProperties"]){
 		NSArray * modulesArray = [customProperties objectForKey:@"modules"];
-        NSLog(@"%@",modulesArray);
+        for(NSDictionary * moduleDict in modulesArray){
+            PolyModule * module = [[polyEngine modules]objectForKey:[moduleDict valueForKey:@"key"]];
+            if(module != nil){
+                for(NSString * propKey in [[moduleDict objectForKey:@"properties"] allKeys]){
+                    PolyNumberProperty * savedProp = [[moduleDict objectForKey:@"properties"] objectForKey:propKey];
+                    PolyNumberProperty * prop = [[module properties] objectForKey:propKey];
+                    if(prop != nil){
+                        [prop setValue:[savedProp valueForKey:@"value"] forKey:@"value"];
+                        [prop setValue:[savedProp valueForKey:@"sceneTokens"] forKey:@"sceneTokens"];
+                        [prop setValue:[savedProp valueForKey:@"minValue"] forKey:@"minValue"];
+                        [prop setValue:[savedProp valueForKey:@"maxValue"] forKey:@"maxValue"];
+                    }
+                }
+            }
+        }
+
+        
+        [self setSceneTokens:self];
     }
     //   NSLog(@"object %@",[[modulesTreeController selectedObjects] objectAtIndex:0] );
     
