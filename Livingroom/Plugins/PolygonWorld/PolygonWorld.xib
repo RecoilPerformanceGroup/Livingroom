@@ -547,11 +547,11 @@
 										<string key="NSFrame">{{1, 34}, {476, 333}}</string>
 										<reference key="NSSuperview" ref="94254328"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="367690111"/>
+										<reference key="NSNextKeyView" ref="724861531"/>
 										<string key="NSReuseIdentifierKey">_NS:499</string>
 										<string key="NSClassName">PluginOpenGLControlView</string>
 									</object>
-									<object class="NSSegmentedControl" id="367690111">
+									<object class="NSSegmentedControl" id="724861531">
 										<reference key="NSNextResponder" ref="94254328"/>
 										<int key="NSvFlags">268</int>
 										<string key="NSFrame">{{8, 5}, {180, 25}}</string>
@@ -560,7 +560,7 @@
 										<reference key="NSNextKeyView" ref="329132416"/>
 										<string key="NSReuseIdentifierKey">_NS:2177</string>
 										<bool key="NSEnabled">YES</bool>
-										<object class="NSSegmentedCell" key="NSCell" id="71777743">
+										<object class="NSSegmentedCell" key="NSCell" id="272197069">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">0</int>
 											<object class="NSFont" key="NSSupport">
@@ -569,16 +569,16 @@
 												<int key="NSfFlags">16</int>
 											</object>
 											<string key="NSCellIdentifier">_NS:2177</string>
-											<reference key="NSControlView" ref="367690111"/>
+											<reference key="NSControlView" ref="724861531"/>
 											<array class="NSMutableArray" key="NSSegmentImages">
 												<object class="NSSegmentItem">
 													<string key="NSSegmentItemLabel">None</string>
-													<bool key="NSSegmentItemSelected">YES</bool>
 													<int key="NSSegmentItemImageScaling">0</int>
 												</object>
 												<object class="NSSegmentItem">
 													<string key="NSSegmentItemLabel">Wireframe</string>
 													<int key="NSSegmentItemTag">1</int>
+													<bool key="NSSegmentItemSelected">YES</bool>
 													<int key="NSSegmentItemImageScaling">0</int>
 												</object>
 												<object class="NSSegmentItem">
@@ -586,6 +586,7 @@
 													<int key="NSSegmentItemImageScaling">0</int>
 												</object>
 											</array>
+											<int key="NSSelectedSegment">1</int>
 											<int key="NSSegmentStyle">4</int>
 										</object>
 									</object>
@@ -1253,19 +1254,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedIndex: self.</string>
-						<reference key="source" ref="71777743"/>
+						<string key="label">selectedIndex: self.polyEngine.modules.SimpleWireframe.drawMode</string>
+						<reference key="source" ref="724861531"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="71777743"/>
+							<reference key="NSSource" ref="724861531"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedIndex: self.</string>
+							<string key="NSLabel">selectedIndex: self.polyEngine.modules.SimpleWireframe.drawMode</string>
 							<string key="NSBinding">selectedIndex</string>
-							<string key="NSKeyPath">self.</string>
+							<string key="NSKeyPath">self.polyEngine.modules.SimpleWireframe.drawMode</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">2268</int>
+					<int key="connectionID">2295</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2632,9 +2633,9 @@
 								<int key="contentType">3</int>
 								<reference key="containingView" ref="154863734"/>
 							</object>
-							<reference ref="367690111"/>
+							<reference ref="724861531"/>
 							<object class="IBNSLayoutConstraint" id="541430187">
-								<reference key="firstItem" ref="367690111"/>
+								<reference key="firstItem" ref="724861531"/>
 								<int key="firstAttribute">5</int>
 								<int key="relation">0</int>
 								<reference key="secondItem" ref="154863734"/>
@@ -2653,7 +2654,7 @@
 								<reference key="firstItem" ref="154863734"/>
 								<int key="firstAttribute">4</int>
 								<int key="relation">0</int>
-								<reference key="secondItem" ref="367690111"/>
+								<reference key="secondItem" ref="724861531"/>
 								<int key="secondAttribute">4</int>
 								<float key="multiplier">1</float>
 								<object class="IBLayoutConstant" key="constant">
@@ -2823,25 +2824,25 @@
 						<reference key="parent" ref="154863734"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2226</int>
-						<reference key="object" ref="367690111"/>
+						<int key="objectID">2274</int>
+						<reference key="object" ref="724861531"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="71777743"/>
+							<reference ref="272197069"/>
 						</array>
 						<reference key="parent" ref="154863734"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2227</int>
-						<reference key="object" ref="71777743"/>
-						<reference key="parent" ref="367690111"/>
+						<int key="objectID">2275</int>
+						<reference key="object" ref="272197069"/>
+						<reference key="parent" ref="724861531"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2264</int>
+						<int key="objectID">2287</int>
 						<reference key="object" ref="541430187"/>
 						<reference key="parent" ref="154863734"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">2265</int>
+						<int key="objectID">2288</int>
 						<reference key="object" ref="588351933"/>
 						<reference key="parent" ref="154863734"/>
 					</object>
@@ -3000,11 +3001,11 @@
 				<string key="2222.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2224.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="2225.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<boolean value="NO" key="2226.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
-				<string key="2226.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="2227.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="2264.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="2265.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="NO" key="2274.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
+				<string key="2274.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2275.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2287.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="2288.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="338.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="338.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="339.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3089,7 +3090,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">2273</int>
+			<int key="maxID">2295</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

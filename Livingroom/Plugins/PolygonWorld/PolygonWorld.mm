@@ -107,6 +107,7 @@
         
         cW = ofGetWidth();
         cH = ofGetHeight();
+        [[[polyEngine modules] objectForKey:@"SimpleWireframe"] controlDraw:drawingInformation];
         [[self selectedModule] controlDraw:drawingInformation];
         [polyEngine controlDraw:drawingInformation];
     } glPopMatrix();
