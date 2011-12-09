@@ -20,9 +20,9 @@
 
     ofRect(0,0,1,1);
 
-    Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();    
+    Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
     
-    for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+    for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
         
         ofSetColor(0,0,0,255*eit->data().crackAmount);
 
@@ -41,13 +41,13 @@
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     
-    Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();    
+    Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
     
     ofSetColor(255,255,255,128);
 
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
 
-    for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+    for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
         
         ofCircle(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()), eit->data().crackAmount*0.05);
         

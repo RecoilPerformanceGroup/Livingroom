@@ -16,7 +16,6 @@
 
 
 @implementation PolyArrangement
-@synthesize arr;
 
 -(id)init{
     if(self = [super init]){
@@ -31,14 +30,14 @@
 //
 
 
-- (Arrangement_2 *)arr
+- (Arrangement_2 *)arrData
 {
     @synchronized(self)
     {
         return arr;
     }
 }
-- (void)setSomeRect:(Arrangement_2 *)aArr
+- (void)setArrData:(Arrangement_2 *)aArr
 {
     @synchronized(self)
     {
@@ -208,10 +207,13 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //
 
 -(void) saveArrangement{
-    std::ofstream    out_file ("arr_ex_io.dat");
-    
-    out_file << *arr;
-    out_file.close();
+    @synchronized(self)
+    {
+        std::ofstream    out_file ("arr_ex_io.dat");
+        
+        out_file << *arr;
+        out_file.close();
+    }
 }
 
 //
@@ -219,13 +221,15 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //
 
 -(void) loadArrangement{
-    arr = new Arrangement_2();
-    
-    std::ifstream    in_file ("arr_ex_io.dat");
-    
-    in_file >> *arr;
-    in_file.close();
-    
+    @synchronized(self)
+    {
+        arr = new Arrangement_2();
+        
+        std::ifstream    in_file ("arr_ex_io.dat");
+        
+        in_file >> *arr;
+        in_file.close();
+    }
 }
 
 //
@@ -233,7 +237,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //
 
 -(void) clearArrangement{
-    arr = new Arrangement_2();
+    [self setArrData:new Arrangement_2()];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  PolyInputSimpleMouse.h
+//  PolyInputSimpleMouseDraw.h
 //  Livingroom
 //
 //  Created by Livingroom on 08/11/11.
@@ -33,7 +33,7 @@ typedef CGAL::Delaunay_mesher_2<Delaunay, Criteria> Mesher;
 
 
 
-@interface PolyInputSimpleMouse : PolyInput{
+@interface PolyInputSimpleMouseDraw : PolyInput{
     vector<Point_2> pointsBuffer;
     
     vector<Polygon_with_holes_2 > subtractedPolygons;

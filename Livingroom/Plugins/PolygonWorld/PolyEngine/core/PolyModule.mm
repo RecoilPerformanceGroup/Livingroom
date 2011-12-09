@@ -51,6 +51,11 @@
 }
 
 
+- (BOOL) isInput{return NO;};
+- (BOOL) isAnimator{return NO;};
+- (BOOL) isRenderer{return NO;};
+
+
 #pragma mark Empty Accesors
 
 - (void) setup{}

@@ -15,7 +15,7 @@
     PolyDataObserver * obs;
 }
 
-@property (readonly) Arrangement_2 * arr;
+@property (readonly) Arrangement_2 * arrData;
 
 -(Point_2) n_point;
 

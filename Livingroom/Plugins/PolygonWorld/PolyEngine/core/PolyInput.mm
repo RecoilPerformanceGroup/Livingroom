@@ -36,4 +36,6 @@
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
 }
 
+- (BOOL) isInput{return YES;};
+
 @end

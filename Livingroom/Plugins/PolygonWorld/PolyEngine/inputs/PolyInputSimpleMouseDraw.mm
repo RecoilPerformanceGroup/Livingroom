@@ -1,5 +1,5 @@
 //
-//  PolyInputSimpleMouse.m
+//  PolyInputSimpleMouseDraw.m
 //  Livingroom
 //
 //  Created by Livingroom on 08/11/11.
@@ -7,10 +7,10 @@
 //
 
 
-#import "PolyInputSimpleMouse.h"
+#import "PolyInputSimpleMouseDraw.h"
 
 
-@implementation PolyInputSimpleMouse
+@implementation PolyInputSimpleMouseDraw
 
 
 -(id)init{
@@ -25,7 +25,7 @@
 }
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
-//    [[engine data] arr]->insert_in_face_interior(Point_2(x,y), [[engine data] arr]->unbounded_face());
+//    [[engine data] arrData]->insert_in_face_interior(Point_2(x,y), [[engine data] arrData]->unbounded_face());
         
     pointsBuffer.push_back(Point_2(x,y));
     
@@ -205,7 +205,7 @@
         
         
    /*     for(int u=0;u<convexPolygons.size();u++){
-            CGAL::insert(*[[engine arrangement] arr],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
+            CGAL::insert(*[[engine arrangement] arrData],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
         }*/
         for(int u=0;u<delauneys.size();u++){
             Delaunay::Finite_faces_iterator vit = delauneys[u].finite_faces_begin();
@@ -217,11 +217,11 @@
                                               Point_2(1,1));
 
   */                  
-                    @synchronized([engine arrangement]){
-                        CGAL::insert(*[[engine arrangement] arr],  delauneys[u].segment(vit, i));
-                    }
+                 //   @synchronized([engine arrangement]){
+                        CGAL::insert(*[[engine arrangement] arrData],  delauneys[u].segment(vit, i));
+                   // }
 
-//                    [[engine arrangement] arr]->insert_in_face_interior(delauneys[u].segment(vit, i), [[engine arrangement] arr]->unbounded_face());
+//                    [[engine arrangement] arrData]->insert_in_face_interior(delauneys[u].segment(vit, i), [[engine arrangement] arrData]->unbounded_face());
 
                 }
             }

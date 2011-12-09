@@ -51,6 +51,10 @@ typedef enum _PolyModuleType {
 
 -(PolyNumberProperty*) addPropF:(NSString*)name;
 
+- (BOOL) isInput;
+- (BOOL) isAnimator;
+- (BOOL) isRenderer;
+
 @end
 
 

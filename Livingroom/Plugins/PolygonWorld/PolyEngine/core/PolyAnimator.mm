@@ -43,4 +43,7 @@
 - (void) controlMouseDragged:(float) x y:(float)y button:(int)button{
     
 }
+
+- (BOOL) isAnimator{return YES;};
+
 @end

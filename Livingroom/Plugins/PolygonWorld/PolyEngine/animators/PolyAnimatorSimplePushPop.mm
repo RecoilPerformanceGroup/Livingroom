@@ -14,8 +14,8 @@
     
     vector<Arrangement_2::Halfedge_handle> deleteHandles;
     
-    Arrangement_2::Face_iterator fit = [[engine arrangement] arr]->faces_begin();    
-    for ( ; fit !=[[engine arrangement] arr]->faces_end(); ++fit) {
+    Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();    
+    for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
         if(fit->number_of_outer_ccbs() == 1){
             
             if(ofRandom(0,100) > v){
@@ -60,7 +60,7 @@
     }
     
     for(int i=0;i<deleteHandles.size();i++){
-        [[engine arrangement] arr]->remove_edge(deleteHandles[i]);
+        [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
     }
     
     

@@ -18,6 +18,8 @@
 	NSMutableArray *groups;
     
     NSMutableSet * selectedTokens;
+    
+    int mouseMode;
 }
 
 @property (readonly) PolyEngine * polyEngine;
@@ -25,6 +27,7 @@
 @property (assign) IBOutlet NSTreeController *modulesTreeController;
 @property (assign) IBOutlet NSDictionaryController *propertiesDictController;
 @property (readonly) NSArray * propertiesSortDescriptor;
+@property (readwrite) int mouseMode;
 
 - (IBAction)saveArrangement:(id)sender;
 - (IBAction)loadArrangement:(id)sender;
@@ -32,6 +35,7 @@
 - (IBAction)setSceneTokens:(id)sender;
 
 - (PolyModule*) selectedModule;
+- (PolyModule*) moduleForMouseMode;
 
 @property(retain) NSMutableArray *groups;
 

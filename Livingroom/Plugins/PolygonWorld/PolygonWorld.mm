@@ -19,7 +19,7 @@
 @synthesize modulesOutlineview;
 @synthesize modulesTreeController;
 @synthesize propertiesDictController;
-
+@synthesize mouseMode;
 
 - (void)awakeFromNib
 {
@@ -110,31 +110,53 @@
         [[[polyEngine modules] objectForKey:@"SimpleWireframe"] controlDraw:drawingInformation];
         [[self selectedModule] controlDraw:drawingInformation];
         [polyEngine controlDraw:drawingInformation];
+        
+        [[self moduleForMouseMode]  controlDraw:drawingInformation];
+
+        
     } glPopMatrix();
     
 }
 
 -(void)controlMousePressed:(float)x y:(float)y button:(int)button{
     [polyEngine controlMousePressed:x/cW y:y/cH button:button];
-    [[self selectedModule] controlMousePressed:x/cW y:y/cH button:button];
-
+    
+    if(![[self selectedModule] isInput]){
+        [[self selectedModule] controlMousePressed:x/cW y:y/cH button:button];
+    }
+    
+    [[self moduleForMouseMode]controlMousePressed:x/cW y:y/cH button:button];
+    
 }
 -(void)controlMouseReleased:(float)x y:(float)y{
     [polyEngine controlMouseReleased:x/cW y:y/cH];
-    [[self selectedModule] controlMouseReleased:x/cW y:y/cH];
+    
+    if(![[self selectedModule] isInput]){
+        [[self selectedModule] controlMouseReleased:x/cW y:y/cH];
+    }
+    
+   [[self moduleForMouseMode] controlMouseReleased:x/cW y:y/cH];
 
 }
 
 -(void)controlKeyPressed:(int)key modifier:(int)modifier{
     [polyEngine controlKeyPressed:key modifier:modifier];
-    [[self selectedModule] controlKeyPressed:key modifier:modifier];
-
+    if(![[self selectedModule] isInput]){
+        [[self selectedModule] controlKeyPressed:key modifier:modifier];
+    }
+    
+    [[self moduleForMouseMode] controlKeyPressed:key modifier:modifier];
 }
 
 -(void)controlMouseMoved:(float)x y:(float)y {
     
     [polyEngine controlMouseMoved:x/cW y:y/cH];
-    [[self selectedModule] controlMouseMoved:x/cW y:y/cH];
+    if(![[self selectedModule] isInput]){
+        [[self selectedModule] controlMouseMoved:x/cW y:y/cH];
+    }
+    
+    [[self moduleForMouseMode] controlMouseMoved:x/cW y:y/cH];
+    
     
     x /= cW;
     y /= cH;
@@ -147,13 +169,27 @@
 -(void)controlMouseDragged:(float)x y:(float)y button:(int)button {
     
     [polyEngine controlMouseDragged:x/cW y:y/cH button:button];
-    [[self selectedModule]controlMouseDragged:x/cW y:y/cH button:button];
+    if(![[self selectedModule] isInput]){
+        [[self selectedModule] controlMouseDragged:x/cW y:y/cH button:button];
+    }
+    
+    [[self moduleForMouseMode] controlMouseDragged:x/cW y:y/cH button:button];
     
     x /= cW;
     y /= cH;
     
     cMouseX = x;
     cMouseY = y;
+}
+
+- (PolyModule*) moduleForMouseMode{
+    if(mouseMode == 0){
+       return [[polyEngine modules] objectForKey:@"Tracker"];
+    }
+    if(mouseMode == 1){
+       return [[polyEngine modules] objectForKey:@"SimpleMouseDraw"];
+    }
+    return nil;
 }
 
 -(NSMutableDictionary *)customProperties{

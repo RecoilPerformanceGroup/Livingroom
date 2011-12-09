@@ -26,4 +26,6 @@
 -(void)update:(NSDictionary *)drawingInformation{
 }
 
+
+- (BOOL) isRenderer{return YES;};
 @end

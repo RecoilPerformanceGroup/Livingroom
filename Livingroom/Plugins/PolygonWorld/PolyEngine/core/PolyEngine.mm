@@ -13,7 +13,8 @@
 #import "PolyRenderSimpleWireframe.h"
 #import "PolyRenderCracks.h"
 
-#import "PolyInputSimpleMouse.h"
+#import "PolyInputSimpleMouseDraw.h"
+#import "PolyInputTracker.h"
 
 #import "PolyAnimatorSimplePushPop.h"
 #import "PolyAnimatorSprings.h"
@@ -33,7 +34,8 @@
         //
         //Inputs
         //
-        [self addModule:@"PolyInputSimpleMouse"];
+        [self addModule:@"PolyInputSimpleMouseDraw"];
+        [self addModule:@"PolyInputTracker"];
 
         //
         //Animators

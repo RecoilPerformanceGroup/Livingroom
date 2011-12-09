@@ -14,13 +14,13 @@
 @implementation PolyAnimatorSprings
 
 -(void)update:(NSDictionary *)drawingInformation{
-    Arrangement_2::Vertex_iterator vit = [[engine arrangement] arr]->vertices_begin();        
-    for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
+    Arrangement_2::Vertex_iterator vit = [[engine arrangement] arrData]->vertices_begin();        
+    for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
         vit->data().springF = ofVec2f(0,0);
     }
     
-    Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();        
-    for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+    Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();        
+    for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
         //Constructor
         if(eit->data().springOptimalLength == -1){
             ofVec2f source = pointToVec(eit->source()->point());
@@ -35,8 +35,8 @@
     if(mousePressed){
         float mouseR = 0.3;
         float mouseF = 0.05;
-        vit = [[engine arrangement] arr]->vertices_begin();        
-        for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
+        vit = [[engine arrangement] arrData]->vertices_begin();        
+        for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
             if(mouse.distance(pointToVec(vit->point())) < mouseR){
                 ofVec2f vertex = pointToVec(vit->point());
                 ofVec2f v = vertex - mouse;
@@ -54,8 +54,8 @@
     
     for(int i=0;i<2;i++){
         //Spring force
-        eit = [[engine arrangement] arr]->edges_begin();        
-        for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+        eit = [[engine arrangement] arrData]->edges_begin();        
+        for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
             ofVec2f source = pointToVec(eit->source()->point());
             ofVec2f target = pointToVec(eit->target()->point());
             
@@ -72,8 +72,8 @@
         }
         
         //Vertex update
-        vit = [[engine arrangement] arr]->vertices_begin();        
-        for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
+        vit = [[engine arrangement] arrData]->vertices_begin();        
+        for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
             vit->data().springV *= 0.8;
 
             vit->data().springV += vit->data().springF * 0.002;
@@ -90,8 +90,8 @@
    // glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
     
-    Arrangement_2::Face_iterator fit = [[engine arrangement] arr]->faces_begin();        
-    for ( ; fit !=[[engine arrangement] arr]->faces_end(); ++fit) {
+    Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();        
+    for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
         
         float diff = 0;
         if(fit->number_of_outer_ccbs() == 1){
@@ -140,8 +140,8 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
 
-    /*Arrangement_2::Face_iterator fit = [[engine arrangement] arr]->faces_begin();        
-    for ( ; fit !=[[engine arrangement] arr]->faces_end(); ++fit) {
+    /*Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();        
+    for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
         
         float diff = 0;
         if(fit->number_of_outer_ccbs() == 1){
@@ -184,8 +184,8 @@
     }*/
     
     /*  glBegin(GL_POINTS);
-     Arrangement_2::Vertex_iterator vit = [[engine arrangement] arr]->vertices_begin();        
-     for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
+     Arrangement_2::Vertex_iterator vit = [[engine arrangement] arrData]->vertices_begin();        
+     for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
      float a = 255-vit->data().springF.length()*255.0;
      glColor3f(255,a,a);
      glVertex2f(CGAL::to_double(vit->point().x()), CGAL::to_double(vit->point().y()));

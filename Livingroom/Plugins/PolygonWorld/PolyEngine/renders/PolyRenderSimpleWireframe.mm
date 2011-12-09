@@ -16,8 +16,8 @@
         
         glPointSize(5);
         glBegin(GL_POINTS);
-        Arrangement_2::Vertex_iterator vit = [[engine arrangement] arr]->vertices_begin();    
-        for ( ; vit !=[[engine arrangement] arr]->vertices_end(); ++vit) {
+        Arrangement_2::Vertex_iterator vit = [[engine arrangement] arrData]->vertices_begin();    
+        for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
             glVertex2d(CGAL::to_double(vit->point().x()) , CGAL::to_double(vit->point().y()));
             
         }    
@@ -29,9 +29,9 @@
             
             
             ofSetColor(0,255,0);
-            Arrangement_2::Face_iterator fit = [[engine arrangement] arr]->faces_begin();    
+            Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();    
             
-            for ( ; fit !=[[engine arrangement] arr]->faces_end(); ++fit) {
+            for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
                 ofSetColor(0,0,255);
                 glBegin(GL_POLYGON);
                 
@@ -54,9 +54,9 @@
         
         ofSetColor(0,255,0);
         glBegin(GL_LINES);
-        Arrangement_2::Edge_iterator eit = [[engine arrangement] arr]->edges_begin();    
+        Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
         
-        for ( ; eit !=[[engine arrangement] arr]->edges_end(); ++eit) {
+        for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
             glVertex2d(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()));
             glVertex2d(CGAL::to_double(eit->target()->point().x()) , CGAL::to_double(eit->target()->point().y()));
         }      
