@@ -193,4 +193,12 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     
 }
 
+//
+//-------------
+//
+
+-(void) clearArrangement{
+    arr = new Arrangement_2();
+}
+
 @end

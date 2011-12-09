@@ -28,6 +28,7 @@
 
 - (IBAction)saveArrangement:(id)sender;
 - (IBAction)loadArrangement:(id)sender;
+- (IBAction)clearArrangement:(id)sender;
 - (IBAction)setSceneTokens:(id)sender;
 
 - (PolyModule*) selectedModule;

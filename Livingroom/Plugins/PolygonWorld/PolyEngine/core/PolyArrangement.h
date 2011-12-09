@@ -27,4 +27,5 @@
 
 -(void) saveArrangement;
 -(void) loadArrangement;
+-(void) clearArrangement;
 @end

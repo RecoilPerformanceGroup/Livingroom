@@ -214,6 +214,12 @@
     [[globalController openglLock] unlock];
 }
 
+- (IBAction)clearArrangement:(id)sender {
+    [[globalController openglLock] lock];
+    [[polyEngine arrangement] clearArrangement];
+    [[globalController openglLock] unlock];
+}
+
 - (IBAction)setSceneTokens:(id)sender {
     [self.groups removeAllObjects];
     
