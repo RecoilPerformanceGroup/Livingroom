@@ -13,6 +13,7 @@
 		3D071993146941D60057E0B9 /* PolyInput.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198D146941D60057E0B9 /* PolyInput.mm */; };
 		3D071994146941D60057E0B9 /* PolyRender.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D07198F146941D60057E0B9 /* PolyRender.mm */; };
 		3D07199A1469423E0057E0B9 /* PolyRenderSimpleWireframe.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */; };
+		3D100A2F14927AAD0067A46E /* CGALEnumerator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D100A2E14927AAD0067A46E /* CGALEnumerator.mm */; };
 		3D16C0A6146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */; };
 		3D1E7089149257360040822A /* PolyInputTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E7088149257360040822A /* PolyInputTracker.mm */; };
 		3D2FC23D1462FEDC0028BC01 /* PolygonWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */; };
@@ -31,6 +32,7 @@
 		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
+		3D9F6BCF14939029004AEA70 /* PolyAnimatorCrumble.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */; };
 		3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8772A148E628300F7558C /* PolyNumberProperty.mm */; };
 		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
 		7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263734148D33C10055DCFA /* MGScopeBar.m */; };
@@ -69,6 +71,8 @@
 		3D07198F146941D60057E0B9 /* PolyRender.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRender.mm; sourceTree = "<group>"; };
 		3D0719981469423E0057E0B9 /* PolyRenderSimpleWireframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRenderSimpleWireframe.h; sourceTree = "<group>"; };
 		3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderSimpleWireframe.mm; sourceTree = "<group>"; };
+		3D100A2D14927AAD0067A46E /* CGALEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGALEnumerator.h; sourceTree = "<group>"; };
+		3D100A2E14927AAD0067A46E /* CGALEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CGALEnumerator.mm; sourceTree = "<group>"; };
 		3D16C0A4146AEC9800718ADC /* PolyAnimatorSimplePushPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSimplePushPop.h; sourceTree = "<group>"; };
 		3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSimplePushPop.mm; sourceTree = "<group>"; };
 		3D1E7087149257360040822A /* PolyInputTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputTracker.h; sourceTree = "<group>"; };
@@ -94,11 +98,13 @@
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		3D956F98146BFB5200A59811 /* PolyAnimatorSprings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSprings.h; sourceTree = "<group>"; };
 		3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSprings.mm; sourceTree = "<group>"; };
-		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouseDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PolyInputSimpleMouseDraw.h; sourceTree = "<group>"; };
+		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouseDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouseDraw.h; sourceTree = "<group>"; };
 		3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouseDraw.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputSimpleMouseDraw.mm; sourceTree = "<group>"; };
 		3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ofxCocoaPlugins.framework; path = ofxCocoaPlugins/build/Debug/ofxCocoaPlugins.framework; sourceTree = "<group>"; };
 		3D9715CF148D180D009A8068 /* PolyModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyModule.h; sourceTree = "<group>"; };
 		3D9715D0148D180D009A8068 /* PolyModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyModule.mm; sourceTree = "<group>"; };
+		3D9F6BCD14939029004AEA70 /* PolyAnimatorCrumble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCrumble.h; sourceTree = "<group>"; };
+		3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCrumble.mm; sourceTree = "<group>"; };
 		3DE87729148E628300F7558C /* PolyNumberProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolyNumberProperty.h; path = properties/PolyNumberProperty.h; sourceTree = "<group>"; };
 		3DE8772A148E628300F7558C /* PolyNumberProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PolyNumberProperty.mm; path = properties/PolyNumberProperty.mm; sourceTree = "<group>"; };
 		7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -163,6 +169,8 @@
 				7F287D94146ABCE7007E8346 /* PolyDataObserver.h */,
 				3DE87729148E628300F7558C /* PolyNumberProperty.h */,
 				3DE8772A148E628300F7558C /* PolyNumberProperty.mm */,
+				3D100A2D14927AAD0067A46E /* CGALEnumerator.h */,
+				3D100A2E14927AAD0067A46E /* CGALEnumerator.mm */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -170,6 +178,8 @@
 		3D071995146942090057E0B9 /* animators */ = {
 			isa = PBXGroup;
 			children = (
+				3D9F6BCD14939029004AEA70 /* PolyAnimatorCrumble.h */,
+				3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */,
 				3D16C0A4146AEC9800718ADC /* PolyAnimatorSimplePushPop.h */,
 				3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */,
 				7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */,
@@ -393,6 +403,8 @@
 				7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */,
 				3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */,
 				3D1E7089149257360040822A /* PolyInputTracker.mm in Sources */,
+				3D100A2F14927AAD0067A46E /* CGALEnumerator.mm in Sources */,
+				3D9F6BCF14939029004AEA70 /* PolyAnimatorCrumble.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

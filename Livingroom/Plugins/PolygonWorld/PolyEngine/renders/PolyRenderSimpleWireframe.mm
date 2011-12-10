@@ -1,12 +1,6 @@
-//
-//  PolyRenderSimpleWireframe.m
-//  Livingroom
-//
-//  Created by Livingroom on 08/11/11.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "PolyRenderSimpleWireframe.h"
+//#import "CGALEnumerator.h"
+
 @implementation PolyRenderSimpleWireframe
 @synthesize drawMode;
 
@@ -16,6 +10,9 @@
         
         glPointSize(5);
         glBegin(GL_POINTS);
+        
+//        CGALEnumerator * en = [CGALEnumerator vertexFromArr:[[engine arrangement] arrData]];
+        
         Arrangement_2::Vertex_iterator vit = [[engine arrangement] arrData]->vertices_begin();    
         for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
             glVertex2d(CGAL::to_double(vit->point().x()) , CGAL::to_double(vit->point().y()));

@@ -28,6 +28,9 @@ struct LRVertex_data {
     //SpringsAnimator
     ofVec2f springF             = ofVec2f(0,0);
     ofVec2f springV             = ofVec2f(0,0);
+    
+    //CrumbleAnimator
+    ofVec3f crumbleforce        = ofVec3f(0,0,0);
 };
 
 // --------
@@ -42,6 +45,10 @@ struct LRHalfedge_data {
     
     //SpringsAnimator
     float springOptimalLength   = -1;
+    
+    //Crumble
+    float crumbleOptimalLength  = -1;
+    float crumbleOptimalAngle   = -1;
 };
 
 // ----

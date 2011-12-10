@@ -19,6 +19,7 @@
 #import "PolyAnimatorSimplePushPop.h"
 #import "PolyAnimatorSprings.h"
 #import "PolyAnimatorCracks.h"
+#import "PolyAnimatorCrumble.h"
 
 @implementation PolyEngine
 @synthesize arrangement, modules;
@@ -41,7 +42,8 @@
         //Animators
         //   
         [self addModule:@"PolyAnimatorCracks"];
-
+     //   [self addModule:@"PolyAnimatorSprings"];
+        [self addModule:@"PolyAnimatorCrumble"];
 
         //
         //Renders
