@@ -227,7 +227,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 
     vit = [[engine arrangement] arrData]->vertices_begin();        
     for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
-        of2DArrow( pointToVec(vit->point()) ,  pointToVec(vit->point()) + vit->data().springF , 0.01);
+        of2DArrow( pointToVec(vit->point()) ,  pointToVec(vit->point()) + ofVec2f(vit->data().springF.x,vit->data().springF.y) , 0.01);
     }
     
     //Visualize angualar stress
