@@ -12,8 +12,6 @@
     GLfloat light1_y;
     GLfloat light1_z;
 
-    GLfloat * mat_specular;
-    GLfloat * mat_shininess;
 }
 
 @end
