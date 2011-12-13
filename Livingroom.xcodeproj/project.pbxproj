@@ -32,6 +32,8 @@
 		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
+		3D9C2662149789D900A34FFB /* OSCControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9C2660149789D900A34FFB /* OSCControl.mm */; };
+		3D9C2663149789D900A34FFB /* OSCControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D9C2661149789D900A34FFB /* OSCControl.xib */; };
 		3D9F6BCF14939029004AEA70 /* PolyAnimatorCrumble.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */; };
 		3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8772A148E628300F7558C /* PolyNumberProperty.mm */; };
 		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
@@ -117,6 +119,9 @@
 		3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ofxCocoaPlugins.framework; path = ofxCocoaPlugins/build/Debug/ofxCocoaPlugins.framework; sourceTree = "<group>"; };
 		3D9715CF148D180D009A8068 /* PolyModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyModule.h; sourceTree = "<group>"; };
 		3D9715D0148D180D009A8068 /* PolyModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyModule.mm; sourceTree = "<group>"; };
+		3D9C265F149789D900A34FFB /* OSCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCControl.h; sourceTree = "<group>"; };
+		3D9C2660149789D900A34FFB /* OSCControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OSCControl.mm; sourceTree = "<group>"; };
+		3D9C2661149789D900A34FFB /* OSCControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSCControl.xib; sourceTree = "<group>"; };
 		3D9F6BCD14939029004AEA70 /* PolyAnimatorCrumble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCrumble.h; sourceTree = "<group>"; };
 		3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCrumble.mm; sourceTree = "<group>"; };
 		3DE87729148E628300F7558C /* PolyNumberProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolyNumberProperty.h; path = properties/PolyNumberProperty.h; sourceTree = "<group>"; };
@@ -331,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				7FE39E781495023C00EFA4CB /* Perspective */,
+				3D9C265D149789CB00A34FFB /* OSCControl */,
 				3D2FC2391462FE3E0028BC01 /* PolygonWorld */,
 			);
 			path = Plugins;
@@ -412,6 +418,16 @@
 				3D386C73145EF95C00665327 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3D9C265D149789CB00A34FFB /* OSCControl */ = {
+			isa = PBXGroup;
+			children = (
+				3D9C265F149789D900A34FFB /* OSCControl.h */,
+				3D9C2660149789D900A34FFB /* OSCControl.mm */,
+				3D9C2661149789D900A34FFB /* OSCControl.xib */,
+			);
+			path = OSCControl;
 			sourceTree = "<group>";
 		};
 		7F26371F148D33C10055DCFA /* MGScopeBar */ = {
@@ -786,7 +802,7 @@
 				7F26374E148D33C10055DCFA /* Source Code License.rtf in Resources */,
 				7F26374F148D33C10055DCFA /* TODO in Resources */,
 				7F462712149511F60095786B /* install.xml in Resources */,
-				7FD3741E1496724500020A8B /* install.xml in Resources */,
+				3D9C2663149789D900A34FFB /* OSCControl.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +845,7 @@
 				7FD374911496724600020A8B /* ofxCvHaarFinder.cpp in Sources */,
 				7FD374921496724600020A8B /* ofxCvImage.cpp in Sources */,
 				7FD374931496724600020A8B /* ofxCvShortImage.cpp in Sources */,
+				3D9C2662149789D900A34FFB /* OSCControl.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
