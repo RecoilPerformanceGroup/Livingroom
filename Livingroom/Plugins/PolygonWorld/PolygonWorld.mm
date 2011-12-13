@@ -23,6 +23,8 @@
 
 - (void)awakeFromNib
 {
+    
+    //[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints];
 	// In this method we basically just set up some sample data for the scope bar, 
 	// so that we can respond to the MGScopeBarDelegate methods easily.
 	
@@ -101,12 +103,12 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     ofBackground(0, 0, 0);
     ofSetColor(0,0,0);
-    glPushMatrix(); {
-        
-        glScaled(ofGetWidth(), ofGetHeight(),1);
+    glPushMatrix(); {        
         
         cW = ofGetWidth();
         cH = ofGetHeight();
+        glScaled(cW, cH,1);
+
         [[[polyEngine modules] objectForKey:@"SimpleWireframe"] controlDraw:drawingInformation];
         [[self selectedModule] controlDraw:drawingInformation];
         [polyEngine controlDraw:drawingInformation];

@@ -54,5 +54,35 @@ static ofVec2f pointToVec(Point_2 p){
     return ofVec2f(CGAL::to_double(p.x()),CGAL::to_double(p.y()));
 }
 
+static ofVec2f handleToVec2(Arrangement_2::Vertex_handle handle){
+    return ofVec2f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()));
+}
+static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
+    return ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().z);
+}
 
+static void glVertexHandle(Arrangement_2::Vertex_handle handle){
+    glVertex2d(CGAL::to_double(handle->point().x()) , CGAL::to_double(handle->point().y()));
+}
+
+
+static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
+    if(!fit->is_fictitious()){
+        if(fit->number_of_outer_ccbs() == 1){
+            Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+            Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+            
+            ofVec3f middle =  handleToVec3(hc->source());
+            
+            ofVec3f u = handleToVec3(hc->prev()->source()) - middle;
+            ofVec3f v = handleToVec3(hc->target()) - middle;
+            
+            ofVec3f normal = u.cross(v);
+            normal.normalize();
+            
+            return normal;
+        }            
+    }
+    return ofVec3f();
+}
 #endif

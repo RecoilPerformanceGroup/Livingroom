@@ -20,17 +20,19 @@
 
 struct LRVertex_data {
     ofColor color;
+    double z                    = 0;
     
     //CracksAnimator
-    float crackAmount = 0.0;
-    int crackEdgeCount = 2;    
+    float crackAmount           = 0.0;
+    int crackEdgeCount          = 2;    
     
     //SpringsAnimator
-    ofVec2f springF             = ofVec2f(0,0);
-    ofVec2f springV             = ofVec2f(0,0);
+    ofVec3f springF             = ofVec3f(0,0,0);
+    ofVec3f springV             = ofVec3f(0,0,0);
     
     //CrumbleAnimator
     ofVec3f crumbleforce        = ofVec3f(0,0,0);
+    bool crumbleAnchor          = true;
 };
 
 // --------
