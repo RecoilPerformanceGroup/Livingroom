@@ -176,7 +176,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                         do { 
                             ofVec2f dir;
                             float angle = edgeAngleToNext(hc, &dir);
-                            float optimalAngle = hc->data()crumbleOptimalAngle;
+                            float optimalAngle = hc->data().crumbleOptimalAngle;
                             
                             float diff = fabs(angle-optimalAngle);
                             
@@ -284,59 +284,5 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 -(void)controlMouseDragged:(float)x y:(float)y button:(int)button{
     mouse = ofVec2f(x,y);
 }
-
-/**
- -(void)addCrackAmount:float amount toVertex: Arrangement_2::Vertex v{
- 
- // add crack
- 
- vit->data().crackAmount+=0.1;
- 
- // if crack is > 1, distribute to the nearest halfedge with most crack
- 
- if(vit->data().crackAmount > 1.0){
- 
- Arrangement_2::Vertex vToPress;
- float highestPressure = 0.0;
- 
- Arrangement_2::Halfedge_around_vertex_circulator eit = vit->vertex_begin();
- 
- for ( ; eit !=vit->vertex_begin(); ++eit) {
- 
- 
- float pressure = eit->vertex()->data().crackAmount;
- if(pressure > highestPressure){
- vToPress = eit->vertex();
- }
- }
- 
- // if none of the vertices were a'crackin' we pick the 'middle' one
- 
- if(highestPressure == 0){
- 
- int numberVertices = vit.vertex_degree ()
- 
- eit = vit->vertex_begin();
- 
- for ( ; eit !=vit->vertex_begin(); ++eit) {
- float pressure = eit->data().crackAmount;
- if(pressure > highestPressure){
- vToPress = eit;
- }
- }
- 
- }
- 
- Halfedge_around_vertex_circulator
- 
- vit->vertex_begin () 
- 
- 
- }
- 
- 
- }
- 
- **/
 
 @end

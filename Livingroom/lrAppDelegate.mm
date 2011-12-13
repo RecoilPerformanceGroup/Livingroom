@@ -10,6 +10,7 @@
 #import "lrAppDelegate.h"
 
 #import "PolygonWorld.h"
+#import "Perspective.h"
 
 @implementation lrAppDelegate
 @synthesize window;
@@ -17,9 +18,11 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     ocp = [[ofxCocoaPlugins alloc] initWithAppDelegate:self];
-    [ocp addHeader:@"Header"];
+    [ocp addHeader:@"Setup"];
     
-    [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Bla", nil]]];
+    [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Triangle", nil]]];
+    [ocp addPlugin:[[Perspective alloc] init]];
+    [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
   //  [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
