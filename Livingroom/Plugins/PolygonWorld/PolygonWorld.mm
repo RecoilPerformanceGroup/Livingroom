@@ -362,12 +362,6 @@
 - (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected 
 		 forItem:(NSString *)identifier inGroup:(int)groupNumber
 {
-	// Display some text showing what just happened.
-	NSString *displayString = [NSString stringWithFormat:@"\"%@\" %@ in group %d.", 
-							   [self scopeBar:theScopeBar titleOfItem:identifier inGroup:groupNumber], 
-							   (selected) ? @"selected" : @"deselected", 
-							   groupNumber];
-    
     if(selected){
         [selectedTokens addObject:identifier];
     } else {

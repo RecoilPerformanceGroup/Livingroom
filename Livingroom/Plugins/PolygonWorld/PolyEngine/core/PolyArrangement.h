@@ -22,7 +22,7 @@
 -(vector< Polygon_2 >) hulls;
 -(CGAL::Object) cgalObjectAtPoint: (Point_2) queryPoint;
 -(Arrangement_2::Vertex_const_handle) vertexAtPoint: (Point_2) queryPoint;
--(Arrangement_2::Halfedge_const_handle) halVerfedgeAtPoint: (Point_2) queryPoint;
+//-(Arrangement_2::Halfedge_const_handle) halVerfedgeAtPoint: (Point_2) queryPoint;
 -(Arrangement_2::Face_const_handle) faceAtPoint: (Point_2) queryPoint;
 
 -(void) saveArrangement;
