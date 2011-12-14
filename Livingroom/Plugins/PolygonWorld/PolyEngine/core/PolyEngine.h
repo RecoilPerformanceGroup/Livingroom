@@ -17,6 +17,7 @@
 @property (readonly)     NSMutableDictionary * modules;
 
 -(PolyModule*) addModule:(NSString*)module;
+-(PolyModule*) getModule:(NSString*)module;
 
 -(NSArray*) allSceneTokens;
 

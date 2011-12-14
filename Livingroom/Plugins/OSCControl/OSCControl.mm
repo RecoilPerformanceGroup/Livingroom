@@ -8,7 +8,8 @@
         sender = new ofxOscSender();
         receiver = new ofxOscReceiver();
         
-        sender->setup("Ecotelemedia-iPad-Mobile-6.local", 8080);
+        //        sender->setup("Ecotelemedia-iPad-Mobile-6.local", 8080);
+        sender->setup("10.0.2.2", 8080);
         receiver->setup(9090);
     }
     
@@ -112,12 +113,13 @@
                      @"MultiTouchXY",@"type",
                      [self rectToBoundsString:bounds], @"bounds",
                      [NSNumber numberWithBool:isMomentary], @"isMomentary",
+                     [NSNumber numberWithBool:true], @"sendZValue",
                      [NSNumber numberWithInt:maxTouches], @"maxTouches",
                      nil]];
 }
 
 - (void) setColor:(NSString*)widget background:(NSString*)background foreground:(NSString*)foreground stroke:(NSString*)stroke {
-
+    
     ofxOscMessage m;
     m.setAddress( "/control/setColors" );    
     m.addStringArg( [widget cStringUsingEncoding:NSUTF8StringEncoding] );
@@ -125,7 +127,7 @@
     m.addStringArg( [foreground cStringUsingEncoding:NSUTF8StringEncoding] );
     m.addStringArg( [stroke cStringUsingEncoding:NSUTF8StringEncoding] );
     sender->sendMessage( m );
-
+    
 }
 
 
@@ -133,7 +135,7 @@
 -(void)setup{
     [self createInterface];
     
-
+    
     /*  [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
      @"test2", @"name",
      @"Slider",@"type",
@@ -158,7 +160,16 @@
 		// get the next message
 		ofxOscMessage m;
 		receiver->getNextMessage( &m );
-        cout<<"OSC: "<<m.getAddress()<<"  "<<m.getNumArgs()<<endl;
+        //cout<<"OSC: "<<m.getAddress()<<"  "<<m.getNumArgs()<<endl;
+        
+        for(int i=0;i<10;i++){
+            if(m.getAddress() == "/trackerxy/"+ofToString(i)){
+                trackerData[i].point.x = m.getArgAsFloat(0);
+                trackerData[i].point.y = m.getArgAsFloat(1);
+                trackerData[i].active = m.getArgAsFloat(2);
+                
+            }
+        }
         
     }
 }
@@ -178,6 +189,23 @@
 }
 
 
+
+- (oscTrackerData) getTracker:(int)tracker{
+    if(tracker >= 0 && tracker < 10){
+        return trackerData[tracker];
+    }
+    return oscTrackerData();
+}
+
+- (vector<ofVec2f>) getTrackerCoordinates{
+    vector<ofVec2f> v;
+    for(int i=0;i<10;i++){
+        if(trackerData[i].active){
+            v.push_back(trackerData[i].point);
+        }
+    }
+    return v;
+}
 
 
 

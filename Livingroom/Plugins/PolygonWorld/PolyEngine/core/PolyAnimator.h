@@ -12,6 +12,9 @@
 #import <Foundation/Foundation.h>
 #import "PolyModule.h"
 
+#import "PolyInputTracker.h"
+
+
 
 @interface PolyAnimator : PolyModule {
 }

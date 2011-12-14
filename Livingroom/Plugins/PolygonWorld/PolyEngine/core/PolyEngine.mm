@@ -70,6 +70,9 @@
     return m;
 }
 
+-(PolyModule*) getModule:(NSString*)module{
+    return [[self modules] objectForKey:module];
+}
 
 -(NSArray*) allInputModules {
     NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"type = %i",PolyTypeInput];

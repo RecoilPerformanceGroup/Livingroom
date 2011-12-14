@@ -10,6 +10,12 @@
 #import <Foundation/Foundation.h>
 #import "PolyNumberProperty.h"
 
+#import <ofxCocoaPlugins/PluginManagerController.h>
+extern PluginManagerController * globalController;
+
+#define GetModule(p) ([engine getModule:p])
+#define GetTracker() ((PolyInputTracker*)GetModule(@"Tracker"))
+
 // Selection modes for the buttons within a group.
 typedef enum _PolyModuleType {
     PolyTypeInput,
