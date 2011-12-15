@@ -10,9 +10,10 @@
         
         [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0.01 maxValue:1.0] named:@"scale"];	
         
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-5.0 maxValue:5.0] named:@"x-shear"];	
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-5.0 maxValue:5.0] named:@"y-shear"];	
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-4.0 maxValue:4.0] named:@"perspective foreshortening"];
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"x-shear"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"y-shear"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:0] named:@"z-shear"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:2] named:@"perspective foreshortening"];
         [self addProperty:[BoolProperty boolPropertyWithDefaultvalue:NO] named:@"show depth map"];
 
         [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"Light X"];	
@@ -74,9 +75,11 @@
     ofSetColor(255, 255, 255,255);
     
     ApplySurfaceForProjector(@"Floor",0); {
+            
+        float aspect = Aspect(@"Floor", 0);
         
             glTranslated(0, 0, 0.01);
-            ofRect(0,0,1,1);
+            ofRect(0,0,1*aspect,1);
 
     } PopSurfaceForProjector();
     
@@ -109,7 +112,7 @@
     
 
     [self drawScene:drawingInformation orShadows:NO];
-    [self drawScene:drawingInformation orShadows:YES];
+  //  [self drawScene:drawingInformation orShadows:YES];
 
     //    ofBox(0.5, 0.2, -sin(ofGetElapsedTimef())+0.2, 0.2);
     
@@ -145,6 +148,24 @@
     
     float * multMatrix = new float[16];
     
+    float persp = PropF(@"perspective foreshortening");
+    
+    float zFactor = 1.0;
+    float x = PropF(@"x-shear");
+    float y = PropF(@"y-shear");
+    
+    float aspect = Aspect(@"Floor",0);
+    
+    if(persp > 1.0){
+        zFactor -= fminf(1.0, persp-1.0);
+        persp = 1.0;
+    } else {
+        x -= (1.0-persp)*0.5*aspect;
+        y -= (1.0-persp)*0.5;
+    }
+    
+    float z = zFactor*(-1/PropF(@"z-shear"));
+    
     if(!doShadows){
         multMatrix[0]  = 1.0f;
         multMatrix[1]  = 0.0f;
@@ -154,10 +175,10 @@
         multMatrix[5]  = 1.0f;
         multMatrix[6]  = 0.0f;
         multMatrix[7]  = 0.0f;
-        multMatrix[8]  = PropF(@"x-shear"); // z-axis x shear
-        multMatrix[9]  = PropF(@"y-shear");; // z-axis y shear
+        multMatrix[8]  = x*z; // z-axis x shear
+        multMatrix[9]  = y*z; // z-axis y shear
         multMatrix[10] = 1.0f;
-        multMatrix[11] = PropF(@"perspective foreshortening"); // perspective foreshortening
+        multMatrix[11] = persp*z; // perspective foreshortening
         multMatrix[12] = 0.0f;
         multMatrix[13] = 0.0f;
         multMatrix[14] = 0.0f;
@@ -171,10 +192,10 @@
         multMatrix[5]  = 1.0f;
         multMatrix[6]  = 0.0f;
         multMatrix[7]  = 0.0f;
-        multMatrix[8]  = light1_x*(100+light1_z); // z-axis x shear
-        multMatrix[9]  = light1_y*(100+light1_z); // z-axis y shear
+        multMatrix[8]  = light1_x*(1.0-light1_z); // z-axis x shear
+        multMatrix[9]  = light1_y*(1.0-light1_z); // z-axis y shear
         multMatrix[10] = 0.0f;
-        multMatrix[11] = (100+light1_z);  // perspective foreshortening
+        multMatrix[11] = (1.0-light1_z);  // perspective foreshortening
         multMatrix[12] = 0.0f;
         multMatrix[13] = 0.0f;
         multMatrix[14] = 0.0f;
@@ -202,18 +223,68 @@
                 glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_white);
             }
             
-            squirrelModel.setPosition(0.25, 0.5, -((PropF(@"scale")*0.5)*(1.5+sin((0.33+ofGetElapsedTimef())*4)*0.5)));
+            squirrelModel.setPosition(0.25*aspect, 0.5, -((PropF(@"scale")*0.5)*(1.5+sin((0.33+ofGetElapsedTimef())*4)*0.5)));
             squirrelModel.draw();
             
-            squirrelModel.setPosition(0.5, 0.75, -((PropF(@"scale")*0.5)*(1.5+sin(ofGetElapsedTimef()*4)*0.5)));
+            squirrelModel.setPosition(0.5*aspect, 0.75, -((PropF(@"scale")*0.5)*(1.5+sin(ofGetElapsedTimef()*4)*0.5)));
             squirrelModel.draw();
             
-            squirrelModel.setPosition(0.75, 0.5, -((PropF(@"scale")*0.5)*(1.5+sin((0.66+ofGetElapsedTimef())*4)*0.5)));
+            squirrelModel.setPosition(0.75*aspect, 0.5, -((PropF(@"scale")*0.5)*(1.5+sin((0.66+ofGetElapsedTimef())*4)*0.5)));
             squirrelModel.draw();
             
             if (doShadows) {
                 glPopMatrix();
             }
+            
+            glDisable(GL_DEPTH_TEST);
+            glDisable(GL_LIGHTING);
+            
+            ofSetLineWidth(4);
+            ofNoFill();
+            
+            ofSetColor(255, 0, 0,127);
+
+            for (float i=0; i<=aspect; i+=0.1) {
+                for (float j=0; j<=1.0; j+=0.1) {
+                    ofLine(i,j,0.0,
+                           i,j,-.1);
+
+                    if (fmodf(i, 0.2) < 0.05 && fmodf(j, 0.2) < 0.05) {
+                        
+                        ofLine(i,j,0.0,
+                               i,j+.1,0.0);
+                        ofLine(i,j,0.0,
+                               i+.1,j,0.0);
+                        
+                        ofLine(i,j,-.1,
+                               i,j+.1,-.1);
+                        ofLine(i,j,-.1,
+                               i+.1,j,-.1);
+
+                        ofLine(i+.1,j,0.0,
+                               i+.1,j+.1,0.0);
+                        ofLine(i,j+.1,0.0,
+                               i+.1,j+.1,0.0);
+                        
+                        
+                        ofLine(i+.1,j,-.1,
+                               i+.1,j+.1,-.1);
+                        ofLine(i,j+.1,-.1,
+                               i+.1,j+.1,-.1);
+                        
+                    }
+                    
+                }        
+            }
+            
+            ofSetColor(0, 127, 0,127);
+            ofLine(0.25,0.5,0.0,
+                   0.25,0.5,-1.0);
+            ofLine(0.5,0.75,0.0,
+                   0.5,0.75,-1.0);
+            ofLine(0.75,0.5,0.0,
+                   0.75,0.5,-1.0);
+            
             
         } glPopMatrix();
         
