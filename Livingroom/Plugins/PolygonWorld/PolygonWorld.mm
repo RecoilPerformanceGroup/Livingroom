@@ -92,6 +92,7 @@
 
 -(void)draw:(NSDictionary *)drawingInformation{
     ofBackground(0, 0, 0);
+    ofColor(255,255,255);
     [polyEngine draw:drawingInformation];
     
     ofColor(255,0,0,255);
