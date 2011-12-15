@@ -3,6 +3,7 @@
 #import "PolygonWorld.h"
 #import <ofxCocoaPlugins/Keystoner.h>
 
+
 #import "MGScopeBar.h"
 
 // Keys for our sample data.
@@ -20,6 +21,7 @@
 @synthesize modulesTreeController;
 @synthesize propertiesDictController;
 @synthesize mouseMode;
+@synthesize moduleView;
 
 - (void)awakeFromNib
 {
@@ -67,7 +69,9 @@
     [modulesOutlineview expandItem:nil expandChildren:YES];
     
     //Tree controller
-    [modulesTreeController addObserver:self forKeyPath:@"selection" options:nil context:nil];
+    [modulesTreeController addObserver:self forKeyPath:@"selection" options:nil context:@"selection"];
+    
+    
     
 	
     //  [propertiesDictController addObserver:self forKeyPath:@"arrangedObjects.value.sceneTokens" options:nil context:nil];
@@ -108,13 +112,13 @@
         cW = ofGetWidth();
         cH = ofGetHeight();
         glScaled(cW, cH,1);
-
+        
         [[[polyEngine modules] objectForKey:@"SimpleWireframe"] controlDraw:drawingInformation];
         [[self selectedModule] controlDraw:drawingInformation];
         [polyEngine controlDraw:drawingInformation];
         
         [[self moduleForMouseMode]  controlDraw:drawingInformation];
-
+        
         
     } glPopMatrix();
     
@@ -137,8 +141,8 @@
         [[self selectedModule] controlMouseReleased:x/cW y:y/cH];
     }
     
-   [[self moduleForMouseMode] controlMouseReleased:x/cW y:y/cH];
-
+    [[self moduleForMouseMode] controlMouseReleased:x/cW y:y/cH];
+    
 }
 
 -(void)controlKeyPressed:(int)key modifier:(int)modifier{
@@ -186,10 +190,10 @@
 
 - (PolyModule*) moduleForMouseMode{
     if(mouseMode == 0){
-       return [[polyEngine modules] objectForKey:@"Tracker"];
+        return [[polyEngine modules] objectForKey:@"Tracker"];
     }
     if(mouseMode == 1){
-       return [[polyEngine modules] objectForKey:@"SimpleMouseDraw"];
+        return [[polyEngine modules] objectForKey:@"SimpleMouseDraw"];
     }
     return nil;
 }
@@ -213,6 +217,13 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([(NSString*)context isEqualToString:@"selection"]){
+        if([[[[self selectedModule] view] subviews] count]> 0){
+            [[[self selectedModule] view] setFrame:[moduleView bounds]];
+            [moduleView replaceSubview:[[moduleView subviews] objectAtIndex:0] with:[[self selectedModule] view]];
+        }
+    }
+    
     if([(NSString*)context isEqualToString:@"customProperties"]){
 		NSArray * modulesArray = [customProperties objectForKey:@"modules"];
         if(modulesArray != nil){
@@ -362,12 +373,6 @@
 - (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected 
 		 forItem:(NSString *)identifier inGroup:(int)groupNumber
 {
-	// Display some text showing what just happened.
-	NSString *displayString = [NSString stringWithFormat:@"\"%@\" %@ in group %d.", 
-							   [self scopeBar:theScopeBar titleOfItem:identifier inGroup:groupNumber], 
-							   (selected) ? @"selected" : @"deselected", 
-							   groupNumber];
-    
     if(selected){
         [selectedTokens addObject:identifier];
     } else {
@@ -414,7 +419,7 @@
 
 - (NSArray *)propertiesSortDescriptor{
     NSSortDescriptor * ageDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"value.sortNumber"
-                                                 ascending:YES] autorelease];
+                                                                    ascending:YES] autorelease];
     return [NSArray arrayWithObject:ageDescriptor];
 }
 

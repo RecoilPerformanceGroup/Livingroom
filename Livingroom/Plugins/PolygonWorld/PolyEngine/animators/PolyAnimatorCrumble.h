@@ -10,9 +10,6 @@
 
 @interface PolyAnimatorCrumble : PolyAnimator{
 
-    BOOL mousePressed;
-    ofVec2f mouse;
-
 }
 
 @end

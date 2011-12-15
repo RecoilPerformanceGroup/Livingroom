@@ -20,7 +20,7 @@
 
 struct LRVertex_data {
     ofColor color;
-    double z                    = 0;
+    ofVec3f pos               = ofVec3f(-1,-1,-1);
     
     //CracksAnimator
     float crackAmount           = 0.0;

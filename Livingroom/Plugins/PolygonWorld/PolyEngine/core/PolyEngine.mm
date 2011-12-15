@@ -20,6 +20,7 @@
 #import "PolyAnimatorSprings.h"
 #import "PolyAnimatorCracks.h"
 #import "PolyAnimatorCrumble.h"
+#import "PolyAnimatorPhysics.h"
 
 @implementation PolyEngine
 @synthesize arrangement, modules;
@@ -41,9 +42,11 @@
         //
         //Animators
         //   
+
         [self addModule:@"PolyAnimatorCracks"];
      //   [self addModule:@"PolyAnimatorSprings"];
         [self addModule:@"PolyAnimatorCrumble"];
+        [self addModule:@"PolyAnimatorPhysics"];
 
         //
         //Renders
@@ -70,6 +73,9 @@
     return m;
 }
 
+-(PolyModule*) getModule:(NSString*)module{
+    return [[self modules] objectForKey:module];
+}
 
 -(NSArray*) allInputModules {
     NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"type = %i",PolyTypeInput];
