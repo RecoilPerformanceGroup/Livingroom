@@ -28,4 +28,9 @@
 -(void) saveArrangement;
 -(void) loadArrangement;
 -(void) clearArrangement;
+
+-(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit))func;
+-(void) enumerateEdges:(void(^)(Arrangement_2::Edge_iterator eit))func;
+-(void) enumerateFaceEdges:(void(^)(Arrangement_2::Ccb_halfedge_circulator hc, Arrangement_2::Face_iterator fit))func;
+
 @end

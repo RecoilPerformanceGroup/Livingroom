@@ -15,6 +15,7 @@ extern PluginManagerController * globalController;
 
 #define GetModule(p) ([engine getModule:p])
 #define GetTracker() ((PolyInputTracker*)GetModule(@"Tracker"))
+#define GetPhysics() ((PolyAnimatorPhysics*)GetModule(@"Physics"))
 
 // Selection modes for the buttons within a group.
 typedef enum _PolyModuleType {
@@ -34,11 +35,14 @@ typedef enum _PolyModuleType {
     NSString * key;
     
     int propertyCounter;
+    
+    NSView * view;
 }
 
 @property (readonly) NSMutableDictionary * properties;
 @property (readonly) PolyModuleType type;
 @property (readwrite, retain)     NSString * key;
+@property (readwrite) NSView * view;
 
 
 - (id) initWithEngine:(PolyEngine*)engine;

@@ -54,15 +54,23 @@ static ofVec2f pointToVec(Point_2 p){
     return ofVec2f(CGAL::to_double(p.x()),CGAL::to_double(p.y()));
 }
 
-static ofVec2f handleToVec2(Arrangement_2::Vertex_handle handle){
-    return ofVec2f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()));
-}
 static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
-    return ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().z);
+//    return ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().z);
+    if(handle->data().pos.x == -1 && handle->data().pos.y == -1 && handle->data().pos.z == -1){
+        handle->data().pos = ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().pos.z);
+    }
+    return handle->data().pos;
+}
+
+static ofVec2f handleToVec2(Arrangement_2::Vertex_handle handle){
+    //return ofVec2f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()));
+    ofVec3f v = handleToVec3(handle);
+    return ofVec2f(v.x,v.y);
 }
 
 static void glVertexHandle(Arrangement_2::Vertex_handle handle){
-    glVertex2d(CGAL::to_double(handle->point().x()) , CGAL::to_double(handle->point().y()));
+    ofVec3f p = handleToVec3(handle);
+    glVertex2d(p.x , p.y);
 }
 
 

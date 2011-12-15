@@ -240,4 +240,41 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     [self setArrData:new Arrangement_2()];
 }
 
+
+
+#pragma mark Enumerators
+
+-(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit))func {
+    Arrangement_2::Vertex_iterator vit;
+    vit = arr->vertices_begin();        
+    for ( ; vit !=arr->vertices_end(); ++vit) {
+        func(vit);
+    }
+}
+
+
+-(void) enumerateEdges:(void(^)(Arrangement_2::Edge_iterator eit))func {
+    Arrangement_2::Edge_iterator eit;    
+    eit = arr->edges_begin();        
+    for ( ; eit != arr->edges_end(); ++eit) {
+        func(eit);
+    }
+}
+
+-(void) enumerateFaceEdges:(void(^)(Arrangement_2::Ccb_halfedge_circulator hc, Arrangement_2::Face_iterator fit))func {
+    Arrangement_2::Face_iterator fit = arr->faces_begin();
+    for ( ; fit !=arr->faces_end(); ++fit) {        
+        if(!fit->is_fictitious()){
+            if(fit->number_of_outer_ccbs() == 1){
+                Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                do { 
+                    func(hc, fit);
+                } while (++hc != ccb_start); 
+            }            
+        }
+    }
+}
+
+
 @end

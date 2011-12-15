@@ -14,12 +14,14 @@
     NSOutlineView *modulesOutlineview;
     NSTreeController *modulesTreeController;
     NSDictionaryController *propertiesDictController;
-    IBOutlet MGScopeBar *scopeBar;
 	NSMutableArray *groups;
     
     NSMutableSet * selectedTokens;
     
     int mouseMode;
+    NSView *moduleView;
+    
+    IBOutlet MGScopeBar *scopeBar;
 }
 
 @property (readonly) PolyEngine * polyEngine;
@@ -28,6 +30,7 @@
 @property (assign) IBOutlet NSDictionaryController *propertiesDictController;
 @property (readonly) NSArray * propertiesSortDescriptor;
 @property (readwrite) int mouseMode;
+@property (assign) IBOutlet NSView *moduleView;
 
 - (IBAction)saveArrangement:(id)sender;
 - (IBAction)loadArrangement:(id)sender;

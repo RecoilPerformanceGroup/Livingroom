@@ -9,13 +9,16 @@
 #import "PolyModule.h"
 
 @implementation PolyModule
-@synthesize properties, type, key;
+@synthesize properties, type, key, view;
 
 
 -(id) initWithEngine:(PolyEngine*)_engine{
     if(self = [self init]){
         engine = _engine;
         propertyCounter = 0;    
+    
+
+
     } 
     return self;
 
@@ -24,6 +27,8 @@
 -(id) init{
     if(self = [super init]){
         properties = [[NSMutableDictionary alloc] init];
+        [self setView:[[NSView alloc] initWithFrame:NSMakeRect(0,0,300,300)]];
+
     }
     return self;
 }

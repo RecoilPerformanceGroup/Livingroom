@@ -139,7 +139,7 @@
     /*  [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
      @"test2", @"name",
      @"Slider",@"type",
-     @"[.0,.4,.75,.3]",@"bounds",
+     @"[.0,.4,.75,.3]",@"bounds", 
      nil]];
      */
     
