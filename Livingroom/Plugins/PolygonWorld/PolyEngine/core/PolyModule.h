@@ -11,6 +11,9 @@
 #import "PolyNumberProperty.h"
 
 #import <ofxCocoaPlugins/PluginManagerController.h>
+#import <ofxCocoaPlugins/Keystoner.h>
+#import <ofxCocoaPlugins/KeystoneSurface.h>
+
 extern PluginManagerController * globalController;
 
 #define GetModule(p) ([engine getModule:p])
