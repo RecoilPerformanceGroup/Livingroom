@@ -10,10 +10,10 @@
         
         [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0.01 maxValue:1.0] named:@"scale"];	
         
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"x-shear"];	
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"y-shear"];	
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:0] named:@"z-shear"];	
-        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:2] named:@"perspective foreshortening"];
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"view point x"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:4.0] named:@"view point y"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-3.0 maxValue:0] named:@"view point z"];	
+        [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:2] named:@"perspective scale"];
         [self addProperty:[BoolProperty boolPropertyWithDefaultvalue:NO] named:@"show depth map"];
 
         [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"Light X"];	
@@ -56,8 +56,17 @@
     light1_x = PropF(@"Light X");
     light1_y = PropF(@"Light Y");
     light1_z = (light1_z * 0.95) + (PropF(@"Light Z")* 0.05);
-
     
+    KeystonePerspective * persp = (KeystonePerspective *)Perspective(@"Floor");
+    
+    [persp setViewPoint:
+     ofVec3f(PropF(@"view point x"),
+              PropF(@"view point y"),
+              PropF(@"view point z"))
+     ];
+             
+    [persp setScale:PropF(@"perspective scale")];
+
     squirrelModel.setScale(PropF(@"scale"), PropF(@"scale"), PropF(@"scale"));
 
 }
@@ -142,78 +151,20 @@
 
 -(void)drawScene: (NSDictionary *)drawingInformation orShadows:(BOOL) doShadows{
 
-    KeystoneSurface * mySurface = (KeystoneSurface*)Surface(@"Floor",0);
-    
-    float * glMatrix = [mySurface warp]->gl_matrix_4x4;
-    
-    float * multMatrix = new float[16];
-    
-    float persp = PropF(@"perspective foreshortening");
-    
-    float zFactor = 1.0;
-    float x = PropF(@"x-shear");
-    float y = PropF(@"y-shear");
-    
-    float aspect = Aspect(@"Floor",0);
-    
-    if(persp > 1.0){
-        zFactor -= fminf(1.0, persp-1.0);
-        persp = 1.0;
-    } else {
-        x -= (1.0-persp)*0.5*aspect;
-        y -= (1.0-persp)*0.5;
-    }
-    
-    float z = zFactor*(-1/PropF(@"z-shear"));
-    
-    if(!doShadows){
-        multMatrix[0]  = 1.0f;
-        multMatrix[1]  = 0.0f;
-        multMatrix[2]  = 0.0f;
-        multMatrix[3]  = 0.0f;
-        multMatrix[4]  = 0.0f;
-        multMatrix[5]  = 1.0f;
-        multMatrix[6]  = 0.0f;
-        multMatrix[7]  = 0.0f;
-        multMatrix[8]  = x*z; // z-axis x shear
-        multMatrix[9]  = y*z; // z-axis y shear
-        multMatrix[10] = 1.0f;
-        multMatrix[11] = persp*z; // perspective foreshortening
-        multMatrix[12] = 0.0f;
-        multMatrix[13] = 0.0f;
-        multMatrix[14] = 0.0f;
-        multMatrix[15] = 1.0f;
-    } else {
-        multMatrix[0]  = 1.0f;
-        multMatrix[1]  = 0.0f;
-        multMatrix[2]  = 0.0f;
-        multMatrix[3]  = 0.0f;
-        multMatrix[4]  = 0.0f;
-        multMatrix[5]  = 1.0f;
-        multMatrix[6]  = 0.0f;
-        multMatrix[7]  = 0.0f;
-        multMatrix[8]  = light1_x*(1.0-light1_z); // z-axis x shear
-        multMatrix[9]  = light1_y*(1.0-light1_z); // z-axis y shear
-        multMatrix[10] = 0.0f;
-        multMatrix[11] = (1.0-light1_z);  // perspective foreshortening
-        multMatrix[12] = 0.0f;
-        multMatrix[13] = 0.0f;
-        multMatrix[14] = 0.0f;
-        multMatrix[15] = 1.0f;
-    }
-    
+   
     GLfloat mat_white[] = {1.0, 1.0, 1.0, 0.0};
     GLfloat mat_black[] = {0.0, 0.0, 0.0, 0.0};
     
     ApplySurfaceForProjector(@"Floor",0); {
 
+        ApplyPerspective(); {
+            
+            float aspect = Aspect(@"Floor", 0);
+            
         /* light placed at infinity in the direcion <10,10,10>*/
         GLfloat light_position[] = {light1_x, light1_y, -light1_z, 0.0}; 
         glLightfv(GL_LIGHT0, GL_POSITION, light_position); 
         
-        glPushMatrix();{
-
-            glMultMatrixf(multMatrix);
 
             if (doShadows) {
                 glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_black);
@@ -286,7 +237,7 @@
                    0.75,0.5,-1.0);
             
             
-        } glPopMatrix();
+        } PopPerspective();
         
     } PopSurfaceForProjector();
 
