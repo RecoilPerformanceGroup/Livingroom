@@ -283,19 +283,19 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     
     
-    /* 
+     
      //Visualize
      
      
-     total force
-     ofSetColor(40,40,0);
+     //total force
+     ofSetColor(255,255,0);
      
-     vit = [[engine arrangement] arrData]->vertices_begin();        
-     for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
+    [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
      of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + ofVec2f(vit->data().springF.x, vit->data().springF.y) , 0.01);
-     }
+    }];
      
-     //Visualize angualar stress
+     
+    /* //Visualize angualar stress
      if(PropI(@"state") >= 2 && PropF(@"angleStiffnesForce") > 0){
      
      ofSetColor(255,0,255);

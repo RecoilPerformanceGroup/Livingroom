@@ -1,4 +1,5 @@
 #import "PolyRenderSimpleWireframe.h"
+
 //#import "CGALEnumerator.h"
 
 @implementation PolyRenderSimpleWireframe
@@ -67,7 +68,7 @@
                             glColor3f(r,0.2,b);
                         }
                         glVertexHandle(hc->source());
-//                        glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
+                        //                        glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                         ++hc; 
                     } while (hc != ccb_start); 
                 }            
@@ -127,6 +128,51 @@
      }
      */
     
+}
+
+-(void)draw:(NSDictionary *)drawingInformation{
+    ApplySurfaceForProjector(@"Floor",0);{
+        ofSetColor(0,255,0);
+        Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();             
+        for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
+            ofSetColor(0,0,255);
+            if(drawFillMode == 1){
+                glColor3f(0,0.3,0);
+            }
+            if(drawFillMode == 2){
+                ofVec3f n = -calculateFaceNormal(fit) * PropF(@"zScale");
+                n *= ofVec3f(PropF(@"lightX"), PropF(@"lightY"), PropF(@"lightZ")).normalized();
+                float l = n.length();
+                glColor3f(l,l,l);
+            }
+            
+            glBegin(GL_POLYGON);
+            
+            
+            if(!fit->is_fictitious()){
+                if(fit->number_of_outer_ccbs() == 1){
+                    Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                    Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                    
+                    
+                    do { 
+                        if(drawFillMode == 3){
+                            float z = hc->source()->data().pos.z * PropF(@"zScale");
+                            float r = z;
+                            float b = -z;
+                            glColor3f(r,0.2,b);
+                        }
+                        glVertexHandle(hc->source());
+                        //                        glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
+                        ++hc; 
+                    } while (hc != ccb_start); 
+                }            
+            }
+            
+            //        
+            glEnd();   
+        } 
+    } PopSurfaceForProjector();
 }
 
 @end
