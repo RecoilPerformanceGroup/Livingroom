@@ -24,6 +24,7 @@
         
         //State 1:
         [self addPropF:@"springStrength"];
+        [self addPropF:@"ZzeroForce"];
         
         //State 2:
         [self addPropF:@"angleStiffnesForce"];
@@ -193,11 +194,23 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         }];
         
         
+        [self addPhysicsBlock:@"ZzeroForce" block:^(PolyArrangement *arrangement) {
+            //
+            //Calculate the vertex to vertex spring force
+            //
+            float f = PropF(@"ZzeroForce");
+            if(f > 0){
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                    vit->data().springF += ofVec3f(0,0,-f*vit->data().pos.z);
+                }];
+            }
+        }];
+        
         
         for(int i=0;i<PropI(@"iterations"); i++){
             //Reset forces
             [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-                vit->data().springF = ofVec2f(0,0);
+                vit->data().springF = ofVec3f(0,0,0);
             }];
             
             
@@ -283,18 +296,18 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 -(void)controlDraw:(NSDictionary *)drawingInformation{
     
     
-     
-     //Visualize
-     
-     
-     //total force
-     ofSetColor(255,255,0);
-     
+    
+    //Visualize
+    
+    
+    //total force
+    ofSetColor(255,255,0);
+    
     [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-     of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + ofVec2f(vit->data().springF.x, vit->data().springF.y) , 0.01);
+        of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + ofVec2f(vit->data().springF.x, vit->data().springF.y) , 0.01);
     }];
-     
-     
+    
+    
     /* //Visualize angualar stress
      if(PropI(@"state") >= 2 && PropF(@"angleStiffnesForce") > 0){
      

@@ -208,6 +208,16 @@
             CGAL::insert(*[[engine arrangement] arrData],  convexPolygons[u].edges_begin(), convexPolygons[u].edges_end());
         }*/
         for(int u=0;u<delauneys.size();u++){
+//            cout<<endl<<endl<<endl;
+//            cout<<"Delaunay #"<<u<<endl;
+//            cout<<"Initial #pts "<<delauneys[u].number_of_vertices()<<endl;
+//            CGAL::make_conforming_Delaunay_2(delauneys[u]);
+//            cout<<"Conformning delaynay 2 #pts "<<delauneys[u].number_of_vertices()<<endl;
+//            
+//            CGAL::make_conforming_Gabriel_2(delauneys[u]);
+//            cout<<"Conformning gabriel 2 #pts "<<delauneys[u].number_of_vertices()<<endl;
+//
+//            
             Delaunay::Finite_faces_iterator vit = delauneys[u].finite_faces_begin();
             for( ; vit != delauneys[u].finite_faces_end(); ++vit){     
                 for(int i=0;i<3;i++){
@@ -216,9 +226,11 @@
                     Segment_2 seg = Segment_2(Point_2(0,0), 
                                               Point_2(1,1));
 
-  */                  
+  */                    
                  //   @synchronized([engine arrangement]){
                         CGAL::insert(*[[engine arrangement] arrData],  delauneys[u].segment(vit, i));
+                    
+                    
                    // }
 
 //                    [[engine arrangement] arrData]->insert_in_face_interior(delauneys[u].segment(vit, i), [[engine arrangement] arrData]->unbounded_face());
@@ -227,6 +239,44 @@
             }
             
         }
+        
+        __block int i=0;
+        [[engine arrangement] enumerateFaces:^(Arrangement_2::Face_iterator fit) {
+            if(fit->is_unbounded()){
+                cout<<"Face #"<<++i<<" is unbounded "<<endl;
+            } else {
+                cout<<"Face #"<<++i<<" Number outer ccbs: "<<fit->number_of_outer_ccbs()<<"  "<<endl;
+                
+                int vertices = 0;
+                Arrangement_2::Ccb_halfedge_circulator circ;
+                Arrangement_2::Ccb_halfedge_circulator curr = circ = fit->outer_ccb();
+                do {
+                    vertices ++;
+                } while (++curr != circ);
+                cout<<"Number vertices: "<<vertices<<endl;
+                
+                if(vertices > 3){
+                    Delaunay dl;
+                    curr = circ = fit->outer_ccb();
+                    do {
+                        dl.push_back(curr->source()->point());
+                    } while (++curr != circ);
+                    
+                    cout<<"Delaunay vertices: "<<dl.number_of_vertices()<<endl;
+                    
+                    Delaunay::Finite_faces_iterator vit = dl.finite_faces_begin();
+                    for( ; vit != dl.finite_faces_end(); ++vit){     
+                        for(int i=0;i<3;i++){
+                            CGAL::insert(*[[engine arrangement] arrData],  dl.segment(vit, i));
+                        }
+                    }
+                }
+            }
+            
+            
+        }];
+        
+
         
         //  
     }
