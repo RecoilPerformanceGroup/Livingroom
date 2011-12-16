@@ -8,8 +8,8 @@
         sender = new ofxOscSender();
         receiver = new ofxOscReceiver();
         
-        //        sender->setup("Ecotelemedia-iPad-Mobile-6.local", 8080);
-        sender->setup("10.0.2.2", 8080);
+        sender->setup("Ecotelemedia-iPad-Mobile-6.local", 8080);
+        //sender->setup("10.0.1.3", 8080);
         receiver->setup(9090);
     }
     

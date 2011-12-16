@@ -23,8 +23,8 @@
     for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
         //Constructor
         if(eit->data().springOptimalLength == -1){
-            ofVec2f source = pointToVec(eit->source()->point());
-            ofVec2f target = pointToVec(eit->target()->point());
+            ofVec2f source = point2ToVec2(eit->source()->point());
+            ofVec2f target = point2ToVec2(eit->target()->point());
             eit->data().springOptimalLength = source.distance(target);
             
             //            cout<<squared_distance(eit->source()->point(), eit->target()->point())<<endl;
@@ -37,8 +37,8 @@
         float mouseF = 0.05;
         vit = [[engine arrangement] arrData]->vertices_begin();        
         for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
-            if(mouse.distance(pointToVec(vit->point())) < mouseR){
-                ofVec2f vertex = pointToVec(vit->point());
+            if(mouse.distance(point2ToVec2(vit->point())) < mouseR){
+                ofVec2f vertex = point2ToVec2(vit->point());
                 ofVec2f v = vertex - mouse;
                 
                 float l = v.length();
@@ -56,8 +56,8 @@
         //Spring force
         eit = [[engine arrangement] arrData]->edges_begin();        
         for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
-            ofVec2f source = pointToVec(eit->source()->point());
-            ofVec2f target = pointToVec(eit->target()->point());
+            ofVec2f source = point2ToVec2(eit->source()->point());
+            ofVec2f target = point2ToVec2(eit->target()->point());
             
             float length = source.distance(target);        
             float optimalLength = eit->data().springOptimalLength;
@@ -101,8 +101,8 @@
             Arrangement_2::Ccb_halfedge_circulator hc = ccb_start;        
             int i=0;
             do { 
-                ofVec2f source = pointToVec(hc->source()->point());
-                ofVec2f target = pointToVec(hc->target()->point());
+                ofVec2f source = point2ToVec2(hc->source()->point());
+                ofVec2f target = point2ToVec2(hc->target()->point());
                 
                 float length = source.distance(target);        
                 float optimalLength = hc->data().springOptimalLength;

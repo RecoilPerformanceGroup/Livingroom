@@ -264,7 +264,11 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 -(void) enumerateFaces:(void(^)(Arrangement_2::Face_iterator fit))func {
     Arrangement_2::Face_iterator fit = arr->faces_begin();
     for ( ; fit !=arr->faces_end(); ++fit) {        
-        func(fit);
+        if(!fit->is_fictitious()){
+            if(fit->number_of_outer_ccbs() == 1){
+                func(fit);
+            }
+        }
     }
 }
 

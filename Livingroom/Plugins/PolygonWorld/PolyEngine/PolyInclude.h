@@ -32,6 +32,7 @@ typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 
 typedef CGAL::Arr_segment_traits_2<Kernel>  Traits_2;
 typedef CGAL::Polygon_2<Kernel>             Polygon_2;
+typedef Traits_2::Point_3                   Point_3;
 typedef Traits_2::Point_2                   Point_2;
 typedef Traits_2::X_monotone_curve_2        Segment_2;
 typedef CGAL::Arr_extended_dcel<Traits_2,LRVertex_data, LRHalfedge_data, LRFace_data>
@@ -50,14 +51,31 @@ typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
 //typedef CDT::Vertex_handle Vertex_handle;
 //typedef CDT::Point Point2;
 
-static ofVec2f pointToVec(Point_2 p){
+static ofVec2f point2ToVec2(Point_2 p){
     return ofVec2f(CGAL::to_double(p.x()),CGAL::to_double(p.y()));
+}
+
+static ofVec3f point3ToVec3(Point_3 p){
+    return ofVec3f(CGAL::to_double(p.x()),CGAL::to_double(p.y()), CGAL::to_double(p.z()));
+}
+
+static Point_3 vec3ToPoint3(ofVec3f v){
+    return Point_3(v.x, v.y, v.z);
+}
+
+
+static ofVec3f handleToPoint3(Arrangement_2::Vertex_handle handle){
+    if(handle->data().pos.x == -1 && handle->data().pos.y == -1 && handle->data().pos.z == -1){
+        ofVec2f v2 = point2ToVec2(handle->point());
+        handle->data().pos = ofVec3f(v2.x, v2.y, 0);
+    }
+    return handle->data().pos;
 }
 
 static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
 //    return ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().z);
     if(handle->data().pos.x == -1 && handle->data().pos.y == -1 && handle->data().pos.z == -1){
-        ofVec2f v2 = pointToVec(handle->point());
+        ofVec2f v2 = point2ToVec2(handle->point());
         handle->data().pos = ofVec3f(v2.x, v2.y, 0);
     }
     return handle->data().pos;
