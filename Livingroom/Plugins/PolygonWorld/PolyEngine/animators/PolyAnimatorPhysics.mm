@@ -231,6 +231,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 ofVec3f u = v3 - v1;
                 ofVec3f v = v2 - v1;
                 
+//                Vector_3 normal 
                 ofVec3f normal = u.cross(v);
                 normal.normalize();
                
@@ -238,8 +239,8 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 
                 
                 
-                Kernel::Triangle_3 triangle = Kernel::Triangle_3(vec3ToPoint3(v1), vec3ToPoint3(v2), vec3ToPoint3(v3));
-                
+                CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3 triangle = CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3));
+            /*    
                 ofVec3f middle = point3ToVec3( CGAL::centroid(triangle));           
                 
                 ofQuaternion q;
@@ -337,7 +338,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 //Friction
                 vit->data().springV *= ofVec3f(1.0-PropF(@"floorFriction"),1.0-PropF(@"floorFriction"),1.0);
                 
-                vit->data().pos += vit->data().springV;                
+                setHandlePos(vit->data().springV + vit->data().pos, vit);
             }];
             
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -6,10 +6,8 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef Livingroom_PolyInclude_h
-#define Livingroom_PolyInclude_h
-
-//#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#pragma once 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Arr_segment_traits_2.h>
@@ -28,15 +26,17 @@
 //#include <CGAL/Delaunay_mesh_size_criteria_2.h>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-//typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+typedef CGAL::Exact_predicates_inexact_constructions_kernel KernelInexact;
 
 typedef CGAL::Arr_segment_traits_2<Kernel>  Traits_2;
+typedef CGAL::Arr_segment_traits_2<KernelInexact>  Traits_2_inexact;
 typedef CGAL::Polygon_2<Kernel>             Polygon_2;
-typedef Traits_2::Point_3                   Point_3;
+typedef Traits_2_inexact::Point_3                   Point_3;
 typedef Traits_2::Point_2                   Point_2;
+typedef Traits_2::Vector_3                  Vector_3;
 typedef Traits_2::X_monotone_curve_2        Segment_2;
 typedef CGAL::Arr_extended_dcel<Traits_2,LRVertex_data, LRHalfedge_data, LRFace_data>
-                                            Dcel;
+Dcel;
 typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
 
 //typedef CGAL::Triangulation_vertex_base_2<K> Vb;
@@ -64,21 +64,21 @@ static Point_3 vec3ToPoint3(ofVec3f v){
 }
 
 
-static ofVec3f handleToPoint3(Arrangement_2::Vertex_handle handle){
-    if(handle->data().pos.x == -1 && handle->data().pos.y == -1 && handle->data().pos.z == -1){
+static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
+    if(handle->data().vecPosOutdated){
         ofVec2f v2 = point2ToVec2(handle->point());
         handle->data().pos = ofVec3f(v2.x, v2.y, 0);
     }
     return handle->data().pos;
 }
 
-static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
-//    return ofVec3f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()), handle->data().z);
-    if(handle->data().pos.x == -1 && handle->data().pos.y == -1 && handle->data().pos.z == -1){
-        ofVec2f v2 = point2ToVec2(handle->point());
-        handle->data().pos = ofVec3f(v2.x, v2.y, 0);
+
+static Point_3 handleToPoint3(Arrangement_2::Vertex_handle handle){
+    if(handle->data().pointPosOutdated){
+        ofVec3f v = handleToVec3(handle);
+        handle->data().pointPos = Point_3(v.x, v.y, v.z);
     }
-    return handle->data().pos;
+    return handle->data().pointPos;
 }
 
 static ofVec2f handleToVec2(Arrangement_2::Vertex_handle handle){
@@ -91,6 +91,16 @@ static void glVertexHandle(Arrangement_2::Vertex_handle handle){
     ofVec3f p = handleToVec3(handle);
     glVertex3d(p.x , p.y, p.z); 
     
+}
+
+static void setHandlePos(ofVec3f v, Arrangement_2::Vertex_handle handle){
+    handle->data().pointPosOutdated = true;
+    handle->data().pos = v;
+}
+
+static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
+    handle->data().vecPosOutdated = true;
+    handle->data().pointPos = p;
 }
 
 
@@ -109,11 +119,10 @@ static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
             normal.normalize();
             
             return normal;
-     
+            
         }            
-    //    cout<<"nil normal"<<endl;
-
+        //    cout<<"nil normal"<<endl;
+        
     }
     return ofVec3f();
 }
-#endif

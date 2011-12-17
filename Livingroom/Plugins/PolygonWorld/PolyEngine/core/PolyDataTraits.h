@@ -8,8 +8,15 @@
 
 #ifndef Livingroom_PolyDataTraits_h
 #define Livingroom_PolyDataTraits_h
+#import "PolyInclude.h"
 
 #import <ofxCocoaPlugins/Plugin.h>
+
+//
+typedef CGAL::Exact_predicates_inexact_constructions_kernel KernelInexact;
+typedef CGAL::Arr_segment_traits_2<KernelInexact>  Traits_2_inexact;
+typedef Traits_2_inexact::Point_3                   Point_3;
+
 
 // documentation for extended arrangment dcels :
 // http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Arrangement_on_surface_2_ref/Class_Arr_extended_dcel.html#Index_anchor_1476
@@ -22,6 +29,9 @@ struct LRVertex_data {
     ofColor color;
     ofVec3f pos                 = ofVec3f(-1,-1,-1);
     Point_3 pointPos            = Point_3(-1,-1,-1);
+    
+    bool vecPosOutdated         = true;
+    bool pointPosOutdated       = true;
     
     //CracksAnimator
     float crackAmount           = 0.0;
@@ -63,3 +73,4 @@ struct LRFace_data {
 };
 
 #endif
+
