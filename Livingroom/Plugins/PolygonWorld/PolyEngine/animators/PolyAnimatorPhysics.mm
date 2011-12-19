@@ -208,73 +208,73 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             }
         }];
         
-       
-        [self addPhysicsBlock:@"FlatNormalForce" block:^(PolyArrangement *arrangement) {
-            //
-            //Calculate the vertex to vertex spring force
-            //
-            float f = PropF(@"FlatNormalForce");
-            __block  Arrangement_2::Face_iterator lastfit;
-            __block ofVec3f normal;
-            [arrangement enumerateFaces:^(Arrangement_2::Face_iterator fit) {
-                Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
-
-                Arrangement_2::Vertex_handle h1 = ccb_start->source();
-                Arrangement_2::Vertex_handle h2 = ccb_start->target();
-                Arrangement_2::Vertex_handle h3 = ccb_start->prev()->source();
-                   
-                ofVec3f v1 = handleToVec3(h1);
-                ofVec3f v2 = handleToVec3(h2);
-                ofVec3f v3 = handleToVec3(h3);
-                
-              
-                ofVec3f u = v3 - v1;
-                ofVec3f v = v2 - v1;
-                
-//                Vector_3 normal 
-                ofVec3f normal = u.cross(v);
-                normal.normalize();
-               
-                ofVec3f goal = -ofVec3f(0,0,1);
-                
-                
-                
-                CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3 triangle = CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3));
-            /*    
-                ofVec3f middle = point3ToVec3( CGAL::centroid(triangle));           
-                
-                ofQuaternion q;
-                q.makeRotate(normal, goal);
-                
-                float angle;
-                ofVec3f rotVec;
-                q.getRotate(angle, rotVec);
-
-                ofVec3f vv1 = v1-middle;
-                ofVec3f vv2 = v2-middle;
-                ofVec3f vv3 = v3-middle;
-                
-                
-                vv1.rotate(angle, rotVec);
-                vv2.rotate(angle, rotVec);
-                vv3.rotate(angle, rotVec);
-                
-                ofVec3f v1goal = middle+vv1;
-                ofVec3f v2goal = middle+vv2;
-                ofVec3f v3goal = middle+vv3;
-                
-                h1->data().springF += (v1goal-v1)*f;
-                h2->data().springF += (v2goal-v2)*f;
-                h3->data().springF += (v3goal-v3)*f;*/
+        
+        float f = PropF(@"FlatNormalForce");
+        if(f > 0){
+            [self addPhysicsBlock:@"FlatNormalForce" block:^(PolyArrangement *arrangement) {
+                //
+                //Calculate the vertex to vertex spring force
+                //
+                __block  Arrangement_2::Face_iterator lastfit;
+                __block ofVec3f normal;
+                [arrangement enumerateFaces:^(Arrangement_2::Face_iterator fit) {
+                    Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                    
+                    Arrangement_2::Vertex_handle h1 = ccb_start->source();
+                    Arrangement_2::Vertex_handle h2 = ccb_start->target();
+                    Arrangement_2::Vertex_handle h3 = ccb_start->prev()->source();
+                    
+                    ofVec3f v1 = handleToVec3(h1);
+                    ofVec3f v2 = handleToVec3(h2);
+                    ofVec3f v3 = handleToVec3(h3);
+                    
+                    
+                    ofVec3f u = v3 - v1;
+                    ofVec3f v = v2 - v1;
+                    
+                    //                Vector_3 normal 
+                    ofVec3f normal = u.cross(v);
+                    normal.normalize();
+                    
+                    
+                    //ofVec3f normal = cgalVec3ToVec3( CGAL::normal(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3)) );
+                    
+                    ofVec3f goal = -ofVec3f(0,0,1);
+                    
+                    
+                    /*
+                     CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3 triangle = CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3));
+                     
+                     ofVec3f middle = point3ToVec3( CGAL::centroid(triangle));   */        
+                    
+                    ofVec3f middle = (v1 + v2 + v3)/3.0;
+                    
+                    ofQuaternion q;
+                    q.makeRotate(normal, goal);
+                    
+                    float angle;
+                    ofVec3f rotVec;
+                    q.getRotate(angle, rotVec);
+                    
+                    ofVec3f vv1 = v1-middle;
+                    ofVec3f vv2 = v2-middle;
+                    ofVec3f vv3 = v3-middle;
+                    
+                    
+                    vv1.rotate(angle, rotVec);
+                    vv2.rotate(angle, rotVec);
+                    vv3.rotate(angle, rotVec);
+                    
+                    ofVec3f v1goal = middle+vv1;
+                    ofVec3f v2goal = middle+vv2;
+                    ofVec3f v3goal = middle+vv3;
+                    
+                    h1->data().springF += (v1goal-v1)*f;
+                    h2->data().springF += (v2goal-v2)*f;
+                    h3->data().springF += (v3goal-v3)*f;
+                }];
             }];
-       /*     [arrangement enumerateFaceEdges:^(Arrangement_2::Ccb_halfedge_circulator hc, Arrangement_2::Face_iterator fit) {
-                if(lastfit != fit){
-                    normal = calculateFaceNormal(fit);
-                    lastfit = fit;
-                }
-                
-            }];*/
-        }];
+        }
         
         for(int i=0;i<PropI(@"iterations"); i++){
             //Reset forces
@@ -372,7 +372,10 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     //total force
     ofSetColor(255,255,0);
     
+    
+    
     [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+        ofVec2f v = handleToVec2(vit)   + ofVec2f(vit->data().springF.x, vit->data().springF.y) ;
         of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + ofVec2f(vit->data().springF.x, vit->data().springF.y) , 0.01);
     }];
     

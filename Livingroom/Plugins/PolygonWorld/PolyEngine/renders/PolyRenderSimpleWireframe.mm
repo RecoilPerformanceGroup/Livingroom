@@ -163,7 +163,6 @@
                             }
                             ofVec3f p = handleToVec3(hc->source());
                             glVertex3d(p.x , p.y, (p.z)*PropF(@"zScale"));
-                        //    cout << p.z << endl;
                             
                             //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                             ++hc; 
