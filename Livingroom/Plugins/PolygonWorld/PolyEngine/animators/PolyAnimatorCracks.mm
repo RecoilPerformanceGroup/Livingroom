@@ -13,34 +13,140 @@
 
 -(id)init{
     if(self = [super init]){
-        [[self addPropF:@"pressure"] setMaxValue:100.0];
+        [self addPropF:@"active"];
+        
+        [self addPropF:@"pressure"];
+        
+        [self addPropF:@"overflowThreshold"];
+        [self addPropF:@"overflowSpeed"];
     }
     
     return self;
 }
 -(void)update:(NSDictionary *)drawingInformation{
+    float active = PropF(@"active");
+    float pressure = PropF(@"pressure");
+    float overflowTheshold = PropF(@"overflowThreshold");
+    float overflowSpeed = PropF(@"overflowSpeed");    
+    
+    if(active > 0){
+        //Reset
+        /*[[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+         vit->data().crackDir = ofVec2f();
+         vit->data().crackAmount = 0;
+         }];
+         */        
         
-  //  [[engine arrangement] cgalObjectAtPoint:Point_2(mouse.x, mouse.y)];
+        //avarage halfedges
+        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+            float avg = (eit->twin()->data().crackAmount +  eit->data().crackAmount) * 0.5;
+            eit->twin()->data().crackAmount = eit->data().crackAmount = avg;
+        }];
+        
+        
+        //Tracker
+        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];        
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+            for(int t=0;t<v.size();t++){
+                if(v[t].distance(handleToVec2(vit)) < 0.1){
+                    Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                    first = curr = vit->incident_halfedges();
+                    do {
+                        curr->data().crackAmount += 1.0;
+                    } while (++curr != first);
+                  
+                }
+            }
+        }];
+        	
+        
+        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+            float crackAmm = eit->data().crackAmount;
+            if(crackAmm > overflowTheshold){
+                float press = crackAmm - overflowTheshold;
+                
+                //Spred det videre
+                
+                Arrangement_2::Vertex_handle h1 = eit->source();
+                Arrangement_2::Vertex_handle h2 = eit->target();
+                
+                ofVec2f dir = handleToVec2(h2) - handleToVec2(h1);
+                // dir.normalize();
+                
+                
+                //Calculate crackCacheRatio
+                float crackRatioTotal = 0;
+                
+                Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                first = curr = h1->incident_halfedges();
+                do {
+                    if((Arrangement_2::Halfedge_handle) curr != eit){
+                        // Note that the current halfedge is directed from u to h1:
+                        Arrangement_2::Vertex_handle u = curr->source(); 
+                        ofVec2f odir = handleToVec2(u) - handleToVec2(h1);
+                        //odir.normalize();         
+                        float ratio = 1.0/fabs((odir).angle(-dir));
+                        curr->data().crackCacheRatio = ratio;
+                        crackRatioTotal += ratio;
+                    }
+                } while (++curr != first);
+
+                first = curr = h2->incident_halfedges();
+                do {
+                    if((Arrangement_2::Halfedge_handle) curr != eit){
+                        // Note that the current halfedge is directed from u to h1:
+                        Arrangement_2::Vertex_handle u = curr->source(); 
+                        ofVec2f odir = handleToVec2(u) - handleToVec2(h2);
+                        //odir.normalize();         
+                        float ratio = 1.0/fabs((odir).angle(-dir));
+                        curr->data().crackCacheRatio = ratio;
+                        crackRatioTotal += ratio;
+                    }
+                } while (++curr != first);
+                
+                
+                //Flow
+                first = curr = h1->incident_halfedges();
+                do {
+                    if((Arrangement_2::Halfedge_handle) curr != eit){
+                        if(curr->data().crackAmount < crackAmm){
+                            curr->data().crackAmount +=  overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
+                            eit->data().crackAmount -= overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
+                        }
+                    }
+                } while (++curr != first);
+                
+                first = curr = h2->incident_halfedges();
+                do {
+                    if((Arrangement_2::Halfedge_handle) curr != eit){
+                        if(curr->data().crackAmount < crackAmm){
+                            curr->data().crackAmount +=  overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
+                            eit->data().crackAmount -= overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
+                        }
+                    }
+                } while (++curr != first);
+
+                
+                /*
+                 
+                 eit->source()->data().crackAmount += (crackAmm - overflowTheshold)*0.5;        
+                 eit->target()->data().crackAmount += (crackAmm - overflowTheshold)*0.5;    
+                 
+                 ofVec2f dir = handleToVec2(eit->source()) - handleToVec2(eit->target());
+                 dir.normalize();
+                 dir *= (crackAmm - overflowTheshold);
+                 
+                 eit->source()->data().crackDir += dir;
+                 eit->target()->data().crackDir -= dir;*/
+            }
+            
+        }];
+    }
+    
     
 }
 
 
-- (void) controlMousePressed:(float) x y:(float)y button:(int)button{
-    mousePressed = YES;
-    mouse = ofVec2f(x,y);    
-}
-
-- (void) controlMouseMoved:(float) x y:(float)y{
-    mouse = ofVec2f(x,y);    
-}
-
-- (void) controlMouseReleased:(float) x y:(float)y{
-    mousePressed = NO;
-}
-
--(void)controlMouseDragged:(float)x y:(float)y button:(int)button{
-    mouse = ofVec2f(x,y);
-}
 
 /**
  -(void)addCrackAmount:float amount toVertex: Arrangement_2::Vertex v{

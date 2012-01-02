@@ -8,6 +8,6 @@
 
 #import "PolyRender.h"
 
-@interface PolyRenderCracks : PolyRender
+@interface PolyRenderCrackLines : PolyRender
 
 @end

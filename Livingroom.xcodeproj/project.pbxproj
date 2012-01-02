@@ -47,7 +47,7 @@
 		7F462714149511F60095786B /* texture3DS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F46270C149511F60095786B /* texture3DS.cpp */; };
 		7F462715149511F60095786B /* ofx3dModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F462710149511F60095786B /* ofx3dModelLoader.cpp */; };
 		7F6D575B146BFEE8006F8CF0 /* PolyAnimatorCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */; };
-		7F6D5778146C0F91006F8CF0 /* PolyRenderCracks.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D5777146C0F91006F8CF0 /* PolyRenderCracks.mm */; };
+		7F6D5778146C0F91006F8CF0 /* PolyRenderCrackLines.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6D5777146C0F91006F8CF0 /* PolyRenderCrackLines.mm */; };
 		7FE39E7B1495023C00EFA4CB /* Perspective.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FE39E7A1495023C00EFA4CB /* Perspective.mm */; };
 /* End PBXBuildFile section */
 
@@ -141,8 +141,8 @@
 		7F462711149511F60095786B /* ofx3DModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofx3DModelLoader.h; sourceTree = "<group>"; };
 		7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCracks.h; sourceTree = "<group>"; };
 		7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCracks.mm; sourceTree = "<group>"; };
-		7F6D5776146C0F90006F8CF0 /* PolyRenderCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRenderCracks.h; sourceTree = "<group>"; };
-		7F6D5777146C0F91006F8CF0 /* PolyRenderCracks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderCracks.mm; sourceTree = "<group>"; };
+		7F6D5776146C0F90006F8CF0 /* PolyRenderCrackLines.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PolyRenderCrackLines.h; sourceTree = "<group>"; };
+		7F6D5777146C0F91006F8CF0 /* PolyRenderCrackLines.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderCrackLines.mm; sourceTree = "<group>"; };
 		7FE39E791495023C00EFA4CB /* Perspective.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Perspective.h; sourceTree = "<group>"; };
 		7FE39E7A1495023C00EFA4CB /* Perspective.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Perspective.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,8 +234,8 @@
 			children = (
 				3D0719981469423E0057E0B9 /* PolyRenderSimpleWireframe.h */,
 				3D0719991469423E0057E0B9 /* PolyRenderSimpleWireframe.mm */,
-				7F6D5776146C0F90006F8CF0 /* PolyRenderCracks.h */,
-				7F6D5777146C0F91006F8CF0 /* PolyRenderCracks.mm */,
+				7F6D5776146C0F90006F8CF0 /* PolyRenderCrackLines.h */,
+				7F6D5777146C0F91006F8CF0 /* PolyRenderCrackLines.mm */,
 			);
 			name = renders;
 			path = Livingroom/Plugins/PolygonWorld/PolyEngine/renders;
@@ -488,7 +488,7 @@
 				3D16C0A6146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm in Sources */,
 				7F6D575B146BFEE8006F8CF0 /* PolyAnimatorCracks.mm in Sources */,
 				3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */,
-				7F6D5778146C0F91006F8CF0 /* PolyRenderCracks.mm in Sources */,
+				7F6D5778146C0F91006F8CF0 /* PolyRenderCrackLines.mm in Sources */,
 				3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */,
 				7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */,
 				7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */,

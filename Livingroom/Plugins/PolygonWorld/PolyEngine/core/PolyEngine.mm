@@ -11,7 +11,7 @@
 #import "PolyArrangement.h"
 
 #import "PolyRenderSimpleWireframe.h"
-#import "PolyRenderCracks.h"
+#import "PolyRenderCrackLines.h"
 
 #import "PolyInputSimpleMouseDraw.h"
 #import "PolyInputTracker.h"
@@ -52,7 +52,8 @@
         //Renders
         //
         [self addModule:@"PolyRenderSimpleWireframe"];
-        
+        [self addModule:@"PolyRenderCrackLines"];
+
         
 
         [self didChangeValueForKey:@"allModulesTree"];

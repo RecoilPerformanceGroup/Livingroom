@@ -67,12 +67,20 @@ static ofVec3f cgalVec3ToVec3(Vector_3 v){
     return ofVec3f(v.x(), v.y(), v.z());
 }
 
+//---------------- 
 
 static ofVec3f handleToVec3(Arrangement_2::Vertex_handle handle){
     if(handle->data().vecPosOutdated){
         handle->data().vecPosOutdated = false;
         ofVec2f v2 = point2ToVec2(handle->point());
         handle->data().pos = ofVec3f(v2.x, v2.y, 0);
+    }
+    return handle->data().pos;
+}
+
+static ofVec3f handleToVec3(Arrangement_2::Vertex_const_handle handle){
+    if(handle->data().vecPosOutdated){
+        return point2ToVec2(handle->point());
     }
     return handle->data().pos;
 }
@@ -87,17 +95,27 @@ static Point_3 handleToPoint3(Arrangement_2::Vertex_handle handle){
     return handle->data().pointPos;
 }
 
+
 static ofVec2f handleToVec2(Arrangement_2::Vertex_handle handle){
-    //return ofVec2f(CGAL::to_double(handle->point().x()),CGAL::to_double(handle->point().y()));
     ofVec3f v = handleToVec3(handle);
     return ofVec2f(v.x,v.y);
 }
+
+static ofVec2f handleToVec2(Arrangement_2::Vertex_const_handle handle){
+    ofVec3f v = handleToVec3(handle);
+    return ofVec2f(v.x,v.y);
+}
+
+//---------------- 
+
 
 static void glVertexHandle(Arrangement_2::Vertex_handle handle){
     ofVec3f p = handleToVec3(handle);
     glVertex3d(p.x , p.y, p.z); 
     
 }
+
+//---------------- 
 
 static void setHandlePos(ofVec3f v, Arrangement_2::Vertex_handle handle){
     if(v.x != handle->data().pos.x || v.y != handle->data().pos.y || v.z != handle->data().pos.z){
@@ -111,6 +129,7 @@ static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
     handle->data().pointPos = p;
 }*/
 
+//---------------- 
 
 static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
     if(!fit->is_fictitious()){ 

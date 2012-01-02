@@ -236,17 +236,8 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                     ofVec3f normal = u.cross(v);
                     normal.normalize();
                     
-                    
-                    //ofVec3f normal = cgalVec3ToVec3( CGAL::normal(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3)) );
-                    
                     ofVec3f goal = -ofVec3f(0,0,1);
-                    
-                    
-                    /*
-                     CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3 triangle = CGAL::Exact_predicates_inexact_constructions_kernel::Triangle_3(handleToPoint3(h1), handleToPoint3(h2), handleToPoint3(h3));
-                     
-                     ofVec3f middle = point3ToVec3( CGAL::centroid(triangle));   */        
-                    
+
                     ofVec3f middle = (v1 + v2 + v3)/3.0;
                     
                     ofQuaternion q;
