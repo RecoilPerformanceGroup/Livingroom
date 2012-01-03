@@ -261,6 +261,14 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     }
 }
 
+-(void) enumerateHalfedges:(void(^)(Arrangement_2::Halfedge_iterator eit))func {
+    Arrangement_2::Halfedge_iterator hit;    
+    hit = arr->halfedges_begin();
+    for ( ; hit != arr->halfedges_end(); ++hit) {
+        func(hit);
+    }
+}
+
 -(void) enumerateFaces:(void(^)(Arrangement_2::Face_iterator fit))func {
     Arrangement_2::Face_iterator fit = arr->faces_begin();
     for ( ; fit !=arr->faces_end(); ++fit) {        

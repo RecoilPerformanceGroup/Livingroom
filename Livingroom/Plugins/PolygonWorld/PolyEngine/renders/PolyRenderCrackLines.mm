@@ -7,6 +7,7 @@
 //
 
 #import "PolyRenderCrackLines.h"
+#import <ofxCocoaPlugins/CustomGraphics.h>
 
 @implementation PolyRenderCrackLines
 
@@ -20,21 +21,35 @@
         glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
         
         ofRect(0,0,1,1);
+        glLineWidth(1);
         
         Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
         
         for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
-            
-            ofSetColor(255.0*eit->data().crackAmount,-250.0*eit->data().crackAmount,0,255);
+            float crack = eit->data().crackAmount + eit->twin()->data().crackAmount;
+           // ofSetColor(255.0*crack,255.0*(1-crack),0,255);
+             ofSetColor(0*crack,0,0,255.0*crack);
             
            // ofSetLineWidth(eit->data().crackAmount*2.0);
             
-            glBegin(GL_LINES);
+            Arrangement_2::Vertex_handle h1 = eit->source();
+            Arrangement_2::Vertex_handle h2 = eit->target();
             
-            glVertex2d(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()));
-            glVertex2d(CGAL::to_double(eit->target()->point().x()) , CGAL::to_double(eit->target()->point().y()));
+            ofLine(handleToVec2(h1).x, handleToVec2(h1).y, handleToVec2(h2).x, handleToVec2(h2).y);
             
-            glEnd();
+         /*   ofVec2f dir = handleToVec2(h2) - handleToVec2(h1);
+            dir.normalize();
+            ofVec2f hat = ofVec2f(-dir.y, dir.x)*0.008;
+            
+            dir *= 0.02;
+            
+            of2DArrow(handleToVec2(eit->source())-hat+dir, handleToVec2(eit->target())-hat-dir, 0.015);
+            
+            crack = eit->twin()->data().crackAmount;
+            ofSetColor(255.0*crack,255.0*(1-crack),0,255);
+
+            
+            of2DArrow(handleToVec2(eit->target())+hat-dir, handleToVec2(eit->source())+hat+dir, 0.015);*/
             
         }      
         
