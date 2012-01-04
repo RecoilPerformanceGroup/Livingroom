@@ -36,6 +36,11 @@
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
 		3D9F6BCF14939029004AEA70 /* PolyAnimatorCrumble.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */; };
 		3DA00422149A11E900EECA9B /* PolyAnimatorPhysics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DA00421149A11E800EECA9B /* PolyAnimatorPhysics.mm */; };
+		3DAF18CD14B35EEE003B6B81 /* Tracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DAF18CB14B35EEE003B6B81 /* Tracker.mm */; };
+		3DAF18CE14B35EEE003B6B81 /* Tracker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAF18CC14B35EEE003B6B81 /* Tracker.xib */; };
+		3DE3C34514B3512800A7E9E0 /* AshParticles.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE3C34314B3512800A7E9E0 /* AshParticles.mm */; };
+		3DE3C34614B3512800A7E9E0 /* AshParticles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE3C34414B3512800A7E9E0 /* AshParticles.xib */; };
+		3DE3C35214B35A6F00A7E9E0 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DE3C34F14B35A6F00A7E9E0 /* ParticleSystem.cpp */; };
 		3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8772A148E628300F7558C /* PolyNumberProperty.mm */; };
 		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
 		7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263734148D33C10055DCFA /* MGScopeBar.m */; };
@@ -118,6 +123,17 @@
 		3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCrumble.mm; sourceTree = "<group>"; };
 		3DA00420149A11E800EECA9B /* PolyAnimatorPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorPhysics.h; sourceTree = "<group>"; };
 		3DA00421149A11E800EECA9B /* PolyAnimatorPhysics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorPhysics.mm; sourceTree = "<group>"; };
+		3DAF18CA14B35EEE003B6B81 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
+		3DAF18CB14B35EEE003B6B81 /* Tracker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tracker.mm; sourceTree = "<group>"; };
+		3DAF18CC14B35EEE003B6B81 /* Tracker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Tracker.xib; sourceTree = "<group>"; };
+		3DE3C34214B3512800A7E9E0 /* AshParticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AshParticles.h; sourceTree = "<group>"; };
+		3DE3C34314B3512800A7E9E0 /* AshParticles.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AshParticles.mm; sourceTree = "<group>"; };
+		3DE3C34414B3512800A7E9E0 /* AshParticles.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AshParticles.xib; sourceTree = "<group>"; };
+		3DE3C34D14B35A6F00A7E9E0 /* Body.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Body.h; sourceTree = "<group>"; };
+		3DE3C34E14B35A6F00A7E9E0 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		3DE3C34F14B35A6F00A7E9E0 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
+		3DE3C35014B35A6F00A7E9E0 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		3DE3C35114B35A6F00A7E9E0 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
 		3DE87729148E628300F7558C /* PolyNumberProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolyNumberProperty.h; path = properties/PolyNumberProperty.h; sourceTree = "<group>"; };
 		3DE8772A148E628300F7558C /* PolyNumberProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PolyNumberProperty.mm; path = properties/PolyNumberProperty.mm; sourceTree = "<group>"; };
 		7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
@@ -141,7 +157,7 @@
 		7F462711149511F60095786B /* ofx3DModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofx3DModelLoader.h; sourceTree = "<group>"; };
 		7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCracks.h; sourceTree = "<group>"; };
 		7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCracks.mm; sourceTree = "<group>"; };
-		7F6D5776146C0F90006F8CF0 /* PolyRenderCrackLines.h */ = {isa = PBXFileReference; fileEncoding = 4; path = PolyRenderCrackLines.h; sourceTree = "<group>"; };
+		7F6D5776146C0F90006F8CF0 /* PolyRenderCrackLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRenderCrackLines.h; sourceTree = "<group>"; };
 		7F6D5777146C0F91006F8CF0 /* PolyRenderCrackLines.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderCrackLines.mm; sourceTree = "<group>"; };
 		7FE39E791495023C00EFA4CB /* Perspective.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Perspective.h; sourceTree = "<group>"; };
 		7FE39E7A1495023C00EFA4CB /* Perspective.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Perspective.mm; sourceTree = "<group>"; };
@@ -244,7 +260,9 @@
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				3DAF18C814B35EE7003B6B81 /* Tracker */,
 				3D8C5FF01497A28500A3CA6D /* OSCControl */,
+				3DE3C34114B3511E00A7E9E0 /* AshParticles */,
 				7FE39E781495023C00EFA4CB /* Perspective */,
 				3D2FC2391462FE3E0028BC01 /* PolygonWorld */,
 			);
@@ -344,6 +362,31 @@
 				3D8C5FF31497A28500A3CA6D /* OSCControl.xib */,
 			);
 			path = OSCControl;
+			sourceTree = "<group>";
+		};
+		3DAF18C814B35EE7003B6B81 /* Tracker */ = {
+			isa = PBXGroup;
+			children = (
+				3DAF18CA14B35EEE003B6B81 /* Tracker.h */,
+				3DAF18CB14B35EEE003B6B81 /* Tracker.mm */,
+				3DAF18CC14B35EEE003B6B81 /* Tracker.xib */,
+			);
+			path = Tracker;
+			sourceTree = "<group>";
+		};
+		3DE3C34114B3511E00A7E9E0 /* AshParticles */ = {
+			isa = PBXGroup;
+			children = (
+				3DE3C34D14B35A6F00A7E9E0 /* Body.h */,
+				3DE3C34E14B35A6F00A7E9E0 /* Particle.h */,
+				3DE3C34F14B35A6F00A7E9E0 /* ParticleSystem.cpp */,
+				3DE3C35014B35A6F00A7E9E0 /* ParticleSystem.h */,
+				3DE3C35114B35A6F00A7E9E0 /* Tree.h */,
+				3DE3C34214B3512800A7E9E0 /* AshParticles.h */,
+				3DE3C34314B3512800A7E9E0 /* AshParticles.mm */,
+				3DE3C34414B3512800A7E9E0 /* AshParticles.xib */,
+			);
+			path = AshParticles;
 			sourceTree = "<group>";
 		};
 		7F26371F148D33C10055DCFA /* MGScopeBar */ = {
@@ -465,6 +508,8 @@
 				7F26374F148D33C10055DCFA /* TODO in Resources */,
 				7F462712149511F60095786B /* install.xml in Resources */,
 				3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */,
+				3DE3C34614B3512800A7E9E0 /* AshParticles.xib in Resources */,
+				3DAF18CE14B35EEE003B6B81 /* Tracker.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +547,9 @@
 				7F462715149511F60095786B /* ofx3dModelLoader.cpp in Sources */,
 				3D8C5FF41497A28500A3CA6D /* OSCControl.mm in Sources */,
 				3DA00422149A11E900EECA9B /* PolyAnimatorPhysics.mm in Sources */,
+				3DE3C34514B3512800A7E9E0 /* AshParticles.mm in Sources */,
+				3DE3C35214B35A6F00A7E9E0 /* ParticleSystem.cpp in Sources */,
+				3DAF18CD14B35EEE003B6B81 /* Tracker.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

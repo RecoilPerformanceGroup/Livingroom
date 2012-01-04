@@ -12,6 +12,7 @@
 #import "PolygonWorld.h"
 #import "Perspective.h"
 #import "OSCControl.h"
+#import "AshParticles.h"
 
 @implementation lrAppDelegate
 @synthesize window;
@@ -24,8 +25,10 @@
     [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Triangle", nil]]];
     [ocp addPlugin:[[Perspective alloc] init]];
     [ocp addPlugin:[[OSCControl alloc] init]];
+    [ocp addPlugin:[[Cameras alloc] initWithNumberCameras:2]];
     [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
+    [ocp addPlugin:[[AshParticles alloc] init]];
   //  [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
     
