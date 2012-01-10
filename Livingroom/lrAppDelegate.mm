@@ -25,7 +25,8 @@
     [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Triangle", nil]]];
     [ocp addPlugin:[[Perspective alloc] init]];
     [ocp addPlugin:[[OSCControl alloc] init]];
-    [ocp addPlugin:[[Cameras alloc] initWithNumberCameras:2]];
+    [ocp addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
+    [ocp addPlugin:[[BlobTracker2d alloc] init]];
     [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
     [ocp addPlugin:[[AshParticles alloc] init]];
