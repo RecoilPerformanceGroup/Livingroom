@@ -7,6 +7,7 @@ class Particle : public Body {
 public:
 	float xv, yv;
 	float xf, yf;
+    float size;
 	Particle(float _x, float _y,
 		float _xv = 0, float _yv = 0) :
 		Body(_x, _y),

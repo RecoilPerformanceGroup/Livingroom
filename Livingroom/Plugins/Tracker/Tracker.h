@@ -4,7 +4,10 @@
 #define USE_
 
 @interface Tracker : ofPlugin {
-
+    ofVec2f controlMouse;
 }
+
+-(int) numberTrackers;
+-(ofVec2f) trackerCentroid:(int)n;
 
 @end

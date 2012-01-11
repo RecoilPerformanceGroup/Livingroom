@@ -6,6 +6,8 @@
 @interface AshParticles : ofPlugin {
    	int kParticles;
 	ParticleSystem particleSystem;
+    
+    ofImage * ashTexture;
 
 }
 

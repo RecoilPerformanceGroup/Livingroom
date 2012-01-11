@@ -13,6 +13,7 @@
 #import "Perspective.h"
 #import "OSCControl.h"
 #import "AshParticles.h"
+#import "Tracker.h"
 
 @implementation lrAppDelegate
 @synthesize window;
@@ -28,6 +29,8 @@
     [ocp addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
     [ocp addPlugin:[[CameraCalibration alloc] init]];
     [ocp addPlugin:[[BlobTracker2d alloc] init]];
+    [ocp addPlugin:[[Tracker alloc] init]];
+    
     [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
     [ocp addPlugin:[[AshParticles alloc] init]];
