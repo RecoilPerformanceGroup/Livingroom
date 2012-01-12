@@ -20,6 +20,7 @@
 		3D2FC23E1462FEDC0028BC01 /* PolygonWorld.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */; };
 		3D33622C14BF0FBB007C8782 /* PolyRenderLights.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D33622B14BF0FBB007C8782 /* PolyRenderLights.mm */; };
 		3D33623014BF11AB007C8782 /* PolyAnimatorGravity.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D33622F14BF11AB007C8782 /* PolyAnimatorGravity.mm */; };
+		3D33623314BF2129007C8782 /* PolyInputRandomGenerator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D33623214BF2128007C8782 /* PolyInputRandomGenerator.mm */; };
 		3D34A1A8146158C80027E291 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1A7146158C80027E291 /* ScriptingBridge.framework */; };
 		3D34A1AC146158CE0027E291 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D34A1AB146158CE0027E291 /* OpenGL.framework */; };
 		3D386C65145EF95C00665327 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D386C64145EF95C00665327 /* Cocoa.framework */; };
@@ -103,6 +104,8 @@
 		3D33622B14BF0FBB007C8782 /* PolyRenderLights.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderLights.mm; sourceTree = "<group>"; };
 		3D33622E14BF11AB007C8782 /* PolyAnimatorGravity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorGravity.h; sourceTree = "<group>"; };
 		3D33622F14BF11AB007C8782 /* PolyAnimatorGravity.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorGravity.mm; sourceTree = "<group>"; };
+		3D33623114BF2128007C8782 /* PolyInputRandomGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputRandomGenerator.h; sourceTree = "<group>"; };
+		3D33623214BF2128007C8782 /* PolyInputRandomGenerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputRandomGenerator.mm; sourceTree = "<group>"; };
 		3D34A1A7146158C80027E291 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = SDKs/MacOSX10.6.sdk/System/Library/Frameworks/ScriptingBridge.framework; sourceTree = DEVELOPER_DIR; };
 		3D34A1AB146158CE0027E291 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		3D386C60145EF95C00665327 /* Livingroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Livingroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,6 +259,8 @@
 				3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouseDraw.mm */,
 				3D1E7087149257360040822A /* PolyInputTracker.h */,
 				3D1E7088149257360040822A /* PolyInputTracker.mm */,
+				3D33623114BF2128007C8782 /* PolyInputRandomGenerator.h */,
+				3D33623214BF2128007C8782 /* PolyInputRandomGenerator.mm */,
 			);
 			name = inputs;
 			path = Livingroom/Plugins/PolygonWorld/PolyEngine/inputs;
@@ -586,6 +591,7 @@
 				3DAF18CD14B35EEE003B6B81 /* Tracker.mm in Sources */,
 				3D33622C14BF0FBB007C8782 /* PolyRenderLights.mm in Sources */,
 				3D33623014BF11AB007C8782 /* PolyAnimatorGravity.mm in Sources */,
+				3D33623314BF2129007C8782 /* PolyInputRandomGenerator.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

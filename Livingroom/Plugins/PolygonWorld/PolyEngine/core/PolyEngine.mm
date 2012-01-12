@@ -16,6 +16,7 @@
 
 #import "PolyInputSimpleMouseDraw.h"
 #import "PolyInputTracker.h"
+#import "PolyInputRandomGenerator.h"
 
 #import "PolyAnimatorSimplePushPop.h"
 #import "PolyAnimatorSprings.h"
@@ -39,6 +40,7 @@
         //
         [self addModule:@"PolyInputSimpleMouseDraw"];
         [self addModule:@"PolyInputTracker"];
+        [self addModule:@"PolyInputRandomGenerator"];
         
         //
         //Animators
@@ -48,6 +50,7 @@
         //   [self addModule:@"PolyAnimatorSprings"];
         [self addModule:@"PolyAnimatorCrumble"];
         [self addModule:@"PolyAnimatorPhysics"];
+        [self addModule:@"PolyAnimatorGravity"];
         
         //
         //Renders

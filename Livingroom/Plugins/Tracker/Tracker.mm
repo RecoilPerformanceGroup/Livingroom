@@ -110,6 +110,16 @@
         n -= num;
     }
     
+    return ofVec2f();
+}
+
+-(vector<ofVec2f>) trackerCentroidVector{
+    int n = [self numberTrackers];
+    vector<ofVec2f> v;
+    for(int i=0; i<n;i++){
+        v.push_back([self trackerCentroid:i]);
+    }
+    return v;
 }
 
 @end

@@ -25,7 +25,7 @@
         
         //State 1:
         [self addPropF:@"springStrength"];
-        [self addPropF:@"ZzeroForce"];
+        [self addPropF:@"ZzeroForce"];  
         [self addPropF:@"FlatNormalForce"];
         
         //State 2:
@@ -150,35 +150,39 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         }];
         
         
-        
-        [self addPhysicsBlock:@"StringForce" block:^(PolyArrangement *arrangement) {
-            //
-            //Calculate the vertex to vertex spring force
-            //
-            [arrangement enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                ofVec3f dir;
+        //
+        //Calculate the vertex to vertex spring force
+        //
+        float springStrength = PropF(@"springStrength");
+        if(springStrength > 0){
+            [self addPhysicsBlock:@"StringForce" block:^(PolyArrangement *arrangement) {
                 
-                float length = edgeLength(eit, &dir);
-                float optimalLength = eit->data().crumbleOptimalLength;
-                
-                dir.normalize();
-                
-                dir *= (length - optimalLength) * PropF(@"springStrength");
-                
-                //float elasticity = PropF(@"elasticity");
-                
-                eit->source()->data().springF += -dir;// * (1-elasticity);
-                eit->target()->data().springF +=  dir;// * (1-elasticity);
+                [arrangement enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                    ofVec3f dir;
+                    
+                    float length = edgeLength(eit, &dir);
+                    float optimalLength = eit->data().crumbleOptimalLength;
+                    
+                    dir.normalize();
+                    
+                    dir *= (length - optimalLength) * springStrength;
+                    
+                    //float elasticity = PropF(@"elasticity");
+                    
+                    eit->source()->data().springF += -dir;// * (1-elasticity);
+                    eit->target()->data().springF +=  dir;// * (1-elasticity);
+                }];
             }];
-        }];
+        }
         
         
-        [self addPhysicsBlock:@"AngularStiffness" block:^(PolyArrangement *arrangement) {
-            
-            //
-            //Calculate angular stiffness force
-            //
-            if(PropI(@"state") >= 2 && PropF(@"angleStiffnesForce") > 0){
+        //
+        //Calculate angular stiffness force
+        //
+        float angleStiffnesForce = PropF(@"angleStiffnesForce");
+        if(PropI(@"state") >= 2 && angleStiffnesForce > 0){
+            [self addPhysicsBlock:@"AngularStiffness" block:^(PolyArrangement *arrangement) {
+                
                 
                 [ arrangement enumerateFaceEdges:^(Arrangement_2::Ccb_halfedge_circulator hc, Arrangement_2::Face_iterator fit) {
                     ofVec2f dir;
@@ -189,27 +193,29 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                     
                     float diff = minus*(fabs(angle)-fabs(optimalAngle));
                     
-                    hc->target()->data().springF +=  dir*diff*PropF(@"angleStiffnesForce")*0.0001;
+                    hc->target()->data().springF +=  dir*diff*angleStiffnesForce*0.0001;
                     
                 }];
-            }
-        }];
+            }];
+        }
         
         
-        [self addPhysicsBlock:@"ZzeroForce" block:^(PolyArrangement *arrangement) {
-            //
-            //Calculate the vertex to vertex spring force
-            //
-            float f = PropF(@"ZzeroForce");
-            if(f > 0){
+        //
+        //Calculate the vertex to vertex spring force
+        //
+        float f = PropF(@"ZzeroForce");
+        if(f > 0){
+            
+            [self addPhysicsBlock:@"ZzeroForce" block:^(PolyArrangement *arrangement) {
+                
                 [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
                     vit->data().springF += ofVec3f(0,0,-f*vit->data().pos.z);
                 }];
-            }
-        }];
+            }];
+        }
         
         
-        float f = PropF(@"FlatNormalForce");
+        f = PropF(@"FlatNormalForce");
         if(f > 0){
             [self addPhysicsBlock:@"FlatNormalForce" block:^(PolyArrangement *arrangement) {
                 //
@@ -237,7 +243,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                     normal.normalize();
                     
                     ofVec3f goal = -ofVec3f(0,0,1);
-
+                    
                     ofVec3f middle = (v1 + v2 + v3)/3.0;
                     
                     ofQuaternion q;
@@ -316,18 +322,20 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // !!!! Vertex position update !!!!
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            
+            int state = PropI(@"state");
+            float minForce = PropF(@"minForce");
+            float floorFriction = PropF(@"floorFriction");
             [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
                 vit->data().springV *= 0;//PropF(@"springDamping");
                 
-                if(PropI(@"state") < 3 || !vit->data().crumbleAnchor){
-                    if( vit->data().springF.length() > PropF(@"minForce")){
-                        vit->data().springV += vit->data().springF * 0.01;
+                if(state < 3 || !vit->data().crumbleAnchor){
+                    if( vit->data().springF.length() > minForce){
+                        vit->data().springV += vit->data().springF * 0.01 * (1.0-vit->data().physicsLock);
                     }
                 }
                 
                 //Friction
-                vit->data().springV *= ofVec3f(1.0-PropF(@"floorFriction"),1.0-PropF(@"floorFriction"),1.0);
+                vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
                 
                 setHandlePos(vit->data().springV + vit->data().pos, vit);
             }];

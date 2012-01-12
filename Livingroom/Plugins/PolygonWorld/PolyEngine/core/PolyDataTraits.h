@@ -33,6 +33,9 @@ struct LRVertex_data {
     bool vecPosOutdated         = true;
     bool pointPosOutdated       = true;
     
+    //Physics General
+    float physicsLock           = 0.0;
+    
     //CracksAnimator
     float crackAmount           = 0.0;
     int crackEdgeCount          = 2;   

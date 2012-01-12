@@ -34,15 +34,7 @@
                 glColor3f(0,0.3,0);
             }
             if(drawFillMode == 2){
-                ofVec3f n = -calculateFaceNormal(fit) * PropF(@"zScale");
-                // cout<<n.x<<"  "<<n.y<<"  "<<n.z<<endl;
-                
-                n *= ofVec3f(PropF(@"lightX"), PropF(@"lightY"), PropF(@"lightZ")).normalized();
-                
-                
-                //                    cout<<n.x<<"  "<<n.y<<"  "<<n.z<<endl;
-                float l = n.length();
-                glColor3f(l,l,l);
+                glColor3f(1,1,1);
             }
             
             glBegin(GL_POLYGON);

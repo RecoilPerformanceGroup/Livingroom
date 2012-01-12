@@ -9,5 +9,6 @@
 
 -(int) numberTrackers;
 -(ofVec2f) trackerCentroid:(int)n;
+-(vector<ofVec2f>) trackerCentroidVector;
 
 @end
