@@ -17,7 +17,7 @@
         engine = _engine;
         propertyCounter = 0;    
     
-
+        [self addPropF:@"active"];
 
     } 
     return self;
@@ -60,7 +60,9 @@
 - (BOOL) isAnimator{return NO;};
 - (BOOL) isRenderer{return NO;};
 
-
+- (BOOL) active{
+    return PropB(@"active");
+}
 #pragma mark Empty Accesors
 
 - (void) setup{}

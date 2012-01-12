@@ -68,6 +68,7 @@ typedef enum _PolyModuleType {
 - (BOOL) isAnimator;
 - (BOOL) isRenderer;
 
+- (BOOL) active;
 @end
 
 

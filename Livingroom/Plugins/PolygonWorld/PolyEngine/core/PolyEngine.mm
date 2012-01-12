@@ -12,6 +12,7 @@
 
 #import "PolyRenderSimpleWireframe.h"
 #import "PolyRenderCrackLines.h"
+#import "PolyRenderLights.h"
 
 #import "PolyInputSimpleMouseDraw.h"
 #import "PolyInputTracker.h"
@@ -32,30 +33,30 @@
         arrangement = [[PolyArrangement alloc] init];
         
         modules = [NSMutableDictionary dictionary];
-
+        
         //
         //Inputs
         //
         [self addModule:@"PolyInputSimpleMouseDraw"];
         [self addModule:@"PolyInputTracker"];
-
+        
         //
         //Animators
         //   
-
+        
         [self addModule:@"PolyAnimatorCracks"];
-     //   [self addModule:@"PolyAnimatorSprings"];
+        //   [self addModule:@"PolyAnimatorSprings"];
         [self addModule:@"PolyAnimatorCrumble"];
         [self addModule:@"PolyAnimatorPhysics"];
-
+        
         //
         //Renders
         //
         [self addModule:@"PolyRenderSimpleWireframe"];
         [self addModule:@"PolyRenderCrackLines"];
+        [self addModule:@"PolyRenderLights"];
 
         
-
         [self didChangeValueForKey:@"allModulesTree"];
         
     }
@@ -70,7 +71,7 @@
     name = [name stringByReplacingOccurrencesOfString:@"PolyRender" withString:@""];
     [m setKey:name];    
     [modules setObject:m forKey:name];    
- 
+    
     return m;
 }
 
@@ -107,6 +108,7 @@
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
         [child setObject:[module key]  forKey:@"name"];
+        [child setObject:[[module properties] objectForKey:@"active"]  forKey:@"active"];
         [children addObject: child];
         
         //NSLog(@"%@", [[inputs objectForKey:module] properties]);
@@ -123,6 +125,7 @@
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
         [child setObject:[module key]  forKey:@"name"];
+        [child setObject:[[module properties] objectForKey:@"active"]  forKey:@"active"];
         [children addObject: child];
     }
     [dict setObject:children forKey:@"children"];
@@ -137,6 +140,7 @@
         NSMutableDictionary * child = [NSMutableDictionary dictionary];
         [child setObject:module forKey:@"module"];
         [child setObject:[module key]  forKey:@"name"];
+        [child setObject:[[module properties] objectForKey:@"active"]  forKey:@"active"];
         [children addObject: child];
     }
     [dict setObject:children forKey:@"children"];
@@ -174,53 +178,60 @@
     }        
 }
 - (void) draw:(NSDictionary*)drawingInformation{
-    for(PolyModule * module in [modules allValues]){
-        [module draw:drawingInformation];
-    }        
+   ApplySurface(@"Floor"); {
+        
+        for(PolyModule * module in [modules allValues]){
+            if([module active]){
+                [module draw:drawingInformation];
+            }
+        }        
+   } PopSurface();
 }
 - (void) update:(NSDictionary*)drawingInformation{
     for(PolyModule * module in [modules allValues]){
-        [module update:drawingInformation];
+        if([module active]){
+            [module update:drawingInformation];
+        }
     }        
 }
 
 - (void) controlDraw:(NSDictionary*)drawingInformation{
-   /* for(PolyModule * module in [modules allValues]){
-        [module controlDraw:drawingInformation];
-    }*/   
+    /* for(PolyModule * module in [modules allValues]){
+     [module controlDraw:drawingInformation];
+     }*/   
 }
 
 - (void) controlMouseMoved:(float) x y:(float)y {
-   /* for(PolyModule * module in [modules allValues]){
-        [module controlMouseMoved:x y:y];
-    }  */ 
+    /* for(PolyModule * module in [modules allValues]){
+     [module controlMouseMoved:x y:y];
+     }  */ 
 }
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
-/*    for(PolyModule * module in [modules allValues]){
-        [module  controlMousePressed:x y:y button:button];
-    }   */
+    /*    for(PolyModule * module in [modules allValues]){
+     [module  controlMousePressed:x y:y button:button];
+     }   */
 }
 
 - (void) controlMouseReleased:(float) x y:(float)y{
-/*    for(PolyModule * module in [modules allValues]){
-        [module controlMouseReleased:x y:y];
-        
-    }   */
+    /*    for(PolyModule * module in [modules allValues]){
+     [module controlMouseReleased:x y:y];
+     
+     }   */
 }
 - (void) controlMouseDragged:(float) x y:(float)y button:(int)button{
-/*    for(PolyModule * module in [modules allValues]){
-        [module controlMouseDragged:x y:y button:button];
-        
-    }   */
+    /*    for(PolyModule * module in [modules allValues]){
+     [module controlMouseDragged:x y:y button:button];
+     
+     }   */
 }
 
 - (void) controlMouseScrolled:(NSEvent *)theEvent{}
 
 - (void) controlKeyPressed:(int)key modifier:(int)modifier{
-/*    for(PolyModule * module in [modules allValues]){
-        [module controlKeyPressed:key modifier:modifier];       
-    }   */
+    /*    for(PolyModule * module in [modules allValues]){
+     [module controlKeyPressed:key modifier:modifier];       
+     }   */
 }
 
 - (void) controlKeyReleased:(int)key modifier:(int)modifier{}

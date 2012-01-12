@@ -227,7 +227,23 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
         
         std::ifstream    in_file ("arr_ex_io.dat");
         
-        in_file >> *arr;
+        if(in_file.good()){
+            in_file >> *arr;
+        } else {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                NSString *question = @"No file to load!";
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setAlertStyle:NSWarningAlertStyle];
+                [alert setMessageText:@"Error!"];
+                [alert setInformativeText:question];
+                //    [alert addButtonWithTitle:cancelButton];
+                
+                [alert runModal];
+                [alert release];
+                alert = nil;
+            }];
+
+        }
         in_file.close();
     }
 }

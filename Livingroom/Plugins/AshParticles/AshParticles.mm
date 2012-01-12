@@ -1,5 +1,6 @@
 #import "AshParticles.h"
 #import "Tracker.h"
+#import <ofxCocoaPlugins/Keystoner.h>
 
 @implementation AshParticles
 
@@ -19,9 +20,9 @@
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"trackerRepulsionForceRadius"];
     
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"globalDampingForce"];
-
+    
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"renderSize"];
-
+    
 }
 
 //
@@ -53,7 +54,7 @@
     if(!imageLoaded){
         NSLog(@"Ash image not found in cameraCalibration!!");
     }
-
+    
 }
 
 //
@@ -93,7 +94,7 @@
         ofVec2f centroid = [GetPlugin(Tracker) trackerCentroid:i];
         particleSystem.addRepulsionForce(centroid.x, centroid.y, 0.1*trackerRepulsionForceRadius, 0.1*trackerRepulsionForce);
     }
-
+    
     
 	particleSystem.update();
 }
@@ -103,62 +104,65 @@
 //
 
 -(void)draw:(NSDictionary *)drawingInformation{
-    ofSetColor(255, 255, 255);
-	ofFill();
-    ofRect(0,0,1,1);
-    
     int n = particleSystem.size();
-	//glEnable(GL_POINT_SIZE);
-	//glPointSize(2);
-    ofSetColor(255,255,255);
-    glEnable (GL_BLEND);
-//    glBlendFunc (GL_ONE, GL_ONE);
+    
+    ApplySurface(@"Floor"); {
+        
+        ofSetColor(255, 255, 255);
+        ofFill();
+        ofRect(0,0,1,1);
+        
+        //glEnable(GL_POINT_SIZE);
+        //glPointSize(2);
+        ofSetColor(255,255,255);
+        glEnable (GL_BLEND);
+        //    glBlendFunc (GL_ONE, GL_ONE);
         glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
-
-//    float size = PropF(@"renderSize");
-//    for(int i = 0; i < n; i++){
-//        glPushMatrix();
-//        ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
-//        glTranslated(p.x,p.y,0);
-//        glRotated(i*2.12541, 0, 0, 1);        
-////        ashTexture->draw(-size*0.5, -size*0.5, size*particleSystem[i].size,size*particleSystem[i].size);
-//        glPopMatrix();
-//    }
-
-    float size = PropF(@"renderSize");
-    
-    ofVec2f dirs[4];
-    dirs[0] = ofVec2f(-1,-1);
-    dirs[1] = ofVec2f(1,-1);
-    dirs[2] = ofVec2f(1,1);
-    dirs[3] = ofVec2f(-1,1);
-    
-    int texW = 8;
-    int texH = 8;
-    
-    ashTexture->getTextureReference().bind();
-    glBegin(GL_QUADS);
-
-    for(int i = 0; i < n; i++){
-        glPushMatrix();
-        ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
-        float _size = size*particleSystem[i].size*0.01;
-        glTexCoord2f (0.0, 0.0);
-        glVertex2f((p-dirs[0]*_size).x, (p-dirs[0]*_size).y);
-
-        glTexCoord2f (texW, 0.0);
-        glVertex2f((p-dirs[1]*_size).x, (p-dirs[1]*_size).y);
-
-        glTexCoord2f (texW, texH);
-        glVertex2f((p-dirs[2]*_size).x, (p-dirs[2]*_size).y);
-
-        glTexCoord2f (0.0, texH);
-        glVertex2f((p-dirs[3]*_size).x, (p-dirs[3]*_size).y);
-    }
-    glEnd();
-    ashTexture->getTextureReference().unbind();
-    ofEnableAlphaBlending();
-    
+        
+        //    float size = PropF(@"renderSize");
+        //    for(int i = 0; i < n; i++){
+        //        glPushMatrix();
+        //        ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
+        //        glTranslated(p.x,p.y,0);
+        //        glRotated(i*2.12541, 0, 0, 1);        
+        ////        ashTexture->draw(-size*0.5, -size*0.5, size*particleSystem[i].size,size*particleSystem[i].size);
+        //        glPopMatrix();
+        //    }
+        
+        float size = PropF(@"renderSize");
+        
+        ofVec2f dirs[4];
+        dirs[0] = ofVec2f(-1,-1);
+        dirs[1] = ofVec2f(1,-1);
+        dirs[2] = ofVec2f(1,1);
+        dirs[3] = ofVec2f(-1,1);
+        
+        int texW = 8;
+        int texH = 8;
+        
+        ashTexture->getTextureReference().bind();
+        glBegin(GL_QUADS);
+        
+        for(int i = 0; i < n; i++){
+            glPushMatrix();
+            ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
+            float _size = size*particleSystem[i].size*0.01;
+            glTexCoord2f (0.0, 0.0);
+            glVertex2f((p-dirs[0]*_size).x, (p-dirs[0]*_size).y);
+            
+            glTexCoord2f (texW, 0.0);
+            glVertex2f((p-dirs[1]*_size).x, (p-dirs[1]*_size).y);
+            
+            glTexCoord2f (texW, texH);
+            glVertex2f((p-dirs[2]*_size).x, (p-dirs[2]*_size).y);
+            
+            glTexCoord2f (0.0, texH);
+            glVertex2f((p-dirs[3]*_size).x, (p-dirs[3]*_size).y);
+        }
+        glEnd();
+        ashTexture->getTextureReference().unbind();
+        ofEnableAlphaBlending();
+    } PopSurface();
     
 }
 

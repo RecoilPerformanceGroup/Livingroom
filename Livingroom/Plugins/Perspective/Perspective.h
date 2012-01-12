@@ -14,6 +14,9 @@
     GLfloat light1_y;
     GLfloat light1_z;
 
+    float zoom;
+    ofVec2f offset;
+    int controlWidth, controlHeight;
 }
 
 @end
