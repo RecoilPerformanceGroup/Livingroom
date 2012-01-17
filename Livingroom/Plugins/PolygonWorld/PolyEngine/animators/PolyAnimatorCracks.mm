@@ -72,13 +72,13 @@ struct VectorSortP {
                         Arrangement_2::Halfedge_around_vertex_circulator first, curr;
                         first = curr = vit->incident_halfedges();
                         //do {
-                        curr->data().crackAmount += 1.0;
+                        curr->data().crackAmount += pressure;
                         curr++;
                         curr++;
                         curr++;
                         curr++;
                         curr++;
-                        curr->data().crackAmount += 1.0;
+                        curr->data().crackAmount += pressure;
                         //} while (++curr != first);
                         
                     }
@@ -198,6 +198,22 @@ struct VectorSortP {
                      eit->target()->data().crackDir -= dir;*/
                 }
                 
+            }];
+            
+            
+            //Calculate vertices
+            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                vit->data().crackAmount = 0;
+                vit->data().crackEdgeCount = 0;
+                
+                Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                first = curr = vit->incident_halfedges();
+                do{
+                    if(curr->data().crackAmount > 0){
+                        vit->data().crackAmount += curr->data().crackAmount;
+                        vit->data().crackEdgeCount ++;
+                    }
+                } while(++curr != first);
             }];
         }
         

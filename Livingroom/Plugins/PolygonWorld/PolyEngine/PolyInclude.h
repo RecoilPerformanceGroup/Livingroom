@@ -130,6 +130,12 @@ static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
 }*/
 
 //---------------- 
+static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
+    ofVec2f v1 = handleToVec2(hit->source());
+    ofVec2f v2 = handleToVec2(hit->target());    
+    ofVec2f dir = v2-v1;
+    return ofVec2f(-dir.y, dir.x);
+}
 
 static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
     if(!fit->is_fictitious()){ 

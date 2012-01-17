@@ -289,7 +289,8 @@
 				7FE39E781495023C00EFA4CB /* Perspective */,
 				3D2FC2391462FE3E0028BC01 /* PolygonWorld */,
 			);
-			path = Plugins;
+			name = Plugins;
+			path = Livingroom/Plugins;
 			sourceTree = "<group>";
 		};
 		3D2FC2391462FE3E0028BC01 /* PolygonWorld */ = {
@@ -307,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				3D386C8C145F012200665327 /* Project.xcconfig */,
+				3D2FC2381462FE3E0028BC01 /* Plugins */,
 				3D9D181914BDF03D00DD2093 /* Resources */,
 				3D386C6A145EF95C00665327 /* Livingroom */,
 				3D8C5FEF149799C200A3CA6D /* Addons */,
@@ -349,7 +351,6 @@
 		3D386C6A145EF95C00665327 /* Livingroom */ = {
 			isa = PBXGroup;
 			children = (
-				3D2FC2381462FE3E0028BC01 /* Plugins */,
 				3D386C76145EF95C00665327 /* lrAppDelegate.h */,
 				3D386C77145EF95C00665327 /* lrAppDelegate.mm */,
 				3D386C79145EF95D00665327 /* MainMenu.xib */,
