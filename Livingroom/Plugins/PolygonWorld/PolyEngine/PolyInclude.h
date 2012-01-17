@@ -129,6 +129,8 @@ static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
     handle->data().pointPos = p;
 }*/
 
+
+
 //---------------- 
 static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
     ofVec2f v1 = handleToVec2(hit->source());
@@ -156,6 +158,25 @@ static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
         }            
         //    cout<<"nil normal"<<endl;
         
+    }
+    return ofVec3f();
+}
+
+static ofVec3f calculateFaceMid(Arrangement_2::Face_handle fit){
+    if(!fit->is_fictitious()){ 
+        if(fit->number_of_outer_ccbs() == 1){
+            Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+            Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+            
+            ofVec3f middle =  handleToVec3(hc->source());
+            
+            ofVec3f u = handleToVec3(hc->prev()->source());
+            ofVec3f v = handleToVec3(hc->target());
+            
+         //   cout<<"Triangle: "<<middle.x<<", "<<middle.y<<", "<<middle.z<<"   -   "<<u.x<<", "<<u.y<<", "<<u.z<<"   -   "<<v.x<<", "<<v.y<<", "<<v.z<<"   -   "<<
+            
+            return (middle+u+v)/3.0;
+        }                   
     }
     return ofVec3f();
 }

@@ -90,6 +90,10 @@
     return self;
 }
 
+-(void)setup{
+    [polyEngine setup];
+}
+
 -(void)draw:(NSDictionary *)drawingInformation{
     ofColor(255,255,255);
     [polyEngine draw:drawingInformation];

@@ -7,7 +7,20 @@
 //
 
 #import "PolyRender.h"
+#define NUM_GRADIENTS 500
 
-@interface PolyRenderCrackLines : PolyRender
+struct gradientVals {
+    float x;
+    float y;
+    float size;
+    float intensity;
+    float val;
+};
+
+@interface PolyRenderCrackLines : PolyRender {
+    ofImage * gradient;
+    
+    gradientVals gradients[NUM_GRADIENTS];
+}
 
 @end

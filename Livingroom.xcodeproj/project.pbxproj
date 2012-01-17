@@ -30,6 +30,7 @@
 		3D386C78145EF95C00665327 /* lrAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D386C77145EF95C00665327 /* lrAppDelegate.mm */; };
 		3D386C7B145EF95D00665327 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C79145EF95D00665327 /* MainMenu.xib */; };
 		3D386C8D145F012200665327 /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3D386C8C145F012200665327 /* Project.xcconfig */; };
+		3D67E44E14C5A06D00CB1696 /* Gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D67E44D14C5A06D00CB1696 /* Gradient.png */; };
 		3D8C5FF41497A28500A3CA6D /* OSCControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF21497A28500A3CA6D /* OSCControl.mm */; };
 		3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF31497A28500A3CA6D /* OSCControl.xib */; };
 		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
@@ -122,6 +123,7 @@
 		3D386C77145EF95C00665327 /* lrAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = lrAppDelegate.mm; sourceTree = "<group>"; };
 		3D386C7A145EF95D00665327 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		3D386C8C145F012200665327 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		3D67E44D14C5A06D00CB1696 /* Gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gradient.png; sourceTree = "<group>"; };
 		3D8C5FF11497A28500A3CA6D /* OSCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCControl.h; sourceTree = "<group>"; };
 		3D8C5FF21497A28500A3CA6D /* OSCControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OSCControl.mm; sourceTree = "<group>"; };
 		3D8C5FF31497A28500A3CA6D /* OSCControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSCControl.xib; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		3D9D181A14BDF03D00DD2093 /* 6943.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6943.jpg; sourceTree = "<group>"; };
 		3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash50x50.jpg; sourceTree = "<group>"; };
 		3D9D181F14BDF53900DD2093 /* ash8x8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash8x8.jpg; sourceTree = "<group>"; };
+		3D9E568A14C573A300172EF4 /* colorramp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorramp.h; sourceTree = "<group>"; };
 		3D9F6BCD14939029004AEA70 /* PolyAnimatorCrumble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCrumble.h; sourceTree = "<group>"; };
 		3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCrumble.mm; sourceTree = "<group>"; };
 		3DA00420149A11E800EECA9B /* PolyAnimatorPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorPhysics.h; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 				3D07197414693DDC0057E0B9 /* PolyEngine */,
 				3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */,
 				3D2FC23B1462FEDC0028BC01 /* PolygonWorld.mm */,
+				3D9E568714C5739000172EF4 /* Colorshift */,
 				3D2FC23C1462FEDC0028BC01 /* PolygonWorld.xib */,
 			);
 			path = PolygonWorld;
@@ -392,11 +396,20 @@
 		3D9D181914BDF03D00DD2093 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D67E44D14C5A06D00CB1696 /* Gradient.png */,
 				3D9D181F14BDF53900DD2093 /* ash8x8.jpg */,
 				3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */,
 				3D9D181A14BDF03D00DD2093 /* 6943.jpg */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		3D9E568714C5739000172EF4 /* Colorshift */ = {
+			isa = PBXGroup;
+			children = (
+				3D9E568A14C573A300172EF4 /* colorramp.h */,
+			);
+			name = Colorshift;
 			sourceTree = "<group>";
 		};
 		3DAF18C814B35EE7003B6B81 /* Tracker */ = {
@@ -550,6 +563,7 @@
 				3D9D181E14BDF11A00DD2093 /* ash50x50.jpg in Resources */,
 				3D9D182014BDF53900DD2093 /* ash8x8.jpg in Resources */,
 				3D973A6014BEE93900FE3CB5 /* Perspective.xib in Resources */,
+				3D67E44E14C5A06D00CB1696 /* Gradient.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
