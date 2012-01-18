@@ -14,6 +14,7 @@
 #import "OSCControl.h"
 #import "AshParticles.h"
 #import "Tracker.h"
+#import "Prolog.h"
 
 @implementation lrAppDelegate
 @synthesize window;
@@ -34,6 +35,7 @@
     [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
     [ocp addPlugin:[[AshParticles alloc] init]];
+    [ocp addPlugin:[[Prolog alloc] init]];
   //  [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
     

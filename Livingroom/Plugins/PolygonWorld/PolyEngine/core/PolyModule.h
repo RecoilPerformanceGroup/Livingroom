@@ -54,6 +54,8 @@ typedef enum _PolyModuleType {
 - (void) draw:(NSDictionary *)drawingInformation;
 - (void) controlDraw:(NSDictionary *)drawingInformation;
 - (void) update:(NSDictionary *)drawingInformation;
+- (void) reset;
+
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button;
 - (void) controlMouseReleased:(float) x y:(float)y;
 - (void) controlMouseMoved:(float) x y:(float)y;

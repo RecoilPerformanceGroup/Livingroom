@@ -25,6 +25,11 @@
     return self;
 }
 
+-(void)reset{
+    SetPropF(@"fallingTime", 0);
+    
+}
+
 -(void)update:(NSDictionary *)drawingInformation{
     //
     // Tracker Gravity

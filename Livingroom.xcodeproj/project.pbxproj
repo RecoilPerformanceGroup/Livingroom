@@ -50,6 +50,8 @@
 		3DE3C34614B3512800A7E9E0 /* AshParticles.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE3C34414B3512800A7E9E0 /* AshParticles.xib */; };
 		3DE3C35214B35A6F00A7E9E0 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DE3C34F14B35A6F00A7E9E0 /* ParticleSystem.cpp */; };
 		3DE8772B148E628300F7558C /* PolyNumberProperty.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8772A148E628300F7558C /* PolyNumberProperty.mm */; };
+		3DF0F51B14C6D42D00B1EDED /* Prolog.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DF0F51914C6D42D00B1EDED /* Prolog.mm */; };
+		3DF0F51C14C6D42D00B1EDED /* Prolog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DF0F51A14C6D42D00B1EDED /* Prolog.xib */; };
 		7F26374B148D33C10055DCFA /* MGRecessedPopUpButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */; };
 		7F26374C148D33C10055DCFA /* MGScopeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F263734148D33C10055DCFA /* MGScopeBar.m */; };
 		7F26374D148D33C10055DCFA /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 7F26373A148D33C10055DCFA /* ReadMe.txt */; };
@@ -156,6 +158,9 @@
 		3DE3C35114B35A6F00A7E9E0 /* Tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tree.h; sourceTree = "<group>"; };
 		3DE87729148E628300F7558C /* PolyNumberProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PolyNumberProperty.h; path = properties/PolyNumberProperty.h; sourceTree = "<group>"; };
 		3DE8772A148E628300F7558C /* PolyNumberProperty.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PolyNumberProperty.mm; path = properties/PolyNumberProperty.mm; sourceTree = "<group>"; };
+		3DF0F51814C6D42D00B1EDED /* Prolog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prolog.h; sourceTree = "<group>"; };
+		3DF0F51914C6D42D00B1EDED /* Prolog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Prolog.mm; sourceTree = "<group>"; };
+		3DF0F51A14C6D42D00B1EDED /* Prolog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Prolog.xib; sourceTree = "<group>"; };
 		7F263731148D33C10055DCFA /* MGRecessedPopUpButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGRecessedPopUpButtonCell.h; sourceTree = "<group>"; };
 		7F263732148D33C10055DCFA /* MGRecessedPopUpButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGRecessedPopUpButtonCell.m; sourceTree = "<group>"; };
 		7F263733148D33C10055DCFA /* MGScopeBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGScopeBar.h; sourceTree = "<group>"; };
@@ -286,6 +291,7 @@
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				3DF0F51614C6D42300B1EDED /* Prolog */,
 				3DAF18C814B35EE7003B6B81 /* Tracker */,
 				3D8C5FF01497A28500A3CA6D /* OSCControl */,
 				3DE3C34114B3511E00A7E9E0 /* AshParticles */,
@@ -437,6 +443,16 @@
 			path = AshParticles;
 			sourceTree = "<group>";
 		};
+		3DF0F51614C6D42300B1EDED /* Prolog */ = {
+			isa = PBXGroup;
+			children = (
+				3DF0F51814C6D42D00B1EDED /* Prolog.h */,
+				3DF0F51914C6D42D00B1EDED /* Prolog.mm */,
+				3DF0F51A14C6D42D00B1EDED /* Prolog.xib */,
+			);
+			path = Prolog;
+			sourceTree = "<group>";
+		};
 		7F26371F148D33C10055DCFA /* MGScopeBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +580,7 @@
 				3D9D182014BDF53900DD2093 /* ash8x8.jpg in Resources */,
 				3D973A6014BEE93900FE3CB5 /* Perspective.xib in Resources */,
 				3D67E44E14C5A06D00CB1696 /* Gradient.png in Resources */,
+				3DF0F51C14C6D42D00B1EDED /* Prolog.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +624,7 @@
 				3D33622C14BF0FBB007C8782 /* PolyRenderLights.mm in Sources */,
 				3D33623014BF11AB007C8782 /* PolyAnimatorGravity.mm in Sources */,
 				3D33623314BF2129007C8782 /* PolyInputRandomGenerator.mm in Sources */,
+				3DF0F51B14C6D42D00B1EDED /* Prolog.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

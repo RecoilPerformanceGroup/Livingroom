@@ -66,6 +66,7 @@
 #pragma mark Empty Accesors
 
 - (void) setup{}
+- (void) reset{}
 - (void) draw:(NSDictionary *)drawingInformation{}
 - (void) controlDraw:(NSDictionary *)drawingInformation{}
 - (void) update:(NSDictionary *)drawingInformation{}

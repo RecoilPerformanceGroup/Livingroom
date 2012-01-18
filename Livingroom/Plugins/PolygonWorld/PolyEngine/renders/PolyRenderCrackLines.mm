@@ -24,6 +24,17 @@
     return self;
 }
 
+-(void) reset{
+    for(int i=0;i<NUM_GRADIENTS;i++){
+        gradients[i].x = ofRandom(0,1); //X
+        gradients[i].y = ofRandom(0,1); //Y
+        gradients[i].size = ofRandom(0.1, 0.2); //Size 
+        gradients[i].intensity = ofRandom(0.1,0.5); //Intensity range
+        gradients[i].val = 0; //Intensity
+    }
+    
+
+}
 -(void)setup{
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"Gradient" ofType:@"png"];
@@ -35,15 +46,7 @@
         NSLog(@"gradients image not found in cracks!!");
     }
     
-    for(int i=0;i<NUM_GRADIENTS;i++){
-        gradients[i].x = ofRandom(0,1); //X
-        gradients[i].y = ofRandom(0,1); //Y
-        gradients[i].size = ofRandom(0.1, 0.2); //Size 
-        gradients[i].intensity = ofRandom(0.1,0.5); //Intensity range
-        gradients[i].val = 0; //Intensity
-    }
-    
-    
+       
     
 }
 
@@ -97,8 +100,9 @@
     Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
     
     ofSetColor(0,0,0,255.0);
-    float lineWidth = PropF(@"lineWidth");
-    float lineWidthMax = PropF(@"lineWidthMax");
+
+    CachePropF(lineWidth);
+    CachePropF(lineWidthMax);
     
     glBegin(GL_QUADS);
     for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {

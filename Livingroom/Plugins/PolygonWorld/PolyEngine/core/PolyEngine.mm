@@ -178,6 +178,7 @@
 - (void) setup{
     for(PolyModule * module in [modules allValues]){
         [module setup];
+        [module reset];
     }        
 }
 - (void) draw:(NSDictionary*)drawingInformation{
