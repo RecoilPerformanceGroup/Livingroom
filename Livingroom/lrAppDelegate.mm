@@ -31,7 +31,8 @@
     [ocp addPlugin:[[CameraCalibration alloc] init]];
     [ocp addPlugin:[[BlobTracker2d alloc] init]];
     [ocp addPlugin:[[Tracker alloc] init]];
-    
+    [ocp addPlugin:[[Midi alloc] init]];
+
     [ocp addHeader:@"Scenes"];
     [ocp addPlugin:[[PolygonWorld alloc] init]];
     [ocp addPlugin:[[AshParticles alloc] init]];

@@ -17,9 +17,11 @@
 
 -(id)init{
     if(self = [super init]){
-        [[self addPropF:@"state"] setMaxValue:3];
         [self addPropF:@"mouseForce"];
         [self addPropF:@"mouseRadius"];
+        
+        [self addPropF:@"crumbleForce"];
+        [self addPropF:@"decrumbleForce"];
     }
     
     return self;
@@ -33,10 +35,9 @@
 #pragma mark Common
 
 -(void)update:(NSDictionary *)drawingInformation{
-    if(PropI(@"state") >= 1){
-        
+    if(PropF(@"crumbleForce") > 0){
         //Tracker force
-        [GetPhysics() addPhysicsBlock:@"TrackerForce" block:^(PolyArrangement *arrangement) {
+        [GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
             {
                 float mouseR = PropF(@"mouseRadius");
                 float mouseF = PropF(@"mouseForce")*0.05;
@@ -44,8 +45,8 @@
                 
                 [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
                     for(int t=0;t<v.size();t++){
-                        if(v[t].distance(handleToVec2(vit)) < mouseR){
-                            ofVec2f vertex = handleToVec2(vit);
+                        ofVec2f vertex = handleToVec2(vit);
+                        if(v[t].distance(vertex) < mouseR){
                             ofVec2f v = vertex - v[t];
                             
                             float l = v.length();
@@ -65,7 +66,78 @@
                 }];
             }
         }];
+        
     }
+    CachePropF(decrumbleForce);
+    if(decrumbleForce > 0){
+        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+        [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
+            
+            for(int i=0;i<v.size();i++){
+                if(![[engine arrangement] vecInsideBoundary:v[i]]){
+                    //Outside boundary
+                    ofVec2f p = v[i];
+                    
+                    Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i]];
+                    
+                    Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
+                    Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
+                    
+                    ofVec2f p1 = handleToVec2(h1);
+                    ofVec2f p2 = handleToVec2(h2);
+                    
+                    float dist1 = p1.distance(p);
+                    float dist2 = p2.distance(p);
+                    
+                    float factor2 = dist1 / (dist1 + dist2);
+                    float factor1 = dist2 / (dist1 + dist2);
+                    
+                    ofVec2f dir1 = (p-p1).normalized();
+                    ofVec2f dir2 = (p-p2).normalized();
+                    
+                    float dist = distanceVecToHalfedge(p, handle);
+                    
+                    h1->data().springF += decrumbleForce*dir1*dist*factor1;      
+                    h2->data().springF += decrumbleForce*dir2*dist*factor2;      
+
+                }
+                //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
+                //            
+            }
+        }];
+        
+    }
+    //Decrumble force
+    /*[GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
+     {
+     float mouseR = PropF(@"mouseRadius");
+     float mouseF = PropF(@"mouseForce")*0.05;
+     vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+     
+     [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+     for(int t=0;t<v.size();t++){
+     if(v[t].distance(handleToVec2(vit)) < mouseR){
+     ofVec2f vertex = handleToVec2(vit);
+     ofVec2f v = vertex - v[t];
+     
+     float l = v.length();
+     l *= 1.0/mouseR;
+     l = 1.0-l;
+     
+     v.normalize();
+     
+     vit->data().springF += v*mouseF*l*2.0;      
+     
+     //Force in z=0
+     float zDiff = vit->data().pos.z;
+     vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
+     
+     }
+     }
+     }];
+     }
+     }];*/
+    
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{

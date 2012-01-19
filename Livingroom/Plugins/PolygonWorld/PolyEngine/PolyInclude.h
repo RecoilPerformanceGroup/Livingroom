@@ -115,19 +115,41 @@ static void glVertexHandle(Arrangement_2::Vertex_handle handle){
     
 }
 
+static void glVertexHandle(Arrangement_2::Vertex_const_handle handle){
+    ofVec3f p = handleToVec3(handle);
+    glVertex3d(p.x , p.y, p.z); 
+    
+}
+
+//---------------- 
+
+static void printVec3f(ofVec3f p){
+    cout<<"VHandle: ["<<p.x<<", "<<p.y<<", "<<p.z<<"]"<<endl;
+}
+
+static void printVertexHandle(Arrangement_2::Vertex_handle handle){
+    ofVec3f p = handleToVec3(handle);
+    printVec3f(p);
+}
+
+static void printVertexHandle(Arrangement_2::Vertex_const_handle handle){
+    ofVec3f p = handleToVec3(handle);
+    printVec3f(p);
+}
+
 //---------------- 
 
 static void setHandlePos(ofVec3f v, Arrangement_2::Vertex_handle handle){
     if(v.x != handle->data().pos.x || v.y != handle->data().pos.y || v.z != handle->data().pos.z){
-    handle->data().pointPosOutdated = true;
-    handle->data().pos = v;
+        handle->data().pointPosOutdated = true;
+        handle->data().pos = v;
     }
 }
 /*
-static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
-    handle->data().vecPosOutdated = true; //Forkert outdated flag (tager den fra arrangement original data)
-    handle->data().pointPos = p;
-}*/
+ static void setHandlePos(Point_3 p, Arrangement_2::Vertex_handle handle){
+ handle->data().vecPosOutdated = true; //Forkert outdated flag (tager den fra arrangement original data)
+ handle->data().pointPos = p;
+ }*/
 
 
 
@@ -138,6 +160,14 @@ static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
     ofVec2f dir = v2-v1;
     return ofVec2f(-dir.y, dir.x);
 }
+
+static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_const_handle hit){
+    ofVec2f v1 = handleToVec2(hit->source());
+    ofVec2f v2 = handleToVec2(hit->target());    
+    ofVec2f dir = v2-v1;
+    return ofVec2f(-dir.y, dir.x);
+}
+
 
 static ofVec3f calculateFaceNormal (Arrangement_2::Face_handle fit){
     if(!fit->is_fictitious()){ 
@@ -173,10 +203,46 @@ static ofVec3f calculateFaceMid(Arrangement_2::Face_handle fit){
             ofVec3f u = handleToVec3(hc->prev()->source());
             ofVec3f v = handleToVec3(hc->target());
             
-         //   cout<<"Triangle: "<<middle.x<<", "<<middle.y<<", "<<middle.z<<"   -   "<<u.x<<", "<<u.y<<", "<<u.z<<"   -   "<<v.x<<", "<<v.y<<", "<<v.z<<"   -   "<<
+            //   cout<<"Triangle: "<<middle.x<<", "<<middle.y<<", "<<middle.z<<"   -   "<<u.x<<", "<<u.y<<", "<<u.z<<"   -   "<<v.x<<", "<<v.y<<", "<<v.z<<"   -   "<<
             
             return (middle+u+v)/3.0;
         }                   
     }
     return ofVec3f();
 }
+
+
+//-----------------
+
+static bool vecInCCB(Arrangement_2::Ccb_halfedge_const_circulator circ, ofVec2f p)
+{
+    Arrangement_2::Ccb_halfedge_const_circulator hc = circ; 
+    
+    int c = 0;
+    
+    do { 
+        ofVec2f source = handleToVec2(hc->source());
+        ofVec2f target = handleToVec2(hc->target());
+        
+        if ((((target.y <= p.y) && (p.y < source.y)) ||
+             ((source.y <= p.y) && (p.y < target.y))) &&
+            (p.x < (source.x - target.x) * (p.y - target.y) / (source.y - target.y) + target.x))
+            c = !c;
+        
+        ++hc; 
+    } while (hc != circ); 
+    
+    return c;
+}
+
+// ---------
+
+static double distanceVecToHalfedge(ofVec2f P, Arrangement_2::Halfedge_const_handle hit)
+{
+    ofVec2f A = handleToVec2(hit->source());
+    ofVec2f B = handleToVec2(hit->target());
+    double normalLength = sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
+    return fabs((P.x - A.x) * (B.y - A.y) - (P.y - A.y) * (B.x - A.x)) / normalLength;
+}
+
+

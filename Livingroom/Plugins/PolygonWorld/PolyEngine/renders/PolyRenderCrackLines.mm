@@ -170,7 +170,7 @@
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
-    
+   /* 
     Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
     
     ofSetColor(255,255,255,128);
@@ -181,7 +181,7 @@
         
         ofCircle(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()), eit->data().crackAmount*0.05);
         
-    }   
+    }   */
     
 }
 

@@ -20,10 +20,13 @@
 -(Point_2) n_point;
 
 -(vector< Polygon_2 >) hulls;
+-( vector< vector<Arrangement_2::Halfedge_const_handle> >) boundaryHandles;
 -(CGAL::Object) cgalObjectAtPoint: (Point_2) queryPoint;
 -(Arrangement_2::Vertex_const_handle) vertexAtPoint: (Point_2) queryPoint;
 //-(Arrangement_2::Halfedge_const_handle) halVerfedgeAtPoint: (Point_2) queryPoint;
 -(Arrangement_2::Face_const_handle) faceAtPoint: (Point_2) queryPoint;
+-(BOOL) vecInsideBoundary:(ofVec3f)p;
+-(Arrangement_2::Halfedge_const_handle) nearestBoundaryHalfedge:(ofVec2f)p;
 
 -(void) saveArrangement;
 -(void) loadArrangement;

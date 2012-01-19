@@ -1,5 +1,5 @@
 #import "PolyRenderSimpleWireframe.h"
-
+#import "PolyInputTracker.h"
 //#import "CGALEnumerator.h"
 
 @implementation PolyRenderSimpleWireframe
@@ -8,7 +8,7 @@
 -(id)init{
     if(self = [super init]){
         [self addPropF:@"zScale"];
-
+        
         [self setDrawFillMode:2];
     }
     return self;
@@ -92,72 +92,84 @@
         glEnd(); 
     }
     
-    //TODO: HULLS is sllooowww
     
-    /* 
-     glPointSize(1);
-     
-     ofSetColor(255,0,0);
-     glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
-     
-     vector< Polygon_2> hull = [[engine arrangement] hulls];
-     
-     for(int i=0;i<hull.size();i++){
-     
-     glBegin(GL_POLYGON);
-     Polygon_2::Vertex_iterator vit = hull[i].vertices_begin();
-     for( ; vit != hull[i].vertices_end(); ++vit){
-     glVertex2d(CGAL::to_double(vit->x()), CGAL::to_double(vit->y()));
-     }
-     glEnd();
-     }
-     */
     
+    glPointSize(1);
+    
+    {
+        
+        ofSetColor(255,0,0);
+        glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+        
+        vector< vector<Arrangement_2::Halfedge_const_handle> > hull = [[engine arrangement] boundaryHandles];
+        
+        
+        for(int i=0;i<hull.size();i++){
+            glBegin(GL_POLYGON);        
+            for(int u=0;u<hull[i].size();u++){
+                glVertexHandle(hull[i][u]->source());
+            }
+            glEnd();
+        }
+        glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+    }
+    
+    
+    //Tracker
+    {
+        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+        ofFill();
+        ofSetColor(0,0,255,100);
+        for(int i=0;i<v.size();i++){
+            ofCircle(v[i].x,v[i].y,0.02);
+        }
+        
+    }
 }
 
 -(void)draw:(NSDictionary *)drawingInformation{
     ofEnableAlphaBlending();
-        ApplyPerspective();{
-            ofSetColor(0,255,0);
-            Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();             
-            for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
-                ofSetColor(0,0,255);
-                if(drawFillMode == 1){
-                    glColor3f(0,0.3,0);
-                }
-                if(drawFillMode == 2){
-                    glColor3f(255,255,255);
-                }
-                
-                glBegin(GL_POLYGON);
-                
-                if(!fit->is_fictitious()){
-                    if(fit->number_of_outer_ccbs() == 1){
-                        Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
-                        Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
-                        
-                        do { 
-                            if(drawFillMode == 3){
-                                float z = hc->source()->data().pos.z * PropF(@"zScale");
-                                float r = z;
-                                float b = -z;
-                                glColor3f(r,0.2,b);
-                            }
-                            ofVec3f p = handleToVec3(hc->source());
-                            glVertex3d(p.x , p.y, (p.z)*PropF(@"zScale"));
-                           // cout<<p.z<<endl;
-//                            cout<<p.x<<"  "<<p.y<<endl;
-                            //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
-                            ++hc; 
-                        } while (hc != ccb_start); 
-                    }            
-                }
-                
-                //        
-                glEnd();   
-            } 
-
-        } PopPerspective();
+    ApplyPerspective();{
+        ofSetColor(0,255,0);
+        Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();             
+        for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
+            ofSetColor(0,0,255);
+            if(drawFillMode == 1){
+                glColor3f(0,0.3,0);
+            }
+            if(drawFillMode == 2){
+                glColor3f(255,255,255);
+            }
+            
+            glBegin(GL_POLYGON);
+            
+            if(!fit->is_fictitious()){
+                if(fit->number_of_outer_ccbs() == 1){
+                    Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                    Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                    
+                    do { 
+                        if(drawFillMode == 3){
+                            float z = hc->source()->data().pos.z * PropF(@"zScale");
+                            float r = z;
+                            float b = -z;
+                            glColor3f(r,0.2,b);
+                        }
+                        ofVec3f p = handleToVec3(hc->source());
+                        glVertex3d(p.x , p.y, (p.z)*PropF(@"zScale"));
+                        // cout<<p.z<<endl;
+                        //                            cout<<p.x<<"  "<<p.y<<endl;
+                        //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
+                        ++hc; 
+                    } while (hc != ccb_start); 
+                }            
+            }
+            
+            //        
+            glEnd();   
+        } 
+        
+    } PopPerspective();
 }
 
 @end

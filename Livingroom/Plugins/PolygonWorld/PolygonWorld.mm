@@ -243,6 +243,8 @@
                             [prop setValue:[savedProp valueForKey:@"sceneTokens"] forKey:@"sceneTokens"];
                             [prop setValue:[savedProp valueForKey:@"minValue"] forKey:@"minValue"];
                             [prop setValue:[savedProp valueForKey:@"maxValue"] forKey:@"maxValue"];
+                            [prop setValue:[savedProp valueForKey:@"midiChannel"] forKey:@"midiChannel"];
+                            [prop setValue:[savedProp valueForKey:@"midiNumber"] forKey:@"midiNumber"];
                         }
                     }
                 }
@@ -355,26 +357,6 @@
 }
 
 
-- (NSImage *)scopeBar:(MGScopeBar *)scopeBar imageForItem:(NSString *)identifier inGroup:(int)groupNumber
-{
-    return nil;
-	// Optional method. If not implemented (or if you return nil), items will not have an image.
-	if (groupNumber == 0) {
-		return [NSImage imageNamed:@"NSComputer"];
-		
-	} else if (groupNumber == 2) {
-		if ([identifier isEqualToString:@"AllFilesItem"]) {
-			return [NSImage imageNamed:@"NSGenericDocument"];
-			
-		} else if ([identifier isEqualToString:@"ImagesOnlyItem"]) {
-			return [[NSWorkspace sharedWorkspace] iconForFileType:@"png"];
-		}
-	}
-	
-	return nil;
-}
-
-
 - (void)scopeBar:(MGScopeBar *)theScopeBar selectedStateChanged:(BOOL)selected 
 		 forItem:(NSString *)identifier inGroup:(int)groupNumber
 {
@@ -407,6 +389,8 @@
         
         
         return [tableView makeViewWithIdentifier:@"textfield" owner:self];
+    } else if([[tableColumn identifier] isEqualToString:@"midi"]){
+        return [tableView makeViewWithIdentifier:@"midiView" owner:self];
     } else {
         return [tableView makeViewWithIdentifier:@"name" owner:self];
     }

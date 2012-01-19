@@ -7,7 +7,7 @@
 //
 
 #import "PolyAnimatorCracks.h"
-
+#import <ofxCocoaPlugins/Midi.h>
 struct VectorSortP {
     bool operator()(Arrangement_2::Halfedge_around_vertex_circulator a, Arrangement_2::Halfedge_around_vertex_circulator b) const {
         return a->data().crackCacheRatio < b->data().crackCacheRatio;
@@ -26,9 +26,28 @@ struct VectorSortP {
         
         [self addPropF:@"overflowThreshold"];
         [self addPropF:@"overflowSpeed"];
+        [[self addPropF:@"impulse"] setMaxValue:128];
+
     }
     
     return self;
+}
+
+-(void)setup{
+    [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
+
+}
+
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([(NSString*)context isEqualToString:@"midi"]){
+        cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
+        SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);
+    }
+  //  if([(NSString*)context isEqualToString:@"midioff"]){
+//        SetPropF(@"impulse", 0);
+//    }
 }
 -(void)update:(NSDictionary *)drawingInformation{
     
@@ -41,16 +60,14 @@ struct VectorSortP {
     
     //avarage halfedges
     
+    CachePropF(impulse);
     
-}
-
-
-- (void) controlKeyPressed:(int)_key modifier:(int)modifier{
-    NSLog(@"Key %i",_key);
-    
-    if(_key == 49){
+    if(impulse > 0){
+        SetPropF(@"impulse",0);
+        
+        
         float active = PropF(@"active");
-        float pressure = PropF(@"pressure");
+        float pressure = PropF(@"pressure")*impulse/128.0;
         float overflowTheshold = PropF(@"overflowThreshold");
         float overflowSpeed = PropF(@"overflowSpeed");    
         
@@ -217,6 +234,18 @@ struct VectorSortP {
             }];
         }
         
+
+    }
+    
+}
+
+
+
+- (void) controlKeyPressed:(int)_key modifier:(int)modifier{
+    NSLog(@"Key %i",_key);
+    
+    if(_key == 49){
+        SetPropF(@"impulse", 128);
     }
 }
 
