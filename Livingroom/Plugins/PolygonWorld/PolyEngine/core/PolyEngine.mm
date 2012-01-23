@@ -67,12 +67,13 @@
 }
 
 -(PolyModule*) addModule:(NSString*)module{
-    PolyModule * m = [[NSClassFromString(module) alloc] initWithEngine:self];
-    NSAssert1(m != nil, @"No class named %@",module);
     NSString * name = [module stringByReplacingOccurrencesOfString:@"PolyInput" withString:@""];
     name = [name stringByReplacingOccurrencesOfString:@"PolyAnimator" withString:@""];
     name = [name stringByReplacingOccurrencesOfString:@"PolyRender" withString:@""];
-    [m setKey:name];    
+
+    PolyModule * m = [[NSClassFromString(module) alloc] initWithEngine:self forKey:name];
+    NSAssert1(m != nil, @"No class named %@",module);
+//    [m setKey:name];    
     [modules setObject:m forKey:name];    
     
     return m;
@@ -194,6 +195,10 @@
 - (void) update:(NSDictionary*)drawingInformation{
     for(PolyModule * module in [modules allValues]){
         if([module active]){
+            if([[[module properties] valueForKey:@"reset"] boolValue]){
+                [[[module properties] valueForKey:@"reset"] setBoolValue:0];
+                [module reset];
+            }
             [module update:drawingInformation];
         }
     }        

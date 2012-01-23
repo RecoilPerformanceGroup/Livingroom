@@ -28,8 +28,8 @@
 -(BOOL) vecInsideBoundary:(ofVec3f)p;
 -(Arrangement_2::Halfedge_const_handle) nearestBoundaryHalfedge:(ofVec2f)p;
 
--(void) saveArrangement;
--(void) loadArrangement;
+-(void) saveArrangement:(int)num;
+-(void) loadArrangement:(int)num;
 -(void) clearArrangement;
 
 -(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit))func;

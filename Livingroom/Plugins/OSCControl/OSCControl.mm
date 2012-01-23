@@ -1,11 +1,13 @@
 #import "OSCControl.h"
+#import "Tracker.h"
+#import <ofxCocoaPlugins/Keystoner.h>
 
 @implementation OSCControl
 
 - (id)init{
     self = [super init];
     if (self) {
-
+        
         
         [self addPropB:@"generate"];
     }
@@ -99,9 +101,29 @@
                      [NSNumber numberWithFloat:bounds.size.width], @"width",
                      [NSNumber numberWithFloat:bounds.size.height], @"height",
                      [NSString stringWithFormat:@"%i",labelSize], @"labelSize",
+                     @"#ccc", @"color",                     
                      label, @"label",
                      mode, @"mode",
                      nil]];
+}
+
+- (void) addButton:(NSString*)label labelSize:(int)labelSize bounds:(NSRect)bounds bindedTo:(PluginProperty*)property{
+ //   NSAssert(property, @"No property");
+    [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
+                     [NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]], @"name",
+                     @"Button",@"type",
+                     [NSString stringWithFormat:@"/%@/%@",[property pluginName], [property name]], @"address",
+                     [NSNumber numberWithFloat:bounds.origin.x], @"x",
+                     [NSNumber numberWithFloat:bounds.origin.y], @"y",
+                     [NSNumber numberWithFloat:bounds.size.width], @"width",
+                     [NSNumber numberWithFloat:bounds.size.height], @"height",
+                     [NSString stringWithFormat:@"%i",labelSize], @"labelSize",
+                     label, @"label",
+                     @"toggle", @"mode",
+                     nil]];
+    [property addObserver:self forKeyPath:@"value" options:nil context:@"property"];
+    
+    [self setColor:[NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]] background:@"rgb(0,0,0)" foreground:@"rgb(80,100,80)" stroke:@"rgb(255,255,255)"];
 }
 
 - (void) addMultiXY:(NSString*)name bounds:(NSRect)bounds isMomentary:(BOOL)isMomentary maxTouches:(int)maxTouches{
@@ -127,12 +149,26 @@
     
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([(NSString*) context isEqualToString:@"property"]){
+        if(sender != nil){
+            
+            ofxOscMessage msg;
+            msg.setAddress([[NSString stringWithFormat:@"/%@/%@",[object pluginName], [object name]] cStringUsingEncoding:NSUTF8StringEncoding]);
+       //     msg.setAddress("/menuButton");
+            msg.addIntArg([object floatValue]);
+            
+            sender->sendMessage(msg);
+        }
+    }
+}
+
 
 
 -(void)setup{
     
     if(sender != nil){
-       
+        
         delete sender;
         delete receiver;
     }
@@ -154,11 +190,13 @@
      @"[.0,.4,.75,.3]",@"bounds", 
      nil]];
      */
-    
+    [self addButton:@"Tracker debug" labelSize:16 bounds:NSMakeRect(0.8, 0.0, 0.2, 0.09) bindedTo:[[GetPlugin(Tracker) properties] objectForKey:@"drawDebug"]];
+    [self addButton:@"Keystone debug" labelSize:16 bounds:NSMakeRect(0.8, 0.1, 0.2, 0.09) bindedTo:[[GetPlugin(Keystoner) properties] objectForKey:@"Enabled"]];
+
     [self addMultiXY:@"trackerxy" bounds:NSMakeRect(0.0, 0.0, 0.75, 1.0) isMomentary:true maxTouches:3];
     [self setColor:@"trackerxy" background:@"#000" foreground:@"#aaa" stroke:@"#ddd"];
     
-    [self addButton:@"but1" label:@"Buttons" labelSize:10 bounds:NSMakeRect(0.8, 0.0, 0.2, 0.1) mode:@"contact"];
+    //    [self addButton:@"but1" label:@"Tracker debug" labelSize:10 bounds:NSMakeRect(0.8, 0.0, 0.2, 0.1) mode:@"toggle"];
 }
 
 //
@@ -177,7 +215,7 @@
 		// get the next message
 		ofxOscMessage m;
 		receiver->getNextMessage( &m );
-        //cout<<"OSC: "<<m.getAddress()<<"  "<<m.getNumArgs()<<endl;
+   //     cout<<"OSC: "<<m.getAddress()<<"  "<<m.getNumArgs()<<endl;
         
         for(int i=0;i<10;i++){
             if(m.getAddress() == "/trackerxy/"+ofToString(i)){
@@ -185,6 +223,28 @@
                 trackerData[i].point.y = m.getArgAsFloat(1);
                 trackerData[i].active = m.getArgAsFloat(2);
                 
+            } 
+            else {
+                NSString * adr = [NSString stringWithCString:m.getAddress().c_str() encoding:NSUTF8StringEncoding];
+                NSArray * splits = [adr componentsSeparatedByString:@"/"];
+                
+                if([splits count] == 3){
+                    for(NSDictionary * header in [globalController plugins]){  
+                        for(ofPlugin * otherPlugin in [header valueForKey:@"children"]){
+                            for(PluginProperty * property in [[otherPlugin properties] allValues]){
+                                if([[property pluginName] isEqualToString:[splits objectAtIndex:1]] && [[property name] isEqualToString:[splits objectAtIndex:2]]){
+                                    if( m.getArgType(0) == OFXOSC_TYPE_INT32){
+                                        [property setIntValue:m.getArgAsInt32(0)];
+                                    } else if( m.getArgType(0) == OFXOSC_TYPE_FLOAT){
+                                        [property setFloatValue:m.getArgAsFloat(0)];
+                                    } else {
+                                        NSLog(@"Unknown osc format");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         

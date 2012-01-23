@@ -7,7 +7,9 @@
 - (id)init{
     self = [super init];
     if (self) {
-        [self addPropF:@"circleSize"];
+        [[self addPropF:@"circleSize"] setMaxValue:0.1];
+        
+        [Prop(@"circleSize") setMidiSmoothing:0.1];
     }
     
     return self;

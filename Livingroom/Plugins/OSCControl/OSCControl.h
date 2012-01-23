@@ -16,4 +16,6 @@ struct oscTrackerData {
 
 - (oscTrackerData) getTracker:(int)tracker;
 - (vector<ofVec2f>) getTrackerCoordinates;
+
+- (void) setColor:(NSString*)widget background:(NSString*)background foreground:(NSString*)foreground stroke:(NSString*)stroke ;
 @end

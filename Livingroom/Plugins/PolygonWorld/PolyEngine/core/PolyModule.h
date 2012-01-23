@@ -48,7 +48,7 @@ typedef enum _PolyModuleType {
 @property (readwrite) NSView * view;
 
 
-- (id) initWithEngine:(PolyEngine*)engine;
+- (id) initWithEngine:(PolyEngine*)engine forKey:(NSString*)key;
 
 - (void) setup;
 - (void) draw:(NSDictionary *)drawingInformation;

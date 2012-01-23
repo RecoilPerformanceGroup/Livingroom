@@ -22,7 +22,7 @@ struct VectorSortP {
     if(self = [super init]){
         [self addPropF:@"active"];
         
-        [self addPropF:@"pressure"];
+        [[self addPropF:@"pressure"] setMaxValue:100];
         
         [self addPropF:@"overflowThreshold"];
         [self addPropF:@"overflowSpeed"];

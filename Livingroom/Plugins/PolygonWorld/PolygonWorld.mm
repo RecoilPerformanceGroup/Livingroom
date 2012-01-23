@@ -2,7 +2,7 @@
 #import "PolyModule.h"
 #import "PolygonWorld.h"
 #import <ofxCocoaPlugins/Keystoner.h>
-
+#import <ofxCocoaPlugins/QLabController.h>
 
 #import "MGScopeBar.h"
 
@@ -13,6 +13,14 @@
 #define GROUP_ITEMS				@"Items"			// array of dictionaries, each containing the following keys:
 #define ITEM_IDENTIFIER			@"Identifier"		// string
 #define ITEM_NAME				@"Name"				// string
+
+@interface QLabController (poly)
+
+-(void) updateQlabForPolyPlugin:(PolygonWorld*) plugin;
+
+@end
+
+
 
 
 @implementation PolygonWorld
@@ -90,6 +98,13 @@
     return self;
 }
 
+-(void)initPlugin{
+    [[self addPropF:@"loadArrangement"] setMaxValue:127];
+    [[self addPropF:@"saveArrangement"] setMaxValue:127];
+    [[self addPropF:@"selectedArrangement"] setMaxValue:127];
+    [self addPropB:@"clearArrangement"];
+}
+
 -(void)setup{
     [polyEngine setup];
 }
@@ -104,9 +119,14 @@
     
 }
 
+
 -(void)update:(NSDictionary *)drawingInformation{
-    [polyEngine update:drawingInformation];
     
+    if(PropB(@"clearArrangement")){
+        [self clearArrangement:self];
+        [Prop(@"clearArrangement") setBoolValue:NO];
+    }
+    [polyEngine update:drawingInformation];
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
@@ -222,6 +242,18 @@
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
+    if(object == Prop(@"loadArrangement")){
+        [Prop(@"selectedArrangement") setIntValue:[object intValue]];
+        [self loadArrangement:self];
+    }
+    if(object == Prop(@"saveArrangement")){
+        [Prop(@"selectedArrangement") setIntValue:[object intValue]];
+        [self saveArrangement:self];
+    }
+    
+    
+    
     if([(NSString*)context isEqualToString:@"selection"]){
         if([[[[self selectedModule] view] subviews] count]> 0){
             [[[self selectedModule] view] setFrame:[moduleView bounds]];
@@ -261,12 +293,12 @@
 }
 
 - (IBAction)saveArrangement:(id)sender {
-    [[polyEngine arrangement] saveArrangement];
+    [[polyEngine arrangement] saveArrangement:PropI(@"selectedArrangement")];
 }
 
 - (IBAction)loadArrangement:(id)sender {
     [[globalController openglLock] lock];
-    [[polyEngine arrangement] loadArrangement];
+    [[polyEngine arrangement] loadArrangement:PropI(@"selectedArrangement")];
     [[globalController openglLock] unlock];
 }
 
@@ -410,6 +442,143 @@
     NSSortDescriptor * ageDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"value.sortNumber"
                                                                     ascending:YES] autorelease];
     return [NSArray arrayWithObject:ageDescriptor];
+}
+
+
+
+#pragma mark QLAB
+-(IBAction) generateMidiNumbers:(id)sender{
+    [super generateMidiNumbers:sender];
+    
+	if([self midiChannel] == nil){		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:@"OK"];
+		[alert setMessageText:@"Midi channel not assigned!"];
+		[alert setInformativeText:@"Assign this before you can generate midi numbers."];
+		[alert setAlertStyle:NSInformationalAlertStyle];
+		[alert runModal];
+	} else {
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:@"OK"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert setMessageText:@"Assign new control numbers?"];
+		[alert setInformativeText:@"This will (perhaps) change all the control numbers!"];
+		[alert setAlertStyle:NSWarningAlertStyle];
+		
+		if ([alert runModal] == NSAlertFirstButtonReturn) {		
+            //	NSMutableArray * objects = [NSMutableArray arrayWithArray:[properties allValues]];
+			//[objects sortUsingDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]]]; 
+            
+            int ch = 0;
+			int i=20;
+            
+            
+            NSDictionary * modulesArray = [polyEngine modules];
+            for(NSDictionary * moduleDict in modulesArray){
+                PolyModule * module = [[polyEngine modules] objectForKey:moduleDict];
+                if(module != nil){
+                    for(PolyNumberProperty * p in [[module properties] allValues]){
+                        if([p forcedMidiNumber] && i < [[p midiNumber] intValue] + 1){
+                            i = [[p midiNumber] intValue] + 1;
+                            if(i > 127){
+                                i = 1;
+                                ch ++;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            for(NSDictionary * moduleDict in modulesArray){
+                PolyModule * module = [[polyEngine modules] objectForKey:moduleDict];
+                if(module != nil){
+                    for(PolyNumberProperty * p in [[module properties] allValues]){
+                        if(![p forcedMidiNumber]){
+                            [p setMidiChannel:[NSNumber numberWithInt:[[self midiChannel] intValue] + ch]];
+                            [p setMidiNumber:[NSNumber numberWithInt:i]];
+                            
+                            i++;
+                            if(i > 127){
+                                i = 1;
+                                ch ++;
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            [[globalController qlabController] updateQlabForPolyPlugin:self];
+        }
+    }
+}
+
+
+-(IBAction) qlabAll:(id)sender{
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle:@"OK"];
+	[alert addButtonWithTitle:@"Cancel"];
+	[alert setMessageText:@"Qlab alle properties?"];
+	[alert setInformativeText:@"Dette kan have stor effekt på qlab!"];
+	[alert setAlertStyle:NSWarningAlertStyle];
+    //	[alert beginSheetModalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	
+	if ([alert runModal] == NSAlertFirstButtonReturn) {
+		NSLog(@"Go qlab");
+		NSMutableArray * objects = [NSMutableArray arrayWithArray:[properties allValues]];
+		[objects sortUsingDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"midiNumber" ascending:YES]]]; 
+        
+        PolyModule * module = [self selectedModule];
+        if(module != nil){
+            for(PolyNumberProperty * p in [[module properties] allValues]){
+                [p sendQlabNonVerbose];
+            }
+        }
+    }
+	
+}
+
+
+@end
+
+
+@implementation QLabController (poly)
+
+-(void) updateQlabForPolyPlugin:(PolygonWorld*) plugin{
+	QLabApplication *qLab = [self getQLab]; 
+	NSArray *workspaces = [qLab workspaces];
+	QLabWorkspace * workspace = [workspaces objectAtIndex:0];
+	
+	NSMutableArray * objects = [NSMutableArray arrayWithArray:[[plugin properties] allValues]];
+    NSArray * cues = [workspace cues];
+	for(QLabCue * cue in cues){
+		NSString *beginsTest = [cue qName];
+        
+		NSLog(@"Cue search: %@",beginsTest); 
+		
+        NSDictionary * modulesArray = [[plugin polyEngine] modules];
+        for(NSDictionary * moduleDict in modulesArray){
+            PolyModule * module = [[[plugin polyEngine] modules] objectForKey:moduleDict];
+            if(module != nil){
+                for(PolyNumberProperty * proptery in [[module properties] allValues]){
+                    
+                    
+                    NSString *searchString = [NSString stringWithFormat:@"[%@: %@]", [module key], [proptery name]];		
+                    int length = [beginsTest length];
+                    NSRange prefixRange = [beginsTest rangeOfString:searchString options:(0)];
+                    
+                    if(prefixRange.length > 0){
+                        NSLog(@"Cue %@ found. Setting channel = %i and c number = %i",[cue qName], [[proptery midiChannel] intValue],[[proptery midiNumber] intValue]);
+                        [self setMidiChannel:[[proptery midiChannel] intValue] number:[[proptery midiNumber] intValue] forCue:cue];
+                        //[cue set
+                        
+                    }
+                }
+            }
+			//	[cue setQName:@"asdasd¡¡"];
+		}
+	}
+	
 }
 
 @end

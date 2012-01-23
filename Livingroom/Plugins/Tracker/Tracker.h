@@ -11,4 +11,7 @@
 -(ofVec2f) trackerCentroid:(int)n;
 -(vector<ofVec2f>) trackerCentroidVector;
 
+-(vector<ofVec2f>) trackerBlob:(int)n;
+-(vector< vector<ofVec2f> >) trackerBlobVector;
+
 @end

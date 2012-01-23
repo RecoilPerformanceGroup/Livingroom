@@ -35,7 +35,7 @@
     [ocp addPlugin:[[Midi alloc] init] midiChannel:2];
 
     [ocp addHeader:@"Scenes"];
-    [ocp addPlugin:[[PolygonWorld alloc] init] midiChannel:3];
+    [ocp addPlugin:[[PolygonWorld alloc] init] midiChannel:10];
     [ocp addPlugin:[[AshParticles alloc] init] midiChannel:4];
     [ocp addPlugin:[[Prolog alloc] init] midiChannel:5];
   //  [ocp addHeader:@"MyPlugins"];

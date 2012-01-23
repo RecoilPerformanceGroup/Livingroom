@@ -12,12 +12,18 @@
 @synthesize properties, type, key, view;
 
 
--(id) initWithEngine:(PolyEngine*)_engine{
+- (id) initWithEngine:(PolyEngine*)_engine forKey:(NSString*)_key{
+    [self setKey:_key];
+
+    properties = [[NSMutableDictionary alloc] init];
+    [self addPropF:@"active"];
+    [self addPropF:@"reset"];
+    
+    [Prop(@"reset") addObserver:self forKeyPath:@"value" options:nil context:@"reset"];
+
     if(self = [self init]){
         engine = _engine;
         propertyCounter = 0;    
-    
-        [self addPropF:@"active"];
 
     } 
     return self;
@@ -26,7 +32,6 @@
 
 -(id) init{
     if(self = [super init]){
-        properties = [[NSMutableDictionary alloc] init];
         [self setView:[[NSView alloc] initWithFrame:NSMakeRect(0,0,300,300)]];
 
     }
@@ -39,6 +44,7 @@
     [p setName:name];
     [p setMinValue:0];
     [p setMaxValue:1.0];
+    [p setPluginName:[self key]];
     [p setSortNumber:propertyCounter++];
     [properties setObject:p forKey:name];
     return p;
@@ -53,6 +59,11 @@
 	
 	return self;
 	
+}
+
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
 }
 
 

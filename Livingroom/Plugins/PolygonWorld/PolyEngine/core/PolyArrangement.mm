@@ -387,10 +387,10 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //-------------
 //
 
--(void) saveArrangement{
+-(void) saveArrangement:(int)num{
     @synchronized(self)
     {
-        std::ofstream    out_file ("arr_ex_io.dat");
+        std::ofstream    out_file (("../../../../../arrangements/arr"+ofToString(num)+".dat").c_str());
         
         out_file << *arr;
         out_file.close();
@@ -401,12 +401,12 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 //-------------
 //
 
--(void) loadArrangement{
+-(void) loadArrangement:(int)num{
     @synchronized(self)
     {
         arr = new Arrangement_2();
         
-        std::ifstream    in_file ("arr_ex_io.dat");
+        std::ifstream    in_file (("../../../../../arrangements/arr"+ofToString(num)+".dat").c_str());
         
         if(in_file.good()){
             in_file >> *arr;
