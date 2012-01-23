@@ -368,8 +368,9 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     // ALLWAYS check if e.is_fictitious() before assuming you've got something
 }
 
--(Arrangement_2::Face_const_handle) faceAtPoint: (Point_2) queryPoint{
-    CGAL::Object obj = [self cgalObjectAtPoint:queryPoint];
+-(Arrangement_2::Face_const_handle) faceAtPoint: (ofVec2f) queryPoint{
+    Point_2 p = Point_2(queryPoint.x, queryPoint.y);
+    CGAL::Object obj = [self cgalObjectAtPoint:p];
     
     Arrangement_2::Face_const_handle      f;
     

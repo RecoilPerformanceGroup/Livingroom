@@ -44,6 +44,7 @@ struct LRVertex_data {
     //SpringsAnimator
     ofVec3f springF             = ofVec3f(0,0,0);
     ofVec3f springV             = ofVec3f(0,0,0);
+    ofVec3f accumF              = ofVec3f(0,0,0);
     
     //CrumbleAnimator
     ofVec3f crumbleforce        = ofVec3f(0,0,0);
@@ -75,6 +76,7 @@ struct LRHalfedge_data {
 
 struct LRFace_data {
     ofColor color;
+    BOOL hole                   = false;
 };
 
 #endif

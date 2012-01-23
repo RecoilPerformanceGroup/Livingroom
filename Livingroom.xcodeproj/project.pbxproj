@@ -230,12 +230,12 @@
 				3D07198D146941D60057E0B9 /* PolyInput.mm */,
 				3D07198E146941D60057E0B9 /* PolyRender.h */,
 				3D07198F146941D60057E0B9 /* PolyRender.mm */,
-				7F287D93146AAE0D007E8346 /* PolyDataTraits.h */,
 				7F287D94146ABCE7007E8346 /* PolyDataObserver.h */,
 				3DE87729148E628300F7558C /* PolyNumberProperty.h */,
 				3DE8772A148E628300F7558C /* PolyNumberProperty.mm */,
 				3D100A2D14927AAD0067A46E /* CGALEnumerator.h */,
 				3D100A2E14927AAD0067A46E /* CGALEnumerator.mm */,
+				7F287D93146AAE0D007E8346 /* PolyDataTraits.h */,
 			);
 			path = core;
 			sourceTree = "<group>";

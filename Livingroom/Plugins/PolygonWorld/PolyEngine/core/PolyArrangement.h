@@ -24,7 +24,7 @@
 -(CGAL::Object) cgalObjectAtPoint: (Point_2) queryPoint;
 -(Arrangement_2::Vertex_const_handle) vertexAtPoint: (Point_2) queryPoint;
 //-(Arrangement_2::Halfedge_const_handle) halVerfedgeAtPoint: (Point_2) queryPoint;
--(Arrangement_2::Face_const_handle) faceAtPoint: (Point_2) queryPoint;
+-(Arrangement_2::Face_const_handle) faceAtPoint: (ofVec2f) queryPoint;
 -(BOOL) vecInsideBoundary:(ofVec3f)p;
 -(Arrangement_2::Halfedge_const_handle) nearestBoundaryHalfedge:(ofVec2f)p;
 

@@ -83,8 +83,11 @@
 //                        color += intensity*light2Color*(n*light2Dir).length();
                     }
                 }
-                
-                glColor3f(color.x,color.y,color.z);
+                glColor4f(color.x,color.y,color.z,1);
+
+                if(fit->data().hole){
+                    glColor4f(0,0,0,0);
+                }
                 
                 
                 

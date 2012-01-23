@@ -42,6 +42,9 @@ typedef CGAL::Delaunay_mesher_2<Delaunay, Criteria> Mesher;
     vector<Delaunay> delauneys;
     vector<Mesher> meshes;
     
+    
+    vector<Segment_2> debugSegments;
+    
 
 
 }

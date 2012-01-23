@@ -33,8 +33,10 @@ typedef CGAL::Arr_segment_traits_2<KernelInexact>  Traits_2_inexact;
 typedef CGAL::Polygon_2<Kernel>             Polygon_2;
 typedef Traits_2_inexact::Point_3           Point_3;
 typedef Traits_2::Point_2                   Point_2;
+typedef Traits_2_inexact::Point_2           Point_2_inexact;
 typedef Traits_2_inexact::Vector_3          Vector_3;
-typedef Traits_2::X_monotone_curve_2        Segment_2;
+typedef Traits_2::Segment_2        Segment_2;
+typedef Traits_2::Line_2                    Line_2;
 typedef CGAL::Arr_extended_dcel<Traits_2,LRVertex_data, LRHalfedge_data, LRFace_data>
 Dcel;
 typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
@@ -127,11 +129,6 @@ static void printVec3f(ofVec3f p){
     cout<<"VHandle: ["<<p.x<<", "<<p.y<<", "<<p.z<<"]"<<endl;
 }
 
-static void printVertexHandle(Arrangement_2::Vertex_handle handle){
-    ofVec3f p = handleToVec3(handle);
-    printVec3f(p);
-}
-
 static void printVertexHandle(Arrangement_2::Vertex_const_handle handle){
     ofVec3f p = handleToVec3(handle);
     printVec3f(p);
@@ -153,13 +150,21 @@ static void setHandlePos(ofVec3f v, Arrangement_2::Vertex_handle handle){
 
 
 
-//---------------- 
-static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
+//----------------
+
+static float edgeLength(Arrangement_2::Halfedge_const_handle hit){
+    ofVec2f v1 = handleToVec2(hit->source());
+    ofVec2f v2 = handleToVec2(hit->target());    
+    ofVec2f dir = v2-v1;
+    return dir.length();    
+}
+
+/*static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
     ofVec2f v1 = handleToVec2(hit->source());
     ofVec2f v2 = handleToVec2(hit->target());    
     ofVec2f dir = v2-v1;
     return ofVec2f(-dir.y, dir.x);
-}
+}*/
 
 static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_const_handle hit){
     ofVec2f v1 = handleToVec2(hit->source());

@@ -22,6 +22,8 @@
         
         [self addPropF:@"crumbleForce"];
         [self addPropF:@"decrumbleForce"];
+        
+        [self addPropF:@"cutHole"];
     }
     
     return self;
@@ -35,27 +37,68 @@
 #pragma mark Common
 
 -(void)update:(NSDictionary *)drawingInformation{
-    if(PropF(@"crumbleForce") > 0){
+    
+    vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+    
+    if(v.size() > 0 && PropB(@"cutHole")){
+        SetPropF(@"cutHole", 0);
+        
+        /*        CGAL::Object obj = [[engine arrangement] cgalObjectAtPoint:Point_2(v[0].x, v[0].y)];
+         
+         Arrangement_2::Face_const_handle      face;
+         
+         if (CGAL::assign (face, obj)) {*/
+        
+        Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0]];
+        {
+            if(!face->is_fictitious() && !face->is_unbounded()){
+                cout<<"Cut"<<endl;
+                Arrangement_2::Face_handle faceCast = [[engine arrangement] arrData]->non_const_handle(face);
+                faceCast->data().hole = true;
+            }
+        }
+        
+    }
+    
+    
+    //Remove lonely edges
+    {
+        __block vector<Arrangement_2::Halfedge_handle> deleteHandles;
+        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+            if(eit->face()->is_unbounded() || eit->face()->data().hole){
+                if(eit->twin()->face()->is_unbounded() || eit->twin()->face()->data().hole){
+                    //Delete edge
+                    deleteHandles.push_back(eit);
+                }            
+            }
+        }];
+        for(int i=0;i<deleteHandles.size();i++){
+            [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
+        }
+    }
+    
+    CachePropF(crumbleForce);
+    if(crumbleForce > 0 && v.size() > 0){
         //Tracker force
         [GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
             {
                 float mouseR = PropF(@"mouseRadius");
                 float mouseF = PropF(@"mouseForce")*0.05;
-                vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
                 
                 [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
                     for(int t=0;t<v.size();t++){
                         ofVec2f vertex = handleToVec2(vit);
                         if(v[t].distance(vertex) < mouseR){
-                            ofVec2f v = vertex - v[t];
+                            ofVec2f vdir = vertex - v[t];
                             
-                            float l = v.length();
+                            float l = vdir.length();
                             l *= 1.0/mouseR;
                             l = 1.0-l;
                             
-                            v.normalize();
+                            vdir.normalize();
                             
-                            vit->data().springF += v*mouseF*l*2.0;      
+                            ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
+                            vit->data().springF += vdir*mouseF*l*2.0;      
                             
                             //Force in z=0
                             float zDiff = vit->data().pos.z;
@@ -64,13 +107,93 @@
                         }
                     }
                 }];
+                /*  
+                 for(int i=0;i<v.size();i++){
+                 Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[i]];
+                 if(!face->is_fictitious() && !face->is_unbounded() && !face->data().hole){
+                 Arrangement_2::Face_handle fit = [[engine arrangement] arrData]->non_const_handle(face);
+                 
+                 
+                 if(fit->number_of_outer_ccbs() == 1){
+                 
+                 Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                 Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                 do { 
+                 if(hc->twin()->face()->is_unbounded() || hc->twin()->face()->data().hole){
+                 
+                 //Inside face that is at the boundary
+                 ofVec2f p = v[i];
+                 
+                 
+                 Arrangement_2::Vertex_handle h1 =  hc->source();
+                 Arrangement_2::Vertex_handle h2 =  hc->target();
+                 
+                 ofVec2f p1 = handleToVec2(h1);
+                 ofVec2f p2 = handleToVec2(h2);
+                 
+                 float dist1 = p1.distance(p);
+                 float dist2 = p2.distance(p);
+                 
+                 float factor2 = dist1 / (dist1 + dist2);
+                 float factor1 = dist2 / (dist1 + dist2);
+                 
+                 ofVec2f dir1 = (p-p1).normalized();
+                 ofVec2f dir2 = (p-p2).normalized();
+                 
+                 float dist = distanceVecToHalfedge(p, hc);
+                 
+                 h1->data().springF += crumbleForce*dir1*dist*factor1;      
+                 h2->data().springF += crumbleForce*dir2*dist*factor2;      
+                 
+                 }
+                 
+                 
+                 
+                 ++hc; 
+                 } while (hc != ccb_start); 
+                 }
+                 
+                 }
+                 
+                 */
+                /*if([[engine arrangement] vecInsideBoundary:v[i]]){
+                 //Outside boundary
+                 ofVec2f p = v[i];
+                 
+                 Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i]];
+                 
+                 Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
+                 Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
+                 
+                 ofVec2f p1 = handleToVec2(h1);
+                 ofVec2f p2 = handleToVec2(h2);
+                 
+                 float dist1 = p1.distance(p);
+                 float dist2 = p2.distance(p);
+                 
+                 float factor2 = dist1 / (dist1 + dist2);
+                 float factor1 = dist2 / (dist1 + dist2);
+                 
+                 ofVec2f dir1 = (p-p1).normalized();
+                 ofVec2f dir2 = (p-p2).normalized();
+                 
+                 float dist = distanceVecToHalfedge(p, handle);
+                 
+                 h1->data().springF += decrumbleForce*dir1*dist*factor1;      
+                 h2->data().springF += decrumbleForce*dir2*dist*factor2;      
+                 
+                 }
+                 //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
+                 //            
+                 }*/
             }
         }];
         
     }
+    
+    
     CachePropF(decrumbleForce);
-    if(decrumbleForce > 0){
-        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+    if(decrumbleForce > 0 && v.size() > 0){
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
             
             for(int i=0;i<v.size();i++){
@@ -99,7 +222,7 @@
                     
                     h1->data().springF += decrumbleForce*dir1*dist*factor1;      
                     h2->data().springF += decrumbleForce*dir2*dist*factor2;      
-
+                    
                 }
                 //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
                 //            
@@ -107,36 +230,7 @@
         }];
         
     }
-    //Decrumble force
-    /*[GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
-     {
-     float mouseR = PropF(@"mouseRadius");
-     float mouseF = PropF(@"mouseForce")*0.05;
-     vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
-     
-     [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-     for(int t=0;t<v.size();t++){
-     if(v[t].distance(handleToVec2(vit)) < mouseR){
-     ofVec2f vertex = handleToVec2(vit);
-     ofVec2f v = vertex - v[t];
-     
-     float l = v.length();
-     l *= 1.0/mouseR;
-     l = 1.0-l;
-     
-     v.normalize();
-     
-     vit->data().springF += v*mouseF*l*2.0;      
-     
-     //Force in z=0
-     float zDiff = vit->data().pos.z;
-     vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
-     
-     }
-     }
-     }];
-     }
-     }];*/
+    
     
 }
 

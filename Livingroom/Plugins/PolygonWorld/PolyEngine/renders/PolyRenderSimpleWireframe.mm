@@ -10,6 +10,7 @@
         [self addPropF:@"zScale"];
         
         [self setDrawFillMode:2];
+        [self setDrawGridMode:1];
     }
     return self;
 }
@@ -36,7 +37,9 @@
             if(drawFillMode == 2){
                 glColor3f(1,1,1);
             }
-            
+            if(fit->data().hole){
+                glColor3f(0.1,0.1,0.1);
+            }
             glBegin(GL_POLYGON);
             
             
@@ -52,6 +55,7 @@
                             float b = -z;
                             glColor3f(r,0.2,b);
                         }
+                        
                         glVertexHandle(hc->source());
                         //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                         ++hc; 
@@ -154,6 +158,9 @@
                             float r = z;
                             float b = -z;
                             glColor3f(r,0.2,b);
+                        }
+                        if(fit->data().hole){
+                            glColor3f(0,0,0);
                         }
                         ofVec3f p = handleToVec3(hc->source());
                         glVertex3d(p.x , p.y, (p.z)*PropF(@"zScale"));

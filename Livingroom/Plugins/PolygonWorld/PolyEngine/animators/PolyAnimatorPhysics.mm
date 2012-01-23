@@ -34,6 +34,8 @@
         //State 3:
         [self addPropF:@"anchorThreshold"];
         
+        [self addPropF:@"deleteStrength"];
+        
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
         NSTextField * textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 300, 300)];
@@ -143,10 +145,12 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
         
         //Random z value (so its never 0)
+        //Reset accumF
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
             if(vit->data().pos.z == 0){
                 vit->data().pos.z = ofRandom(-0.001,0.001);
             }
+            vit->data().accumF = ofVec3f();
         }];
         
         
@@ -336,6 +340,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 
                 //Friction
                 vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
+                vit->data().accumF +=  vit->data().springF;
                 
                 setHandlePos(vit->data().springV + vit->data().pos, vit);
             }];
@@ -343,11 +348,28 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
         }
     }
     
     [blockPhysics removeAllObjects];
     
+    
+    CachePropF(deleteStrength);
+    if(deleteStrength > 0){
+        __block vector<Arrangement_2::Halfedge_handle> deletehandles;
+        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+            ofVec3f f1 = eit->source()->data().accumF;
+            ofVec3f f2 = eit->target()->data().accumF;
+            
+            if((f1+f2).length() > deleteStrength){
+                deletehandles.push_back(eit);
+            }
+        }];
+        for(int i=0;i<deletehandles.size();i++){
+            [[engine arrangement] arrData]->remove_edge(deletehandles[i]);
+        }
+    }
     
     if(updateDebug){
         __block NSMutableString * str = [NSMutableString string];
@@ -374,8 +396,8 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     
     
     [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-        ofVec2f v = handleToVec2(vit)   + ofVec2f(vit->data().springF.x, vit->data().springF.y) ;
-        of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + ofVec2f(vit->data().springF.x, vit->data().springF.y) , 0.01);
+        ofVec2f v = handleToVec2(vit)   + ofVec2f(vit->data().accumF.x, vit->data().accumF.y) ;
+        of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + 0.1*ofVec2f(vit->data().accumF.x, vit->data().accumF.y) , 0.01);
     }];
     
     
