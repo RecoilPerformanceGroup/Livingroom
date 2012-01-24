@@ -15,6 +15,7 @@
 #import "AshParticles.h"
 #import "Tracker.h"
 #import "Prolog.h"
+#import "Mask.h"
 
 @implementation lrAppDelegate
 @synthesize window;
@@ -38,6 +39,7 @@
     [ocp addPlugin:[[PolygonWorld alloc] init] midiChannel:10];
     [ocp addPlugin:[[AshParticles alloc] init] midiChannel:4];
     [ocp addPlugin:[[Prolog alloc] init] midiChannel:5];
+    [ocp addPlugin:[[Mask alloc] init] midiChannel:6];
   //  [ocp addHeader:@"MyPlugins"];
 //    [ocp addPlugin:[[ExamplePlugin alloc] init]];
     

@@ -57,7 +57,7 @@ struct LRVertex_data {
 
 struct LRHalfedge_data {
     ofColor color;
-
+    bool deleted                = false;
     //CracksAnimator
     float crackAmount           = 0.0;
     float crackCacheRatio       = 0.0;

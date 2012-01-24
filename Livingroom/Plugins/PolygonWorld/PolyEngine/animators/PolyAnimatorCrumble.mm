@@ -63,18 +63,15 @@
     
     //Remove lonely edges
     {
-        __block vector<Arrangement_2::Halfedge_handle> deleteHandles;
         [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
             if(eit->face()->is_unbounded() || eit->face()->data().hole){
                 if(eit->twin()->face()->is_unbounded() || eit->twin()->face()->data().hole){
                     //Delete edge
-                    deleteHandles.push_back(eit);
+                    eit->data().deleted = true;
+                    eit->twin()->data().deleted = true;
                 }            
             }
         }];
-        for(int i=0;i<deleteHandles.size();i++){
-            [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
-        }
     }
     
     CachePropF(crumbleForce);

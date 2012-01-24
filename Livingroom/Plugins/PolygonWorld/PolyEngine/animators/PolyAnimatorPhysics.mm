@@ -363,12 +363,11 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             ofVec3f f2 = eit->target()->data().accumF;
             
             if((f1+f2).length() > deleteStrength){
-                deletehandles.push_back(eit);
+                eit->data().deleted = true;
+                eit->twin()->data().deleted = true;
             }
         }];
-        for(int i=0;i<deletehandles.size();i++){
-            [[engine arrangement] arrData]->remove_edge(deletehandles[i]);
-        }
+        
     }
     
     if(updateDebug){

@@ -144,7 +144,8 @@
             if(drawFillMode == 2){
                 glColor3f(255,255,255);
             }
-            
+            glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+
             glBegin(GL_POLYGON);
             
             if(!fit->is_fictitious()){
@@ -174,6 +175,8 @@
             
             //        
             glEnd();   
+            glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+
         } 
         
     } PopPerspective();

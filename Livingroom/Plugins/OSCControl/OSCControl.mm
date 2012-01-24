@@ -1,6 +1,7 @@
 #import "OSCControl.h"
 #import "Tracker.h"
 #import <ofxCocoaPlugins/Keystoner.h>
+#import "Mask.h"
 
 @implementation OSCControl
 
@@ -108,7 +109,7 @@
 }
 
 - (void) addButton:(NSString*)label labelSize:(int)labelSize bounds:(NSRect)bounds bindedTo:(PluginProperty*)property{
- //   NSAssert(property, @"No property");
+    NSAssert(property, @"No property");
     [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
                      [NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]], @"name",
                      @"Button",@"type",
@@ -190,8 +191,16 @@
      @"[.0,.4,.75,.3]",@"bounds", 
      nil]];
      */
-    [self addButton:@"Tracker debug" labelSize:16 bounds:NSMakeRect(0.8, 0.0, 0.2, 0.09) bindedTo:[[GetPlugin(Tracker) properties] objectForKey:@"drawDebug"]];
-    [self addButton:@"Keystone debug" labelSize:16 bounds:NSMakeRect(0.8, 0.1, 0.2, 0.09) bindedTo:[[GetPlugin(Keystoner) properties] objectForKey:@"Enabled"]];
+    float x = 0.76;
+    float w = 0.24;
+    float h = 0.09;
+    
+    [self addButton:@"Tracker debug" labelSize:16 bounds:NSMakeRect(x, 0.0, w, h) bindedTo:[[GetPlugin(Tracker) properties] objectForKey:@"drawDebug"]];
+    [self addButton:@"Keystone debug" labelSize:16 bounds:NSMakeRect(x, 0.1, w, h) bindedTo:[[GetPlugin(Keystoner) properties] objectForKey:@"Enabled"]];
+
+    [self addButton:@"Left blind" labelSize:16 bounds:NSMakeRect(x, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"leftBlind"]];
+    [self addButton:@"Right blind" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"rightBlind"]];
+
 
     [self addMultiXY:@"trackerxy" bounds:NSMakeRect(0.0, 0.0, 0.75, 1.0) isMomentary:true maxTouches:3];
     [self setColor:@"trackerxy" background:@"#000" foreground:@"#aaa" stroke:@"#ddd"];
@@ -208,6 +217,10 @@
     if(PropB(@"generate")){
         SetPropB(@"generate", NO);
         [self setup];
+        
+        for(int i=0;i<10;i++){
+                trackerData[i].active = false;
+        }
     }
     
     while( receiver->hasWaitingMessages() )
