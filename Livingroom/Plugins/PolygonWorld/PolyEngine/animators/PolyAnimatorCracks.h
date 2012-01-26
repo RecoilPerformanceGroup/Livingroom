@@ -12,7 +12,8 @@
 
     BOOL mousePressed;
     ofVec2f mouse;
-
+    vector< vector<ofVec2f> > crackLines;
+    vector< Arrangement_2::Vertex_handle > crackLinesVertices;
 }
-
+@property (readonly)     vector< vector<ofVec2f> > crackLines;
 @end

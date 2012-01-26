@@ -7,6 +7,7 @@
 //
 
 #import "PolyInputRandomGenerator.h"
+#import "Mask.h"
 
 @implementation PolyInputRandomGenerator
 
@@ -16,6 +17,7 @@
         [self addPropF:@"numPoints"];
         [self addPropF:@"generate"];
         [self addPropF:@"deleteLength"];        
+        [self addPropF:@"triangleFilter"];        
     }
     return self;
 }
@@ -51,6 +53,7 @@
     //            convexPolygons[i].vertices_end());
     
     
+    
     //Trip around boundary and delete it
     
     CachePropF(deleteLength);
@@ -63,6 +66,36 @@
                 if(edgeLength(h) > deleteLength)
                     [[engine arrangement] arrData]->remove_edge(h);
             }
+        }
+    }
+    
+    if(PropB(@"triangleFilter")){
+        __block vector< Arrangement_2::Halfedge_handle > deleteHandles;
+        
+        ofVec2f corner1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
+        ofVec2f corner2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
+        
+        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+            ofVec2f v1 = handleToVec2(eit->source()); 
+            ofVec2f v2 = handleToVec2(eit->target());
+            
+            bool added = false;
+            if(v1.x > corner1.x && v1.x < corner2.x){
+                if(v1.y < corner1.y){
+                    deleteHandles.push_back( eit);
+                    added = true;
+                }
+            }
+            if(!added && v2.x > corner1.x && v2.x < corner2.x){
+                if(v2.y < corner1.y){
+                    deleteHandles.push_back( eit);
+                }
+            }
+
+        }];
+        
+        for(int i=0;i<deleteHandles.size();i++){
+            [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
         }
     }
     

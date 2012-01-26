@@ -201,7 +201,10 @@
     [self addButton:@"Left blind" labelSize:16 bounds:NSMakeRect(x, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"leftBlind"]];
     [self addButton:@"Right blind" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"rightBlind"]];
 
+    [self addButton:@"Triangle white" labelSize:16 bounds:NSMakeRect(x, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleWhite"]];
+    [self addButton:@"Triangle black" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleBlack"]];
 
+    
     [self addMultiXY:@"trackerxy" bounds:NSMakeRect(0.0, 0.0, 0.75, 1.0) isMomentary:true maxTouches:3];
     [self setColor:@"trackerxy" background:@"#000" foreground:@"#aaa" stroke:@"#ddd"];
     

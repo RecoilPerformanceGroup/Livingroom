@@ -32,7 +32,7 @@
 -(void) loadArrangement:(int)num;
 -(void) clearArrangement;
 
--(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit))func;
+-(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit, BOOL * stop))func;
 -(void) enumerateEdges:(void(^)(Arrangement_2::Edge_iterator eit))func;
 -(void) enumerateHalfedges:(void(^)(Arrangement_2::Halfedge_iterator eit))func;
 -(void) enumerateFaces:(void(^)(Arrangement_2::Face_iterator fit))func;

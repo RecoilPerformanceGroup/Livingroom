@@ -45,7 +45,6 @@
         //
         //Animators
         //   
-        
         [self addModule:@"PolyAnimatorCracks"];
         //   [self addModule:@"PolyAnimatorSprings"];
         [self addModule:@"PolyAnimatorCrumble"];
@@ -194,6 +193,12 @@
 }
 - (void) update:(NSDictionary*)drawingInformation{
     for(PolyModule * module in [modules allValues]){
+        for(PolyNumberProperty * prop in [[module properties] allValues]){
+           // [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+
+                [prop update];
+            //}];
+        }
         if([module active]){
             if([[[module properties] valueForKey:@"reset"] boolValue]){
                 [[[module properties] valueForKey:@"reset"] setBoolValue:0];

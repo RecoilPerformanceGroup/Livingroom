@@ -8,6 +8,8 @@
 
 #import "PolyRenderCrackLines.h"
 #import <ofxCocoaPlugins/CustomGraphics.h>
+#import "Mask.h"
+#import "PolyAnimatorCracks.h"
 
 @implementation PolyRenderCrackLines
 
@@ -19,6 +21,7 @@
         
         [self addPropF:@"cloudIntensity"];
         [self addPropF:@"cloudSize"];
+
         
     }
     return self;
@@ -33,7 +36,9 @@
         gradients[i].val = 0; //Intensity
     }
     
-
+    
+    
+    
 }
 -(void)setup{
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
@@ -46,7 +51,7 @@
         NSLog(@"gradients image not found in cracks!!");
     }
     
-       
+    
     
 }
 
@@ -61,7 +66,7 @@
         CachePropF(cloudSize);
         CachePropF(cloudIntensity);
         
-        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
             if(vit->data().crackAmount > 0){
                 for(int i=0;i<NUM_GRADIENTS;i++){
                     if(handleToVec2(vit).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size){
@@ -100,7 +105,7 @@
     Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
     
     ofSetColor(0,0,0,255.0);
-
+    
     CachePropF(lineWidth);
     CachePropF(lineWidthMax);
     
@@ -165,23 +170,49 @@
     }      
     glEnd();
     
+    
+    
+    vector< vector<ofVec2f> > crackLines = [(PolyAnimatorCracks*)GetModule(@"Cracks") crackLines]; 
+    for(int i=0;i<crackLines.size();i++){
+        if(crackLines[i].size() == 2 && crackLines[i][0].x != 0.0){
+            for(int u=0;u<NUM_GRADIENTS;u++){
+                if(gradients[u].y > crackLines[i][0].y && gradients[u].y < crackLines[i][1].y){
+                    if(distanceVecToLine(ofVec2f(gradients[u].x,gradients[u].y), crackLines[i][0], crackLines[i][1])  < gradients[u].size*0.5){
+                        gradients[u].val += 0.001;
+                        if(gradients[u].val > 1)
+                            gradients[u].val = 1;
+                    }
+                }
+            }
+        }
+        
+        
+        ofSetColor(0,0,0);
+        //        glLineWidth(<#GLfloat width#>)
+        glBegin(GL_LINE_STRIP);
+        for(int u=0;u<crackLines[i].size();u++){
+            glVertex2f(crackLines[i][u].x, crackLines[i][u].y); 
+        }
+        glEnd();
+    }
+    
     // }PopSurfaceForProjector();
     
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
-   /* 
-    Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
-    
-    ofSetColor(255,255,255,128);
-    
-    glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
-    
-    for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
-        
-        ofCircle(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()), eit->data().crackAmount*0.05);
-        
-    }   */
+    /* 
+     Arrangement_2::Edge_iterator eit = [[engine arrangement] arrData]->edges_begin();    
+     
+     ofSetColor(255,255,255,128);
+     
+     glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+     
+     for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
+     
+     ofCircle(CGAL::to_double(eit->source()->point().x()) , CGAL::to_double(eit->source()->point().y()), eit->data().crackAmount*0.05);
+     
+     }   */
     
 }
 

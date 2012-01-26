@@ -8,6 +8,10 @@
     KeystoneSurface * triangleLeft;
     
     BOOL adjustInProgress;
+    
+    ofVec2f triangleFloorCoordinate[2];
 }
+
+-(ofVec2f) triangleFloorCoordinate:(float)n;
 
 @end

@@ -13,6 +13,10 @@
 -(void)initPlugin{
     [self addPropF:@"leftBlind"];
     [self addPropF:@"rightBlind"];
+    
+    [self addPropF:@"triangleWhite"];
+    [self addPropF:@"triangleBlack"];
+
 }
 
 //
@@ -31,6 +35,15 @@
         [[[triangleLeft cornerPositions] objectAtIndex:i] addObserver:self forKeyPath:@"x" options:nil context:triangleLeft];
         [[[triangleLeft cornerPositions] objectAtIndex:i] addObserver:self forKeyPath:@"y" options:nil context:triangleLeft];
     }
+    
+    
+    
+        ofVec2f proj = [triangleRight convertToProjection:ofVec2f(0,1)];
+        proj *= ofVec2f(1,1);
+        triangleFloorCoordinate[0] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
+        
+        proj = [triangleRight convertToProjection:ofVec2f([[triangleRight aspect] floatValue],1)];
+        triangleFloorCoordinate[1] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
 }
 
 
@@ -61,6 +74,15 @@
                 [ps setValue:[NSNumber numberWithFloat:goal.y] forKey:@"y"];
             }
             [surface recalculate];
+            
+            if(surface == triangleRight){
+                ofVec2f proj = [surface convertToProjection:ofVec2f(0,1)];
+                proj *= ofVec2f(1,1);
+                triangleFloorCoordinate[0] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
+                
+                proj = [surface convertToProjection:ofVec2f([[surface aspect] floatValue],1)];
+                triangleFloorCoordinate[1] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
+            }
             adjustInProgress = NO;
         }
     }
@@ -87,6 +109,31 @@
     
     ofSetColor(0,0,0,255.0*PropF(@"leftBlind"));
     ofRect(0.5,0,0.5,1);
+    
+    ApplySurface(@"Triangle"){
+        float aspect = Aspect(@"Triangle",0);
+        ofSetColor(0,0,0,255.0*PropF(@"triangleBlack"));
+        ofTriangle(aspect, 0, aspect, 1, 0, 1);
+
+        ofSetColor(255,255,255,255.0*PropF(@"triangleWhite"));
+        ofTriangle(aspect, 0, aspect, 1, 0, 1);
+    } PopSurface();
+    
+    if([[[GetPlugin(Keystoner) properties] valueForKey:@"Enabled"] boolValue]){
+        ofSetColor(255,255,255);
+        ApplySurface(@"Floor");
+        ofCircle(triangleFloorCoordinate[0].x, triangleFloorCoordinate[0].y, 0.01);
+        ofCircle(triangleFloorCoordinate[1].x, triangleFloorCoordinate[1].y, 0.01);
+        PopSurface();
+     
+        ofSetColor(255,0,0);
+
+        ApplySurface(@"Triangle");
+        ofLine(0,1 , Aspect(@"Triangle", 0)*2,-1);
+        PopSurface();
+
+    }
+    
 }
 
 //
@@ -96,4 +143,13 @@
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
 }
 
+-(ofVec2f) triangleFloorCoordinate:(float)n{
+    if(n == 0){
+        return triangleFloorCoordinate[0];
+    }
+    if(n == 1){
+        return triangleFloorCoordinate[1];
+    }
+    return ;
+}
 @end

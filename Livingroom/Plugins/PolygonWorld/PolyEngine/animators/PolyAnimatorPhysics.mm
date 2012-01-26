@@ -146,9 +146,10 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
         //Random z value (so its never 0)
         //Reset accumF
-        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
             if(vit->data().pos.z == 0){
                 vit->data().pos.z = ofRandom(-0.001,0.001);
+                vit->data().bornZ = vit->data().pos.z;
             }
             vit->data().accumF = ofVec3f();
         }];
@@ -212,8 +213,8 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             
             [self addPhysicsBlock:@"ZzeroForce" block:^(PolyArrangement *arrangement) {
                 
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-                    vit->data().springF += ofVec3f(0,0,-f*vit->data().pos.z);
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    vit->data().springF += ofVec3f(0,0,f*(vit->data().bornZ-vit->data().pos.z));
                 }];
             }];
         }
@@ -279,7 +280,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
         for(int i=0;i<PropI(@"iterations"); i++){
             //Reset forces
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                 vit->data().springF = ofVec3f(0,0,0);
             }];
             
@@ -312,7 +313,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             
             //Anchor
             if(PropI(@"state") >= 3){
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     if(vit->data().crumbleAnchor == true){
                         if(vit->data().springF.length() > PropF(@"anchorThreshold")){
                             vit->data().crumbleAnchor = false;
@@ -329,7 +330,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             int state = PropI(@"state");
             float minForce = PropF(@"minForce");
             float floorFriction = PropF(@"floorFriction");
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                 vit->data().springV *= 0;//PropF(@"springDamping");
                 
                 if(state < 3 || !vit->data().crumbleAnchor){
@@ -394,7 +395,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     
     
     
-    [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+    [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
         ofVec2f v = handleToVec2(vit)   + ofVec2f(vit->data().accumF.x, vit->data().accumF.y) ;
         of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + 0.1*ofVec2f(vit->data().accumF.x, vit->data().accumF.y) , 0.01);
     }];

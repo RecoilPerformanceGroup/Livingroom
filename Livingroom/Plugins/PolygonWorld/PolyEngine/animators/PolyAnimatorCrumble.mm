@@ -38,7 +38,7 @@
 
 -(void)update:(NSDictionary *)drawingInformation{
     
-    vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+    vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
     
     if(v.size() > 0 && PropB(@"cutHole")){
         SetPropF(@"cutHole", 0);
@@ -49,7 +49,7 @@
          
          if (CGAL::assign (face, obj)) {*/
         
-        Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0]];
+        Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0][0]];
         {
             if(!face->is_fictitious() && !face->is_unbounded()){
                 cout<<"Cut"<<endl;
@@ -82,25 +82,27 @@
                 float mouseR = PropF(@"mouseRadius");
                 float mouseF = PropF(@"mouseForce")*0.05;
                 
-                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int t=0;t<v.size();t++){
-                        ofVec2f vertex = handleToVec2(vit);
-                        if(v[t].distance(vertex) < mouseR){
-                            ofVec2f vdir = vertex - v[t];
-                            
-                            float l = vdir.length();
-                            l *= 1.0/mouseR;
-                            l = 1.0-l;
-                            
-                            vdir.normalize();
-                            
-                            ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
-                            vit->data().springF += vdir*mouseF*l*2.0;      
-                            
-                            //Force in z=0
-                            float zDiff = vit->data().pos.z;
-                            vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
-                            
+                        for(int u=0;u<v[t].size();u++){
+                            ofVec2f vertex = handleToVec2(vit);
+                            if(v[t][u].distance(vertex) < mouseR){
+                                ofVec2f vdir = vertex - v[t][u];
+                                
+                                float l = vdir.length();
+                                l *= 1.0/mouseR;
+                                l = 1.0-l;
+                                
+                                vdir.normalize();
+                                
+                                ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
+                                vit->data().springF += vdir*mouseF*l*2.0;      
+                                
+                                //Force in z=0
+                                float zDiff = vit->data().pos.z;
+                                vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
+                                
+                            }
                         }
                     }
                 }];
@@ -194,32 +196,33 @@
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
             
             for(int i=0;i<v.size();i++){
-                if(![[engine arrangement] vecInsideBoundary:v[i]]){
-                    //Outside boundary
-                    ofVec2f p = v[i];
-                    
-                    Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i]];
-                    
-                    Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
-                    Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
-                    
-                    ofVec2f p1 = handleToVec2(h1);
-                    ofVec2f p2 = handleToVec2(h2);
-                    
-                    float dist1 = p1.distance(p);
-                    float dist2 = p2.distance(p);
-                    
-                    float factor2 = dist1 / (dist1 + dist2);
-                    float factor1 = dist2 / (dist1 + dist2);
-                    
-                    ofVec2f dir1 = (p-p1).normalized();
-                    ofVec2f dir2 = (p-p2).normalized();
-                    
-                    float dist = distanceVecToHalfedge(p, handle);
-                    
-                    h1->data().springF += decrumbleForce*dir1*dist*factor1;      
-                    h2->data().springF += decrumbleForce*dir2*dist*factor2;      
-                    
+                for(int u=0;u<v[i].size();u++){
+                    if(![[engine arrangement] vecInsideBoundary:v[i][u]]){
+                        //Outside boundary
+                        ofVec2f p = v[i][u];
+                        
+                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i][u]];
+                        
+                        Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
+                        Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
+                        
+                        ofVec2f p1 = handleToVec2(h1);
+                        ofVec2f p2 = handleToVec2(h2);
+                        
+                        float dist1 = p1.distance(p);
+                        float dist2 = p2.distance(p);
+                        
+                        float factor2 = dist1 / (dist1 + dist2);
+                        float factor1 = dist2 / (dist1 + dist2);
+                        
+                        ofVec2f dir1 = (p-p1).normalized();
+                        ofVec2f dir2 = (p-p2).normalized();
+                        
+                        float dist = distanceVecToHalfedge(p, handle);
+                        
+                        h1->data().springF += decrumbleForce*dir1*dist*factor1;      
+                        h2->data().springF += decrumbleForce*dir2*dist*factor2;      
+                    }
                 }
                 //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
                 //            
@@ -242,9 +245,11 @@
         ofFill();
         ofSetColor(255,255,255,30);
         
-        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+        vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
         for(int i=0;i<v.size();i++){
-            ofCircle(v[i].x,v[i].y, PropF(@"mouseRadius"));
+            for(int u=0;u<v[i].size();u++){
+                ofCircle(v[i][u].x,v[i][u].y, PropF(@"mouseRadius"));
+            }
         }
     }
     /* 

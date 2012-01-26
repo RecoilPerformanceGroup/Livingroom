@@ -225,6 +225,15 @@
     return v;
 }
 
+-(vector< vector<ofVec2f> >) trackerBlobVector{
+    int n = [self numberTrackers];
+    vector< vector<ofVec2f> > v;
+    for(int i=0; i<n;i++){
+        v.push_back([self trackerBlob:i]);
+    }
+    return v;
+}
+
 -(ofVec2f) trackerCentroid:(int)n{
     // OSC Control blobs
     {

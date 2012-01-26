@@ -121,11 +121,13 @@
     
     //Tracker
     {
-        vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];
+        vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
         ofFill();
         ofSetColor(0,0,255,100);
         for(int i=0;i<v.size();i++){
-            ofCircle(v[i].x,v[i].y,0.02);
+            for(int u=0;u<v[i].size();u++){
+                ofCircle(v[i][u].x,v[i][u].y,0.02);
+            }
         }
         
     }

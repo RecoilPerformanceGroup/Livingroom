@@ -29,6 +29,7 @@ struct LRVertex_data {
     ofColor color;
     ofVec3f pos                 = ofVec3f(-1,-1,-1);
     Point_3 pointPos            = Point_3(-1,-1,-1);
+    float bornZ                 = 0.0;
     
     bool vecPosOutdated         = true;
     bool pointPosOutdated       = true;

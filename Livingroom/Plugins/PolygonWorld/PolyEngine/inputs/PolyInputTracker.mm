@@ -1,19 +1,35 @@
 #import "PolyInputTracker.h"
-#import "OSCControl.h"
+#import "Tracker.h"
 
 @implementation PolyInputTracker
 
-- (vector<ofVec2f>) getTrackerCoordinates{
-    vector<ofVec2f> v;
+- (vector< vector<ofVec2f> >) getTrackerCoordinates{
+    vector< vector<ofVec2f> > v;
     if(mousePressed){
-        v.push_back(mouse);
+        vector< ofVec2f > v2;
+        v2.push_back( mouse);
+        v.push_back(v2);
     } else {
-        vector<ofVec2f> osc = [GetPlugin(OSCControl) getTrackerCoordinates];
-        v.assign(osc.begin(), osc.end());
+        vector< vector<ofVec2f> > osc = [GetPlugin(Tracker) trackerBlobVector];
+        return osc;
     }
        
     return v;
 }
+
+
+- (vector<ofVec2f>) getTrackerCoordinatesCentroids{
+    vector< ofVec2f > v;
+    if(mousePressed){
+        v.push_back( mouse);
+    } else {
+        vector<ofVec2f> osc = [GetPlugin(Tracker) trackerCentroidVector];
+        return osc;
+    }
+    
+    return v;
+}
+
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
     mousePressed = YES;

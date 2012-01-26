@@ -10,17 +10,28 @@
         
         //[[self addPropF:@"drawMode"] setMaxValue:2];
         
-        [self addPropF:@"dirLightX"];
-        [self addPropF:@"dirLightY"];
-        [self addPropF:@"dirLightZ"];
+        [[self addPropF:@"dirLightX"] setMidiSmoothing:0.1];;
+        [[self addPropF:@"dirLightY"] setMidiSmoothing:0.1];;
+        [[self addPropF:@"dirLightZ"] setMidiSmoothing:0.1];;
         [[self addPropF:@"dirLightTemp"] setMinValue:1000 maxValue:10000];
-        [self addPropF:@"dirLightIntensity"];
+        [[self addPropF:@"dirLightIntensity"] setMidiSmoothing:0.9];
+        
+        [[self addPropF:@"dirLight2X"] setMidiSmoothing:0.1];;
+        [[self addPropF:@"dirLight2Y"] setMidiSmoothing:0.1];;
+        [[self addPropF:@"dirLight2Z"] setMidiSmoothing:0.1];;
+        [[self addPropF:@"dirLight2Temp"] setMinValue:1000 maxValue:10000];
+        [[self addPropF:@"dirLight2Intensity"] setMidiSmoothing:0.9];
         
         [self addPropF:@"pointLightX"];
         [self addPropF:@"pointLightY"];
         [self addPropF:@"pointLightZ"];
-        [self addPropF:@"pointLightIntensity"];
+        [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
+       
+        [self addPropF:@"backside"];
+
+        [Prop(@"pointLightTemp") setMidiSmoothing:0.1];
+        [Prop(@"dirLightTemp") setMidiSmoothing:0.1];
     }
     return self;
 }
@@ -32,8 +43,15 @@
 
 -(void)draw:(NSDictionary *)drawingInformation{
     ofEnableAlphaBlending();
-    ofVec3f light1 = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
-    ofVec3f light1Color = colorTemp(PropI(@"dirLightTemp"), PropF(@"dirLightIntensity"));
+    ofVec3f light1[2];
+    light1[0] = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
+    light1[1] = ofVec3f(PropF(@"dirLight2X"), PropF(@"dirLight2Y"), PropF(@"dirLight2Z")).normalized();
+
+    ofVec3f light1Color[2];
+    light1Color[0] = colorTemp(PropI(@"dirLightTemp"), PropF(@"dirLightIntensity"));
+    light1Color[1] = colorTemp(PropI(@"dirLight2Temp"), PropF(@"dirLight2Intensity"));
+    
+    
     
     ofVec3f light2 = ofVec3f(PropF(@"pointLightX"), PropF(@"pointLightY"), PropF(@"pointLightZ"));
     ofVec3f light2Color = colorTemp(PropI(@"pointLightTemp"), PropF(@"pointLightIntensity"));
@@ -59,12 +77,13 @@
                 ofVec3f mid = calculateFaceMid(fit);
                 
                 //Dir light
+                for(int i=0;i<2;i++)
                 {
-                    float angle = light1.angle(n);
-                    if(angle < 90){
+                    float angle = light1[i].angle(n);
+                    if(angle < 90 || PropB(@"backside")){
 //                        ofVec3f l1 = n*light1;
 //                        color += light1Color*l1.length();
-                        color += light1Color*(90-angle)/90.0;
+                        color += light1Color[i]*fabs(90-angle)/90.0;
                     }
                 }
                 
@@ -72,13 +91,13 @@
                 {
                     ofVec3f light2Dir = (mid-light2);
                     float angle = light2Dir.angle(n);
-                    if(angle < 90){
+                    if(angle < 90 || PropB(@"backside")){
                         
                         float dist = light2Dir.length();
 //                        light2Dir /= dist;
                         
                         float intensity = 1.0/(4*PI*dist*dist);
-                        color += intensity*light2Color*(90-angle)/90.0;
+                        color += intensity*light2Color*fabs(90-angle)/90.0;
                       
 //                        color += intensity*light2Color*(n*light2Dir).length();
                     }

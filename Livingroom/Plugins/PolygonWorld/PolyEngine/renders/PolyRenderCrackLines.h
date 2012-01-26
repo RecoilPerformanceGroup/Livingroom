@@ -7,7 +7,7 @@
 //
 
 #import "PolyRender.h"
-#define NUM_GRADIENTS 500
+#define NUM_GRADIENTS 200
 
 struct gradientVals {
     float x;
@@ -21,6 +21,7 @@ struct gradientVals {
     ofImage * gradient;
     
     gradientVals gradients[NUM_GRADIENTS];
+    
 }
 
 @end

@@ -20,7 +20,8 @@
         [self addPropF:@"fallingTime"];  
         [self addPropF:@"fallingForce"];  
 
-        
+        [self addPropF:@"tracker"];  
+
     }
     return self;
 }
@@ -34,7 +35,13 @@
     //
     // Tracker Gravity
     //
-    vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerCentroidVector];
+    vector<ofVec2f> centroids;
+    if(PropF(@"tracker")){
+         centroids = [GetPlugin(Tracker) trackerCentroidVector];
+    } else {
+        centroids.push_back(ofVec2f(0.5,0.5));
+    }
+    
     float f = PropF(@"trackerForce");
 
     if(f > 0 && centroids.size() > 0){
@@ -43,7 +50,7 @@
             float dist = PropF(@"trackerRadius");
             
             if(f > 0){
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int i=0; i<centroids.size();i++){
                         ofVec2f centroid = centroids[i];
                         float _dist = centroid.distance( handleToVec2(vit) ) ;
@@ -67,7 +74,7 @@
     float fallingTime = PropF(@"fallingTime");
     if(fallingForce > 0){
         [GetPhysics() addPhysicsBlock:@"Falling Gravity" block:^(PolyArrangement *arrangement) {
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     vit->data().springF += ofVec3f(0,0,fallingForce); 
                     
                     float fallDist = 1.0-fallingTime;

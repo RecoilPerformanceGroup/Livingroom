@@ -8,15 +8,24 @@
 
 #import "PolyAnimatorCracks.h"
 #import <ofxCocoaPlugins/Midi.h>
+#import "Mask.h"
+
+
 struct VectorSortP {
     bool operator()(Arrangement_2::Halfedge_around_vertex_circulator a, Arrangement_2::Halfedge_around_vertex_circulator b) const {
         return a->data().crackCacheRatio < b->data().crackCacheRatio;
     }
 };
 
+struct VectorSortY {
+    bool operator()(ofVec2f a, ofVec2f b) const {
+        return a.y < b.y;
+    }
+};
+
 
 @implementation PolyAnimatorCracks
-
+@synthesize crackLines;
 
 -(id)init{
     if(self = [super init]){
@@ -27,7 +36,10 @@ struct VectorSortP {
         [self addPropF:@"overflowThreshold"];
         [self addPropF:@"overflowSpeed"];
         [[self addPropF:@"impulse"] setMaxValue:128];
-
+        
+        [self addPropF:@"onlyCracklines"];
+        
+        
     }
     
     return self;
@@ -36,7 +48,24 @@ struct VectorSortP {
 -(void)setup{
     [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
     [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
+}
 
+-(void)reset{
+    crackLines.clear();
+    for(int i=0;i<5;i++){
+        vector< ofVec2f > v;
+        v.push_back([GetPlugin(Mask) triangleFloorCoordinate:0]);
+        v.push_back(ofVec2f(0.6+i*0.02, 0.8));
+        crackLines.push_back(v);        
+    }
+    
+    [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+        eit->twin()->data().crackAmount = 0;
+        eit->data().crackAmount = 0;
+    }];
+
+    
+    
 }
 
 
@@ -45,14 +74,16 @@ struct VectorSortP {
         cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
         SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);
     }
-  //  if([(NSString*)context isEqualToString:@"midioff"]){
-//        SetPropF(@"impulse", 0);
-//    }
+    //  if([(NSString*)context isEqualToString:@"midioff"]){
+    //        SetPropF(@"impulse", 0);
+    //    }
 }
 -(void)update:(NSDictionary *)drawingInformation{
-    
+    if(crackLines.size() > 0 && crackLines[0][0].x == 0.0){
+        [self reset];
+    }
     //Reset
-    /*[[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+    /*[[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
      vit->data().crackDir = ofVec2f();
      vit->data().crackAmount = 0;
      }];
@@ -73,6 +104,58 @@ struct VectorSortP {
         
         if(active > 0){
             
+            //Cracklines
+            vector<ofVec2f> v = [GetTracker() getTrackerCoordinatesCentroids];    
+
+            for(int t=0;t<v.size();t++){
+                for(int i=0;i<crackLines.size();i++){
+                    for(int u=1;u<crackLines[i].size();u++){
+                        ofVec2f A = crackLines[i][u-1];        
+                        ofVec2f B = crackLines[i][u];
+                        
+                        if(v[t].y > A.y && v[t].y < B.y){
+                            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                                ofVec2f p = handleToVec2(vit);
+                                if(p.distance(A) > 0.04 && p.distance(B) > 0.04){
+                                    if(p.y > A.y && p.y < B.y){
+                                        float dist = distanceVecToLine(p, A, B);
+                                        if(dist < ofRandom(0.0, 0.1*pressure/100.0)){
+                                            bool collision = NO;
+                                            for(int ii=0;ii<crackLines.size();ii++){
+                                                for(int uu=2;uu<crackLines[i].size();uu++){
+                                                    ofVec2f AA = crackLines[ii][uu-1];        
+                                                    ofVec2f BB = crackLines[ii][uu];
+                                                    ofVec2f r;
+                                                    if(lineSegmentIntersection(A, p, AA, BB, &r) || lineSegmentIntersection(B, p, AA, BB, &r)){
+                                                        collision = YES;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            if(!collision){
+                                                crackLines[i].push_back(p);
+                                                crackLinesVertices.push_back(vit);
+                                                *stop = YES;
+                                            }
+                                        }
+                                    }
+                                }
+                            }];
+                        }
+                    }
+                }
+            }
+            
+            
+            for(int i=0;i<crackLines.size();i++){
+                sort(crackLines[i].begin(), crackLines[i].end(), VectorSortY());
+            }
+
+            
+            //----------
+            
+            
+            
             [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
                 if(eit->twin()->data().crackAmount > overflowTheshold || eit->data().crackAmount > overflowTheshold){
                     float avg = (eit->twin()->data().crackAmount +  eit->data().crackAmount) * 0.5;
@@ -82,25 +165,46 @@ struct VectorSortP {
             
             
             //Tracker
-            vector<ofVec2f> v = [GetTracker() getTrackerCoordinates];        
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
-                for(int t=0;t<v.size();t++){
-                    if(v[t].distance(handleToVec2(vit)) < 0.02){
-                        Arrangement_2::Halfedge_around_vertex_circulator first, curr;
-                        first = curr = vit->incident_halfedges();
-                        //do {
-                        curr->data().crackAmount += pressure;
-                        curr++;
-                        curr++;
-                        curr++;
-                        curr++;
-                        curr++;
-                        curr->data().crackAmount += pressure;
-                        //} while (++curr != first);
-                        
+            if(PropB(@"onlyCracklines")){
+                for(int i=0;i<crackLinesVertices.size();i++){
+                    Arrangement_2::Vertex_handle vit = crackLinesVertices[i];
+                    for(int t=0;t<v.size();t++){
+                        if(v[t].distance(handleToVec2(vit)) < 0.02){
+                            Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                            first = curr = vit->incident_halfedges();
+                            //do {
+                            curr->data().crackAmount += pressure;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr->data().crackAmount += pressure;
+                            //} while (++curr != first);
+                            
+                        }
                     }
                 }
-            }];
+            } else {
+                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    for(int t=0;t<v.size();t++){
+                        if(v[t].distance(handleToVec2(vit)) < 0.02){
+                            Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                            first = curr = vit->incident_halfedges();
+                            //do {
+                            curr->data().crackAmount += pressure;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr++;
+                            curr->data().crackAmount += pressure;
+                            //} while (++curr != first);
+                            
+                        }
+                    }
+                }];
+            }
             
             
             
@@ -219,7 +323,7 @@ struct VectorSortP {
             
             
             //Calculate vertices
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit) {
+            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                 vit->data().crackAmount = 0;
                 vit->data().crackEdgeCount = 0;
                 
@@ -232,9 +336,12 @@ struct VectorSortP {
                     }
                 } while(++curr != first);
             }];
+            
+            
+                       
         }
         
-
+        
     }
     
 }

@@ -2,7 +2,7 @@
 //  PolyInclude.h
 //  Livingroom
 //
-//  Created by Livingroom on 08/11/11.
+//  Created B.y Livingroom on 08/11/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
@@ -20,10 +20,10 @@
 
 //
 ////#include <CGAL/Projection_traits_xy_3.h>
-//#include <CGAL/Constrained_Delaunay_triangulation_2.h>
-//#include <CGAL/Delaunay_mesher_2.h>
-//#include <CGAL/Delaunay_mesh_face_base_2.h>
-//#include <CGAL/Delaunay_mesh_size_criteria_2.h>
+//#include <CGAL/Constrained_DelaunA.y_triangulation_2.h>
+//#include <CGAL/DelaunA.y_mesher_2.h>
+//#include <CGAL/DelaunA.y_mesh_face_base_2.h>
+//#include <CGAL/DelaunA.y_mesh_size_criteria_2.h>
 
 typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 typedef CGAL::Exact_predicates_inexact_constructions_kernel KernelInexact;
@@ -42,11 +42,11 @@ Dcel;
 typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
 
 //typedef CGAL::Triangulation_vertex_base_2<K> Vb;
-//typedef CGAL::Delaunay_mesh_face_base_2<K> Fb;
+//typedef CGAL::DelaunA.y_mesh_face_base_2<K> Fb;
 //typedef CGAL::Triangulation_data_structure_2<Vb, Fb> Tds;
-//typedef CGAL::Constrained_Delaunay_triangulation_2<K, Tds> CDT;
-//typedef CGAL::Delaunay_mesh_size_criteria_2<CDT> Criteria;
-//typedef CGAL::Delaunay_mesher_2<CDT, Criteria> Mesher;
+//typedef CGAL::Constrained_DelaunA.y_triangulation_2<K, Tds> CDT;
+//typedef CGAL::DelaunA.y_mesh_size_criteria_2<CDT> Criteria;
+//typedef CGAL::DelaunA.y_mesher_2<CDT, Criteria> Mesher;
 //
 //typedef CDT::Edge_iterator  Edge_iterator;
 //
@@ -242,12 +242,72 @@ static bool vecInCCB(Arrangement_2::Ccb_halfedge_const_circulator circ, ofVec2f 
 
 // ---------
 
+
+
+static double distanceVecToLine(ofVec2f P, ofVec2f A, ofVec2f B)
+{
+    double normalLength = sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
+    return fabs((P.x - A.x) * (B.y - A.y) - (P.y - A.y) * (B.x - A.x)) / normalLength;
+}
+
+
+
+
 static double distanceVecToHalfedge(ofVec2f P, Arrangement_2::Halfedge_const_handle hit)
 {
     ofVec2f A = handleToVec2(hit->source());
     ofVec2f B = handleToVec2(hit->target());
-    double normalLength = sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
-    return fabs((P.x - A.x) * (B.y - A.y) - (P.y - A.y) * (B.x - A.x)) / normalLength;
+    return distanceVecToLine(P,A,B);
+}
+
+static bool lineSegmentIntersection(
+                             ofVec2f A,
+                             ofVec2f B,
+                             ofVec2f C,
+                             ofVec2f D,
+                             ofVec2f * R) {
+    
+    double  distAB, theCos, theSin, newX, ABpos ;
+    
+    //  Fail if either line segment is zero-length.
+    if ((A.x==B.x && A.y==B.y) || (C.x==D.x && C.y==D.y)) return NO;
+    
+    //  Fail if the segments share an end-point.
+    if ((A.x==C.x && A.y==C.y) || (B.x==C.x && B.y==C.y)
+        ||  (A.x==D.x && A.y==D.y) || (B.x==D.x && B.y==D.y)) {
+        return NO; }
+    
+    //  (1) Translate the system so that point A is on the origin.
+    B.x-=A.x; B.y-=A.y;
+    C.x-=A.x; C.y-=A.y;
+    D.x-=A.x; D.y-=A.y;
+    
+    //  Discover the length of segment A-B.
+    distAB=sqrt(B.x*B.x+B.y*B.y);
+    
+    //  (2) Rotate the system so that point B is on the positive X A.xis.
+    theCos=B.x/distAB;
+    theSin=B.y/distAB;
+    newX=C.x*theCos+C.y*theSin;
+    C.y  =C.y*theCos-C.x*theSin; C.x=newX;
+    newX=D.x*theCos+D.y*theSin;
+    D.y  =D.y*theCos-D.x*theSin; D.x=newX;
+    
+    //  Fail if segment C-D doesn't cross line A-B.
+    if ((C.y<0. && D.y<0.) || (C.y>=0. && D.y>=0.)) return NO;
+    
+    //  (3) Discover the position of the intersection point along line A-B.
+    ABpos=D.x+(C.x-D.x)*D.y/(D.y-C.y);
+    
+    //  Fail if segment C-D crosses line A-B outside of segment A-B.
+    if (ABpos<0. || ABpos>distAB) return NO;
+    
+    //  (4) Apply the discovered position to line A-B in the original coordinate system.
+    R->x=A.x+ABpos*theCos;
+    R->y=A.y+ABpos*theSin;
+    
+    //  Success.
+    return YES; 
 }
 
 

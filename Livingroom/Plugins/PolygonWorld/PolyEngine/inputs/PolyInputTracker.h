@@ -6,6 +6,7 @@
     ofVec2f mouse;
 }
 
-- (vector<ofVec2f>) getTrackerCoordinates;
+- (vector< vector<ofVec2f> >) getTrackerCoordinates;
+- (vector<ofVec2f>) getTrackerCoordinatesCentroids;
 
 @end

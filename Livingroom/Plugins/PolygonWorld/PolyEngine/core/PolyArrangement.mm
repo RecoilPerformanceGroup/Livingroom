@@ -441,11 +441,16 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
 
 #pragma mark Enumerators
 
--(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit))func {
+-(void) enumerateVertices:(void(^)(Arrangement_2::Vertex_iterator vit, BOOL * stop))func {
     Arrangement_2::Vertex_iterator vit;
     vit = arr->vertices_begin();        
+    BOOL stop = NO;
     for ( ; vit !=arr->vertices_end(); ++vit) {
-        func(vit);
+        func(vit, &stop);
+        if(stop){
+            cout<<"Stop"<<endl;
+            break;
+        }
     }
 }
 
