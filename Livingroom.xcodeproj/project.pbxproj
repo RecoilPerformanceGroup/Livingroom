@@ -41,6 +41,11 @@
 		3D9715CE148D0A2B009A8068 /* ofxCocoaPlugins.framework in Copy Files (Framework) */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
 		3D9715D1148D180D009A8068 /* PolyModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D9715D0148D180D009A8068 /* PolyModule.mm */; };
 		3D973A6014BEE93900FE3CB5 /* Perspective.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D973A5F14BEE93900FE3CB5 /* Perspective.xib */; };
+		3D97F4C714D2F49400981D15 /* particles.fs in Sources */ = {isa = PBXBuildFile; fileRef = 3D97F4C514D2F49400981D15 /* particles.fs */; };
+		3D97F4C814D2F49400981D15 /* particles.vs in Sources */ = {isa = PBXBuildFile; fileRef = 3D97F4C614D2F49400981D15 /* particles.vs */; };
+		3D97F4C914D2F50A00981D15 /* particles.fs in Resources */ = {isa = PBXBuildFile; fileRef = 3D97F4C514D2F49400981D15 /* particles.fs */; };
+		3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */ = {isa = PBXBuildFile; fileRef = 3D97F4C614D2F49400981D15 /* particles.vs */; };
+		3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D97F4D814D2F9B300981D15 /* ofxShader.cpp */; };
 		3D9D181B14BDF03D00DD2093 /* 6943.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181A14BDF03D00DD2093 /* 6943.jpg */; };
 		3D9D181E14BDF11A00DD2093 /* ash50x50.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */; };
 		3D9D182014BDF53900DD2093 /* ash8x8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181F14BDF53900DD2093 /* ash8x8.jpg */; };
@@ -142,6 +147,10 @@
 		3D9715CF148D180D009A8068 /* PolyModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyModule.h; sourceTree = "<group>"; };
 		3D9715D0148D180D009A8068 /* PolyModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyModule.mm; sourceTree = "<group>"; };
 		3D973A5F14BEE93900FE3CB5 /* Perspective.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Perspective.xib; sourceTree = "<group>"; };
+		3D97F4C514D2F49400981D15 /* particles.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = particles.fs; sourceTree = "<group>"; };
+		3D97F4C614D2F49400981D15 /* particles.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = particles.vs; sourceTree = "<group>"; };
+		3D97F4D814D2F9B300981D15 /* ofxShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxShader.cpp; sourceTree = "<group>"; };
+		3D97F4D914D2F9B300981D15 /* ofxShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxShader.h; sourceTree = "<group>"; };
 		3D9D181A14BDF03D00DD2093 /* 6943.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6943.jpg; sourceTree = "<group>"; };
 		3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash50x50.jpg; sourceTree = "<group>"; };
 		3D9D181F14BDF53900DD2093 /* ash8x8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash8x8.jpg; sourceTree = "<group>"; };
@@ -419,6 +428,8 @@
 		3D9D181914BDF03D00DD2093 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D97F4C514D2F49400981D15 /* particles.fs */,
+				3D97F4C614D2F49400981D15 /* particles.vs */,
 				3D67E44D14C5A06D00CB1696 /* Gradient.png */,
 				3D9D181F14BDF53900DD2093 /* ash8x8.jpg */,
 				3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */,
@@ -448,6 +459,8 @@
 		3DE3C34114B3511E00A7E9E0 /* AshParticles */ = {
 			isa = PBXGroup;
 			children = (
+				3D97F4D814D2F9B300981D15 /* ofxShader.cpp */,
+				3D97F4D914D2F9B300981D15 /* ofxShader.h */,
 				3DE3C34D14B35A6F00A7E9E0 /* Body.h */,
 				3DE3C34E14B35A6F00A7E9E0 /* Particle.h */,
 				3DE3C34F14B35A6F00A7E9E0 /* ParticleSystem.cpp */,
@@ -599,6 +612,8 @@
 				3D67E44E14C5A06D00CB1696 /* Gradient.png in Resources */,
 				3DF0F51C14C6D42D00B1EDED /* Prolog.xib in Resources */,
 				3D3FAB5E14CEAA50006B9B36 /* Mask.xib in Resources */,
+				3D97F4C914D2F50A00981D15 /* particles.fs in Resources */,
+				3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,6 +659,9 @@
 				3D33623314BF2129007C8782 /* PolyInputRandomGenerator.mm in Sources */,
 				3DF0F51B14C6D42D00B1EDED /* Prolog.mm in Sources */,
 				3D3FAB5D14CEAA50006B9B36 /* Mask.mm in Sources */,
+				3D97F4C714D2F49400981D15 /* particles.fs in Sources */,
+				3D97F4C814D2F49400981D15 /* particles.vs in Sources */,
+				3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

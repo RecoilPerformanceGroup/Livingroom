@@ -31,20 +31,33 @@
 
 
 -(void)setup{
-    kParticles = 30;
+    //    shader = new ofxShader();
+    //    
+    //    NSBundle *framework=[NSBundle bundleForClass:[self class]];
+    //
+    //    NSString * vert = [framework pathForResource:@"particles" ofType:@"vs"];
+    //    NSString * frag = [framework pathForResource:@"particles" ofType:@"fs"];
+    //    ashTexture = new ofImage();
+    //    shader->loadShader([vert cStringUsingEncoding:NSUTF8StringEncoding], [frag cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+    
+    kParticles = 2;
 	float padding = 0.1;
 	float maxVelocity = .05;
-	for(int i = 0; i < kParticles * 1024; i++) {
-		float x = ofRandom(padding, 1.0 - padding);
-		float y = ofRandom(padding, 1.0 - padding);
-		float xv = 0;//ofRandom(-maxVelocity, maxVelocity);
-		float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
-		Particle particle(x, y, xv, yv);
-        particle.size = ofRandom(0.5,1);
-		particleSystem.add(particle);
-	}
     
-	particleSystem.setTimeStep(1);
+    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+        for(int i = 0; i < kParticles * 1024; i++) {
+            float x = ofRandom(padding, 1.0 - padding);
+            float y = ofRandom(padding, 1.0 - padding);
+            float xv = 0;//ofRandom(-maxVelocity, maxVelocity);
+            float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
+            Particle particle(x, y, xv, yv);
+            particle.size = ofRandom(0.5,1);
+            particleSystem[u].add(particle);
+        }
+        particleSystem[u].setTimeStep(1);
+        
+    }
     
     
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
@@ -63,9 +76,6 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
-    particleSystem.setupForces();
-    
-	// apply per-particle forces
     
     float internalRepulsionForce = PropF(@"internalRepulsionForce");
     float internalRepulsionForceRadius = PropF(@"internalRepulsionForceRadius");
@@ -73,30 +83,46 @@
     float trackerRepulsionForce = PropF(@"trackerRepulsionForce");
     float trackerRepulsionForceRadius = PropF(@"trackerRepulsionForceRadius");    
     
-	for(int i = 0; i < particleSystem.size(); i++) {
-		Particle& cur = particleSystem[i];
-		// global force on other particles
-        if(internalRepulsionForce > 0){
-            particleSystem.addRepulsionForce(cur, 0.01*internalRepulsionForceRadius, 0.1*internalRepulsionForce);
-        }
-        
-		// forces on this particle
-		cur.bounceOffWalls(0, 0, 1,1);
-        
-        if(globalDampingForce > 0)
-            cur.addDampingForce(0.5*globalDampingForce);
-	}
-	// single global forces
-	//particleSystem.addAttractionForce(0.5, 0.5, 0.5, 0.001);
     
-    int n = [GetPlugin(Tracker) numberTrackers];
-    for(int i=0; i<n;i++){
-        ofVec2f centroid = [GetPlugin(Tracker) trackerCentroid:i];
-        particleSystem.addRepulsionForce(centroid.x, centroid.y, 0.1*trackerRepulsionForceRadius, 0.1*trackerRepulsionForce);
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
+    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+        [queue addOperationWithBlock:^{
+            
+            particleSystem[u].setupForces();
+            
+            // apply per-particle forces
+            
+            for(int i = 0; i < particleSystem[u].size(); i++) {
+                Particle& cur = particleSystem[u][i];
+                // global force on other particles
+                if(internalRepulsionForce > 0){
+                    particleSystem[u].addRepulsionForce(cur, 0.01*internalRepulsionForceRadius, 0.1*internalRepulsionForce);
+                }
+                
+                // forces on this particle
+                cur.bounceOffWalls(0, 0, 1,1);
+                
+                if(globalDampingForce > 0)
+                    cur.addDampingForce(0.5*globalDampingForce);
+            }
+            // single global forces
+            //particleSystem.addAttractionForce(0.5, 0.5, 0.5, 0.001);
+            
+            int n = [GetPlugin(Tracker) numberTrackers];
+            for(int i=0; i<n;i++){
+                ofVec2f centroid = [GetPlugin(Tracker) trackerCentroid:i];
+                particleSystem[u].addRepulsionForce(centroid.x, centroid.y, 0.1*trackerRepulsionForceRadius, 0.1*trackerRepulsionForce);
+            }
+            
+            particleSystem[u].update();
+        }];
     }
     
     
-	particleSystem.update();
+    
+    [queue waitUntilAllOperationsAreFinished];
+    
 }
 
 //
@@ -104,7 +130,6 @@
 //
 
 -(void)draw:(NSDictionary *)drawingInformation{
-    int n = particleSystem.size();
     
     ApplySurface(@"Floor"); {
         
@@ -140,27 +165,40 @@
         int texW = 8;
         int texH = 8;
         
-        ashTexture->getTextureReference().bind();
-        glBegin(GL_QUADS);
+        /*  ashTexture->getTextureReference().bind();
+         glBegin(GL_QUADS);
+         
+         for(int i = 0; i < n; i++){
+         glPushMatrix();
+         ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
+         float _size = size*particleSystem[i].size*0.01;
+         glTexCoord2f (0.0, 0.0);
+         glVertex2f((p-dirs[0]*_size).x, (p-dirs[0]*_size).y);
+         
+         glTexCoord2f (texW, 0.0);
+         glVertex2f((p-dirs[1]*_size).x, (p-dirs[1]*_size).y);
+         
+         glTexCoord2f (texW, texH);
+         glVertex2f((p-dirs[2]*_size).x, (p-dirs[2]*_size).y);
+         
+         glTexCoord2f (0.0, texH);
+         glVertex2f((p-dirs[3]*_size).x, (p-dirs[3]*_size).y);
+         }
+         glEnd();
+         ashTexture->getTextureReference().unbind();*/
         
-        for(int i = 0; i < n; i++){
-            glPushMatrix();
-            ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
-            float _size = size*particleSystem[i].size*0.01;
-            glTexCoord2f (0.0, 0.0);
-            glVertex2f((p-dirs[0]*_size).x, (p-dirs[0]*_size).y);
+        glBegin(GL_POINTS);
+        
+        for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+            int n = particleSystem[u].size();
             
-            glTexCoord2f (texW, 0.0);
-            glVertex2f((p-dirs[1]*_size).x, (p-dirs[1]*_size).y);
-            
-            glTexCoord2f (texW, texH);
-            glVertex2f((p-dirs[2]*_size).x, (p-dirs[2]*_size).y);
-            
-            glTexCoord2f (0.0, texH);
-            glVertex2f((p-dirs[3]*_size).x, (p-dirs[3]*_size).y);
+            for(int i = 0; i < n; i++){
+                ofVec2f p = ofVec2f(particleSystem[u][i].x, particleSystem[u][i].y); 
+                
+                glVertex2f((p).x, (p).y);
+            }
         }
         glEnd();
-        ashTexture->getTextureReference().unbind();
         ofEnableAlphaBlending();
     } PopSurface();
     
