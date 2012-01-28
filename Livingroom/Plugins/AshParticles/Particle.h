@@ -9,12 +9,24 @@ public:
 	float xf, yf;
     float size;
     
+    float alpha;
+    bool dying;
+    bool livingUp;
+    
+    bool dead;
+    bool alive;
+    
     Particle(){};
     
 	Particle(float _x, float _y,
 		float _xv = 0, float _yv = 0) :
 		Body(_x, _y),
 		xv(_xv), yv(_yv) {
+            alpha = 0.0;
+            dying = false;
+            livingUp = false;
+            dead = true;
+            alive = false;
 	}
 	void updatePosition(float timeStep) {
 		// f = ma, m = 1, f = a, v = int(a)
@@ -22,6 +34,27 @@ public:
 		yv += yf;
 		x += xv * timeStep;
 		y += yv * timeStep;
+        
+        if(dying && !dead){
+            alpha -= 0.01;
+            if(alpha < 0){
+                alpha = 0;
+                dead = true;
+                dying = false;
+                alive = false;
+            }
+        }
+        
+        if(livingUp && !alive){
+            alpha += 0.01;
+            if(alpha > 1){
+                alpha = 1;
+                alive = true;
+                livingUp = false;
+                dead = false;
+                //cout<<"Alive"<<endl;
+            }
+        }
 	}
 	void resetForce() {
 		xf = 0;
