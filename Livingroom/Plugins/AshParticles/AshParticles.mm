@@ -85,8 +85,8 @@
     
     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
         [queue addOperationWithBlock:^{
+            Particle * particle =  &particles[u][0];
             for(int i = 0; i < NUM_PARTICLES; i++) {
-                Particle * particle =  &particles[u][i];
                 particle->resetForce();
                 
                 for(int t=trackers.size()-1;t>=0;t--){
@@ -113,6 +113,8 @@
                 particle->bounceOffWalls(0, 0, 1,1);
                 particle->addDampingForce(0.5*globalDampingForce);
                 particle->updatePosition(1.0);
+                
+                particle++;
             }
         }];
     }
@@ -188,8 +190,10 @@
         glBegin(GL_POINTS);
         
         for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+            Particle * particle =  &particles[u][0];
             for(int i = 0; i < NUM_PARTICLES; i++) {
-                particles[u][i].draw();
+                particle->draw();
+                particle++;
             }
         }
         glEnd();

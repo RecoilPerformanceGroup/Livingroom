@@ -15,6 +15,8 @@
     ofImage * ashTexture;
     
     ofxShader * shader;
+    
+//    NSThread * threads[NUM_PARTICLE_SYSTEMS]
 
 }
 
