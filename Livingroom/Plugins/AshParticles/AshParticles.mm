@@ -41,22 +41,18 @@
     //    shader->loadShader([vert cStringUsingEncoding:NSUTF8StringEncoding], [frag cStringUsingEncoding:NSUTF8StringEncoding]);
     
     
-    kParticles = 2;
-	float padding = 0.1;
+	float padding = 0.0;
 	float maxVelocity = .05;
     
     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-        for(int i = 0; i < kParticles * 1024; i++) {
+        for(int i = 0; i < NUM_PARTICLES; i++) {
             float x = ofRandom(padding, 1.0 - padding);
             float y = ofRandom(padding, 1.0 - padding);
             float xv = 0;//ofRandom(-maxVelocity, maxVelocity);
             float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
-            Particle particle(x, y, xv, yv);
-            particle.size = ofRandom(0.5,1);
-            particleSystem[u].add(particle);
-        }
-        particleSystem[u].setTimeStep(1);
-        
+            particles[u][i] = Particle(x, y, xv, yv);
+            particles[u][i].size = ofRandom(0.5,1);
+        }        
     }
     
     
@@ -83,39 +79,41 @@
     float trackerRepulsionForce = PropF(@"trackerRepulsionForce");
     float trackerRepulsionForceRadius = PropF(@"trackerRepulsionForceRadius");    
     
+    vector <ofVec2f> trackers = [GetPlugin(Tracker) trackerCentroidVector];
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
         [queue addOperationWithBlock:^{
-            
-            particleSystem[u].setupForces();
-            
-            // apply per-particle forces
-            
-            for(int i = 0; i < particleSystem[u].size(); i++) {
-                Particle& cur = particleSystem[u][i];
-                // global force on other particles
-                if(internalRepulsionForce > 0){
-                    particleSystem[u].addRepulsionForce(cur, 0.01*internalRepulsionForceRadius, 0.1*internalRepulsionForce);
+            for(int i = 0; i < NUM_PARTICLES; i++) {
+                Particle * particle =  &particles[u][i];
+                particle->resetForce();
+                
+                for(int t=trackers.size()-1;t>=0;t--){
+                    const ofVec2f * tracker = &trackers[t];
+                    if(tracker->x > particle->x - trackerRepulsionForceRadius 
+                       && tracker->x < particle->x + trackerRepulsionForceRadius 
+                       &&tracker->y > particle->y - trackerRepulsionForceRadius 
+                       && tracker->y < particle->y + trackerRepulsionForceRadius){
+                        
+                        ofVec2f p = ofVec2f(particle->x, particle->y);
+                        float dist = p.distance(*tracker);
+                        if(dist < trackerRepulsionForceRadius){
+                            ofVec2f f = (p - *tracker) / dist;
+                            f *= 1.0-(dist/trackerRepulsionForceRadius);
+                            f *= trackerRepulsionForce;
+                            particle->xf += f.x;
+                            particle->yf += f.y;
+                        }
+                    }
+                    
+                    
                 }
                 
-                // forces on this particle
-                cur.bounceOffWalls(0, 0, 1,1);
-                
-                if(globalDampingForce > 0)
-                    cur.addDampingForce(0.5*globalDampingForce);
+                particle->bounceOffWalls(0, 0, 1,1);
+                particle->addDampingForce(0.5*globalDampingForce);
+                particle->updatePosition(1.0);
             }
-            // single global forces
-            //particleSystem.addAttractionForce(0.5, 0.5, 0.5, 0.001);
-            
-            int n = [GetPlugin(Tracker) numberTrackers];
-            for(int i=0; i<n;i++){
-                ofVec2f centroid = [GetPlugin(Tracker) trackerCentroid:i];
-                particleSystem[u].addRepulsionForce(centroid.x, centroid.y, 0.1*trackerRepulsionForceRadius, 0.1*trackerRepulsionForce);
-            }
-            
-            particleSystem[u].update();
         }];
     }
     
@@ -190,12 +188,8 @@
         glBegin(GL_POINTS);
         
         for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-            int n = particleSystem[u].size();
-            
-            for(int i = 0; i < n; i++){
-                ofVec2f p = ofVec2f(particleSystem[u][i].x, particleSystem[u][i].y); 
-                
-                glVertex2f((p).x, (p).y);
+            for(int i = 0; i < NUM_PARTICLES; i++) {
+                particles[u][i].draw();
             }
         }
         glEnd();
