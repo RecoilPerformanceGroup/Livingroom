@@ -39,16 +39,10 @@
 
 
 -(void)setup{
-    //    shader = new ofxShader();
-    //    
-    //    NSBundle *framework=[NSBundle bundleForClass:[self class]];
-    //
-    //    NSString * vert = [framework pathForResource:@"particles" ofType:@"vs"];
-    //    NSString * frag = [framework pathForResource:@"particles" ofType:@"fs"];
-    //    ashTexture = new ofImage();
-    //    shader->loadShader([vert cStringUsingEncoding:NSUTF8StringEncoding], [frag cStringUsingEncoding:NSUTF8StringEncoding]);
     
     
+    NSBundle *framework=[NSBundle bundleForClass:[self class]];
+
 	float padding = 0.0;
 	float maxVelocity = .05;
     
@@ -60,17 +54,35 @@
             float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
             particles[u][i] = Particle(x, y, xv, yv);
             particles[u][i].size = ofRandom(0.5,1);
+            pos[NUM_PARTICLES*u+i] = ofPoint(x,y,0);
+            color[NUM_PARTICLES*u+i] = ofVec4f(1.0,1.0,1.0,1.0);
         }        
     }
     
     
-    NSBundle *framework=[NSBundle bundleForClass:[self class]];
+    
+    //   NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"ash8x8" ofType:@"jpg"];
     ashTexture = new ofImage();
     bool imageLoaded = ashTexture->loadImage([path cStringUsingEncoding:NSUTF8StringEncoding]);
     if(!imageLoaded){
         NSLog(@"Ash image not found in cameraCalibration!!");
     }
+    
+    
+    
+    glewInit();
+    glGenBuffersARB(2, &particleVBO[0]);
+    
+    // color
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec4f), &color[0].x, GL_STREAM_DRAW_ARB);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+    // vertices
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec3f), &pos[0].x, GL_STREAM_DRAW_ARB);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
 }
 
@@ -87,7 +99,7 @@
     CachePropF(trackerMagneticForce);
     CachePropF(trackerMagneticForceRadius);    
     CachePropF(trackerMagneticForceRadiusBig);    
-    
+    CachePropF(alpha);
     
     //--------------------------------------------
     
@@ -250,6 +262,11 @@
                 particle->addDampingForce(0.5*globalDampingForce);
                 particle->updatePosition(1.0);
                 
+                pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
+                
+                ;
+                
+                
                 particle++;
             }
         }];
@@ -258,6 +275,43 @@
     
     
     [queue waitUntilAllOperationsAreFinished];
+    
+    
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
+    int first = -1;
+    int num = 0;
+    
+    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+        Particle * particle =  &particles[u][0];
+        for(int i = 0; i < NUM_PARTICLES; i++) {
+            int j = NUM_PARTICLES*u+i;
+            if(color[j] != ofVec4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0)){
+                color[j] = ofVec4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0);
+                
+                if(first == -1){
+                    first = j;
+                    num = 0;
+                }
+                num++;
+                
+            }
+            else if(first != -1){
+                glBufferSubData(GL_ARRAY_BUFFER, first, (num)*sizeof(ofVec4f), &color[first].x);
+                first = -1;
+            }
+        }
+    }
+    
+    if(first != -1){
+        glBufferSubData(GL_ARRAY_BUFFER, first, (num)*sizeof(ofVec4f), &color[first].x);
+    }
+    
+    glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofPoint), &pos[0].x);
+    glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    
     
 }
 
@@ -273,79 +327,27 @@
         ofFill();
         ofRect(0,0,1,1);
         
-        //glEnable(GL_POINT_SIZE);
-        //glPointSize(2);
-        ofSetColor(255,255,255);
         glEnable (GL_BLEND);
-        //    glBlendFunc (GL_ONE, GL_ONE);
         glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
         
-        //    float size = PropF(@"renderSize");
-        //    for(int i = 0; i < n; i++){
-        //        glPushMatrix();
-        //        ofVec2f p = ofVec2f(particleSystem[i].x, particleSystem[i].y); 
-        //        glTranslated(p.x,p.y,0);
-        //        glRotated(i*2.12541, 0, 0, 1);        
-        ////        ashTexture->draw(-size*0.5, -size*0.5, size*particleSystem[i].size,size*particleSystem[i].size);
-        //        glPopMatrix();
-        //    }
         
-        float size = PropF(@"renderSize");
-        /*
-         
-         ofVec2f dirs[4];
-         dirs[0] = ofVec2f(-1,-1);
-         dirs[1] = ofVec2f(1,-1);
-         dirs[2] = ofVec2f(1,1);
-         dirs[3] = ofVec2f(-1,1);
-         
-         int texW = 8;
-         int texH = 8;
-         
-         ashTexture->getTextureReference().bind();
-         glBegin(GL_QUADS);
-         
-         for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-         Particle * particle =  &particles[u][0];
-         for(int i = 0; i < NUM_PARTICLES; i++) {
-         ofVec2f p = ofVec2f(particle->x, particle->y); 
-         float _size = size*particle->size*0.01;
-         glTexCoord2f (0.0, 0.0);
-         glVertex2f((p-dirs[0]*_size).x, (p-dirs[0]*_size).y);
-         
-         glTexCoord2f (texW, 0.0);
-         glVertex2f((p-dirs[1]*_size).x, (p-dirs[1]*_size).y);
-         
-         glTexCoord2f (texW, texH);
-         glVertex2f((p-dirs[2]*_size).x, (p-dirs[2]*_size).y);
-         
-         glTexCoord2f (0.0, texH);
-         glVertex2f((p-dirs[3]*_size).x, (p-dirs[3]*_size).y);
-         
-         particle++;
-         
-         }
-         
-         }
-         glEnd();
-         ashTexture->getTextureReference().unbind();*/
+        //Points
         
-        CachePropF(alpha);
         glPointSize(PropF(@"renderSize"));
-        glBegin(GL_POINTS);
         
-        for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-            Particle * particle =  &particles[u][0];
-            for(int i = 0; i < NUM_PARTICLES; i++) {
-                if(particle->alpha > 0){
-                    glColor4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0);
-                    particle->draw();
-                }
-                particle++;
-            }
-        }
-        glEnd();
-        ofEnableAlphaBlending();
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
+        glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), 0);
+        
+        glEnableClientState(GL_COLOR_ARRAY);
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
+        glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
+        glDrawArrays(GL_POINTS, 0, NUMP);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+        
     } PopSurfaceForProjector();
     
 }
