@@ -1,6 +1,7 @@
 #import "AshParticles.h"
 #import "Tracker.h"
 #import <ofxCocoaPlugins/Keystoner.h>
+#import <ofxCocoaPlugins/CustomGraphics.h>
 
 @implementation AshParticles
 
@@ -30,6 +31,16 @@
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"renderSize"];
     
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
+    
+    
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"wind"];
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"windTurb"];
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"windSpeed"];
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"windForce"];
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"windForceRadius"];
+    
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"reset"];
+    
     
 }
 
@@ -65,6 +76,9 @@
     diff.allocate(GRID_SIZE, GRID_SIZE);
     diff.set(0);
     
+    timeDiff.allocate(GRID_SIZE, GRID_SIZE);
+    timeDiff.set(0);
+    
     fade.allocate(GRID_SIZE, GRID_SIZE);
     fade.set(10);
     
@@ -95,6 +109,10 @@
     glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec3f), &pos[0].x, GL_STREAM_DRAW_ARB);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
+    
+    
+    perlinX = new Perlin(4, 8, 1, 0);
+    perlinY = new Perlin(4, 8, 1, 1);
 }
 
 //
@@ -111,23 +129,55 @@
     CachePropF(trackerMagneticForceRadius);    
     CachePropF(trackerMagneticForceRadiusBig);    
     CachePropF(alpha);
+    CachePropF(windForce);    
+    CachePropF(windForceRadius);    
+    
+    //---------------- RESET ------------------
+    
+    if(PropB(@"reset")){
+        [Prop(@"reset") setBoolValue:NO];
+        
+        for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+            for(int i = 0; i < NUM_PARTICLES; i++) {
+                float x = ofRandom(0, 1.0);
+                float y = ofRandom(0, 1.0);
+                particles[u][i].x = x;
+                particles[u][i].y = y;
+                particles[u][i].xv = 0;
+                particles[u][i].yv = 0;
+                particles[u][i].dead = true;
+                particles[u][i].alive = false;
+                particles[u][i].livingUp = false;
+                particles[u][i].dying = false;
+                particles[u][i].alpha = 0;
+            }
+        }
+    }
+    
     
     
     //---------------- TRACKER ------------------
     
     ofxCvGrayscaleImage tracker = [GetPlugin(Tracker) trackerImageWithResolution:GRID_SIZE];
-  //  grid += tracker;
+    //  grid += tracker;
+    
+    /*  diff = tracker;
+     diff -= grid;
+     diff.threshold(254);*/
     
     diff = tracker;
-    diff -= grid;
-    diff.threshold(254);
-  //  diff.absDiff(tracker, grid);
+    diff -= timeDiff;
+    
+    //  diff.absDiff(tracker, grid);
     
     grid -= fade;
     grid += diff;
     
     
     contourFinder.findContours(grid, 0, GRID_SIZE*GRID_SIZE, 10, NO);
+    
+    timeDiff = tracker;
+    
     /*    cvDistTransform(tracker.getCvImage(), distanceImage.getCvImage());
      distanceImage.flagImageChanged();*/
     
@@ -180,7 +230,7 @@
     }
     
     if(PropB(@"die")){
-        if(numberParticles < 1-(alive)){
+        if(numberParticles < (alive)){
             int diffNum = (alive)*NUMP- (numberParticles)*NUMP;
             for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
                 Particle * particle =  &particles[u][0];
@@ -227,7 +277,7 @@
                                 particle->x = p.x;
                                 particle->y = p.y;
                                 particle->livingUp = true;
-
+                                
                                 diffNum--;
                                 if(diffNum == 0) break;
                             }
@@ -247,101 +297,128 @@
         [queue addOperationWithBlock:^{
             Particle * particle =  &particles[u][0];
             for(int i = 0; i < NUM_PARTICLES; i++) {
-                particle->resetForce();
-                
-                //----------- Inside blob -----------
-                
-                int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
-                
-                
-                if(gridIndex >= 0 && gridIndex < GRID_SIZE*GRID_SIZE && grid.getPixels()[gridIndex] > 0){
-                    
-                    
-                    float bestDist = -1;
-                    ofVec2f tracker;
+                if(particle->alive || particle->livingUp){
+                    particle->resetForce();
                     ofVec2f p = ofVec2f(particle->x, particle->y);
                     
+                    //----------- Inside blob -----------
+                    
+                    int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
                     
                     
-                    for(int ii=0;ii<contourFinder.blobs.size();ii++){
-                        for(int uu=0;uu<contourFinder.blobs[ii].nPts;uu+=3){                            
-                            float _dist = contourFinder.blobs[ii].pts[uu].distanceSquared(p);
-                            if(bestDist == -1 || bestDist > _dist){
-                                bestDist = _dist;
-                                tracker = contourFinder.blobs[ii].pts[uu];
+                    if(gridIndex >= 0 && gridIndex < GRID_SIZE*GRID_SIZE && grid.getPixels()[gridIndex] > 0){
+                        
+                        if(contourFinder.blobs.size() > 0){
+                            float bestDist = -1;
+                            ofVec2f tracker;
+                            
+                            
+                            ofVec2f pScaled = p * ofVec2f(GRID_SIZE,GRID_SIZE);
+                            for(int ii=0;ii<contourFinder.blobs.size();ii++){
+                                for(int uu=0;uu<contourFinder.blobs[ii].nPts;uu+=3){                            
+                                    float _dist = contourFinder.blobs[ii].pts[uu].distanceSquared(pScaled);
+                                    if(bestDist == -1 || bestDist > _dist){
+                                        bestDist = _dist;
+                                        tracker = contourFinder.blobs[ii].pts[uu];
+                                    }
+                                }
+                            }
+                            
+                            tracker /= ofVec2f(GRID_SIZE,GRID_SIZE);
+                            
+                            if(trackerRepulsionForce){
+                                ofVec2f f = (tracker-p);
+                                f *= trackerRepulsionForce;
+                                particle->xf += f.x;
+                                particle->yf += f.y;
+                            }
+                        }
+                        /* if(trackerMagneticForce){
+                         
+                         float dist = p.distance(tracker);
+                         if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
+                         ofVec2f f = (p - tracker) / dist;
+                         f *= 1.0-(dist/trackerMagneticForceRadiusBig);
+                         f *= trackerMagneticForce;
+                         particle->xf -= f.x;
+                         particle->yf -= f.y;
+                         
+                         }                         
+                         }  */                 
+                    }
+                    
+                    
+                    //----------- Wind -----------
+                    int numWinds = wind.size();
+                    if(windForce > 0){
+                        for(int w=0;w<numWinds;w++){
+                            ofVec2f * wP = &wind[w].p;
+                            if(wP->x > particle->x - windForceRadius 
+                               && wP->x < particle->x + windForceRadius 
+                               && wP->y > particle->y - windForceRadius 
+                               && wP->y < particle->y + windForceRadius){
+                                
+                                float dist = wP->distance(p);
+                                if(dist < windForceRadius){
+                                    
+                                    ofVec2f f = wind[w].v;
+                                    f *= 1.0-(dist/windForceRadius);
+                                    f *= windForce*0.1;
+                                    particle->xf += f.x;
+                                    particle->yf += f.y;
+                                    
+                                }
                             }
                         }
                     }
                     
+                    /*for(int t=trackers.size()-1;t>=0;t--){
+                     const ofVec2f * tracker = &trackers[t];
+                     
+                     if(trackerRepulsionForce){
+                     
+                     if(tracker->x > particle->x - trackerRepulsionForceRadius 
+                     && tracker->x < particle->x + trackerRepulsionForceRadius 
+                     &&tracker->y > particle->y - trackerRepulsionForceRadius 
+                     && tracker->y < particle->y + trackerRepulsionForceRadius){
+                     
+                     ofVec2f p = ofVec2f(particle->x, particle->y);
+                     float dist = p.distance(*tracker);
+                     if(dist < trackerRepulsionForceRadius){
+                     ofVec2f f = (p - *tracker) / dist;
+                     f *= 1.0-(dist/trackerRepulsionForceRadius);
+                     f *= trackerRepulsionForce;
+                     particle->xf += f.x;
+                     particle->yf += f.y;
+                     }
+                     } 
+                     }
+                     
+                     if(trackerMagneticForce){
+                     if(tracker->x > particle->x - trackerMagneticForceRadiusBig 
+                     && tracker->x < particle->x + trackerMagneticForceRadiusBig 
+                     &&tracker->y > particle->y - trackerMagneticForceRadiusBig 
+                     && tracker->y < particle->y + trackerMagneticForceRadiusBig){
+                     
+                     ofVec2f p = ofVec2f(particle->x, particle->y);
+                     float dist = p.distance(*tracker);
+                     if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
+                     ofVec2f f = (p - *tracker) / dist;
+                     f *= 1.0-(dist/trackerMagneticForceRadiusBig);
+                     f *= trackerMagneticForce;
+                     particle->xf -= f.x;
+                     particle->yf -= f.y;
+                     }                        
+                     }                         
+                     }                   
+                     }*/
                     
-                    if(trackerRepulsionForce){
-                        ofVec2f f = (tracker-p);
-                        f *= trackerRepulsionForce;
-                        particle->xf += f.x;
-                        particle->yf += f.y;
-                    }
+                    particle->bounceOffWalls(0, 0, 1,1);
+                    particle->addDampingForce(0.5*globalDampingForce);
+                    particle->updatePosition(1.0);
                     
-                   /* if(trackerMagneticForce){
-                        
-                        float dist = p.distance(tracker);
-                        if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
-                            ofVec2f f = (p - tracker) / dist;
-                            f *= 1.0-(dist/trackerMagneticForceRadiusBig);
-                            f *= trackerMagneticForce;
-                            particle->xf -= f.x;
-                            particle->yf -= f.y;
-                            
-                        }                         
-                    }  */                 
+                    pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
                 }
-                
-                /*for(int t=trackers.size()-1;t>=0;t--){
-                 const ofVec2f * tracker = &trackers[t];
-                 
-                 if(trackerRepulsionForce){
-                 
-                 if(tracker->x > particle->x - trackerRepulsionForceRadius 
-                 && tracker->x < particle->x + trackerRepulsionForceRadius 
-                 &&tracker->y > particle->y - trackerRepulsionForceRadius 
-                 && tracker->y < particle->y + trackerRepulsionForceRadius){
-                 
-                 ofVec2f p = ofVec2f(particle->x, particle->y);
-                 float dist = p.distance(*tracker);
-                 if(dist < trackerRepulsionForceRadius){
-                 ofVec2f f = (p - *tracker) / dist;
-                 f *= 1.0-(dist/trackerRepulsionForceRadius);
-                 f *= trackerRepulsionForce;
-                 particle->xf += f.x;
-                 particle->yf += f.y;
-                 }
-                 } 
-                 }
-                 
-                 if(trackerMagneticForce){
-                 if(tracker->x > particle->x - trackerMagneticForceRadiusBig 
-                 && tracker->x < particle->x + trackerMagneticForceRadiusBig 
-                 &&tracker->y > particle->y - trackerMagneticForceRadiusBig 
-                 && tracker->y < particle->y + trackerMagneticForceRadiusBig){
-                 
-                 ofVec2f p = ofVec2f(particle->x, particle->y);
-                 float dist = p.distance(*tracker);
-                 if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
-                 ofVec2f f = (p - *tracker) / dist;
-                 f *= 1.0-(dist/trackerMagneticForceRadiusBig);
-                 f *= trackerMagneticForce;
-                 particle->xf -= f.x;
-                 particle->yf -= f.y;
-                 }                        
-                 }                         
-                 }                   
-                 }*/
-                
-                particle->bounceOffWalls(0, 0, 1,1);
-                particle->addDampingForce(0.5*globalDampingForce);
-                particle->updatePosition(1.0);
-                
-                pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
-                
                 particle++;
             }
         }];
@@ -361,7 +438,7 @@
         Particle * particle =  &particles[u][0];
         for(int i = 0; i < NUM_PARTICLES; i++) {
             int j = NUM_PARTICLES*u+i;
-            if(color[j] != ofVec4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0)){
+            if(color[j].x != alpha*particle->alpha){
                 color[j] = ofVec4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0);
                 
                 if(first == -1){
@@ -382,15 +459,43 @@
     if(first != -1){
         glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &color[first].x);
     }
-  //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
+    //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
     
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
     
     //--------------  POSITION ------------------    
     
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofPoint), &pos[0].x);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, ((alive+livingUp)*NUMP)*sizeof(ofPoint), &pos[0].x);
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    
+    
+    //-------------- WIND ------------------------
+    float windAmm = PropF(@"wind");
+    if(windAmm > 0){
+        for(int i=0;i<windAmm*10;i++){
+            WindObject obj;
+            obj.p = ofVec2f(0.5,0.5);
+            obj.v = ofVec2f(ofRandom(-1,1), ofRandom(-1,1)).normalized();
+            wind.push_back(obj);
+        }
+    }
+    
+    CachePropF(windTurb);
+    CachePropF(windSpeed);
+    for(int i=0;i<wind.size();i++){
+        wind[i].v += windTurb*ofVec2f(perlinX->Get( wind[i].p.x, wind[i].p.y), perlinY->Get( wind[i].p.x, wind[i].p.y));
+        wind[i].v.normalize();
+        
+        wind[i].p +=  wind[i].v * 0.1*windSpeed;
+        
+        if(wind[i].p.x > 1 || wind[i].p.x < 0 || wind[i].p.y > 1 || wind[i].p.y < 0){
+            wind.erase(wind.begin()+i);
+        }
+    }
+    
+    //--------------------------------------------
+    
     
     
 }
@@ -463,6 +568,21 @@
     grid.draw(0,40,ofGetWidth(), ofGetHeight()-40);
     
     contourFinder.draw(0,40,ofGetWidth(), ofGetHeight()-40);
+    
+    for(float x=0;x<1;x+= 0.025){
+        for(float y=0;y<1;y+= 0.025){
+            ofVec2f p = ofVec2f(x*ofGetWidth(), y*(ofGetHeight()-40)+40);
+            of2DArrow(p, p + 10*ofVec2f(perlinX->Get(x, y), perlinY->Get(x,y)), 2);
+        }
+    }
+    
+    ofSetColor(255,255,0);
+    for(int i=0;i<wind.size();i++){
+        ofVec2f p = ofVec2f(wind[i].p.x*ofGetWidth(), wind[i].p.y*(ofGetHeight()-40)+40);
+        of2DArrow(p, p + 10*wind[i].v, 2);
+        
+    }
+    
     
 }
 

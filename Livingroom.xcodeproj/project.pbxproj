@@ -46,6 +46,7 @@
 		3D97F4C914D2F50A00981D15 /* particles.fs in Resources */ = {isa = PBXBuildFile; fileRef = 3D97F4C514D2F49400981D15 /* particles.fs */; };
 		3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */ = {isa = PBXBuildFile; fileRef = 3D97F4C614D2F49400981D15 /* particles.vs */; };
 		3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D97F4D814D2F9B300981D15 /* ofxShader.cpp */; };
+		3D9A105414D6E2C50050C8E2 /* perlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A105214D6E2C50050C8E2 /* perlin.cpp */; };
 		3D9D181B14BDF03D00DD2093 /* 6943.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181A14BDF03D00DD2093 /* 6943.jpg */; };
 		3D9D181E14BDF11A00DD2093 /* ash50x50.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */; };
 		3D9D182014BDF53900DD2093 /* ash8x8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181F14BDF53900DD2093 /* ash8x8.jpg */; };
@@ -151,6 +152,8 @@
 		3D97F4C614D2F49400981D15 /* particles.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = particles.vs; sourceTree = "<group>"; };
 		3D97F4D814D2F9B300981D15 /* ofxShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxShader.cpp; sourceTree = "<group>"; };
 		3D97F4D914D2F9B300981D15 /* ofxShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxShader.h; sourceTree = "<group>"; };
+		3D9A105214D6E2C50050C8E2 /* perlin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = perlin.cpp; sourceTree = "<group>"; };
+		3D9A105314D6E2C50050C8E2 /* perlin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = perlin.h; sourceTree = "<group>"; };
 		3D9D181A14BDF03D00DD2093 /* 6943.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6943.jpg; sourceTree = "<group>"; };
 		3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash50x50.jpg; sourceTree = "<group>"; };
 		3D9D181F14BDF53900DD2093 /* ash8x8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash8x8.jpg; sourceTree = "<group>"; };
@@ -459,6 +462,8 @@
 		3DE3C34114B3511E00A7E9E0 /* AshParticles */ = {
 			isa = PBXGroup;
 			children = (
+				3D9A105214D6E2C50050C8E2 /* perlin.cpp */,
+				3D9A105314D6E2C50050C8E2 /* perlin.h */,
 				3D97F4D814D2F9B300981D15 /* ofxShader.cpp */,
 				3D97F4D914D2F9B300981D15 /* ofxShader.h */,
 				3DE3C34D14B35A6F00A7E9E0 /* Body.h */,
@@ -662,6 +667,7 @@
 				3D97F4C714D2F49400981D15 /* particles.fs in Sources */,
 				3D97F4C814D2F49400981D15 /* particles.vs in Sources */,
 				3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */,
+				3D9A105414D6E2C50050C8E2 /* perlin.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
