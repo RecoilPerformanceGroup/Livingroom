@@ -1,7 +1,6 @@
 #pragma once
 #import <ofxCocoaPlugins/Plugin.h>
-
-#define USE_
+#import "ofxCvMain.h"
 
 @interface Tracker : ofPlugin {
     ofVec2f controlMouse;
@@ -14,5 +13,6 @@
 -(vector<ofVec2f>) trackerBlob:(int)n;
 -(vector< vector<ofVec2f> >) trackerBlobVector;
 
+-(ofxCvGrayscaleImage) trackerImageWithResolution:(int)res;
 
 @end

@@ -42,7 +42,7 @@
     
     
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
-
+    
 	float padding = 0.0;
 	float maxVelocity = .05;
     
@@ -55,11 +55,22 @@
             particles[u][i] = Particle(x, y, xv, yv);
             particles[u][i].size = ofRandom(0.5,1);
             pos[NUM_PARTICLES*u+i] = ofPoint(x,y,0);
-            color[NUM_PARTICLES*u+i] = ofVec4f(1.0,1.0,1.0,1.0);
+            color[NUM_PARTICLES*u+i] = ofVec4f(0.0,0.0,0.0,1.0);
         }        
     }
     
+    grid.allocate(GRID_SIZE, GRID_SIZE);
+    grid.set(0);
     
+    diff.allocate(GRID_SIZE, GRID_SIZE);
+    diff.set(0);
+    
+    fade.allocate(GRID_SIZE, GRID_SIZE);
+    fade.set(10);
+    
+    
+    distanceImage.allocate(GRID_SIZE, GRID_SIZE);
+    distanceImage.set(0);
     
     //   NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"ash8x8" ofType:@"jpg"];
@@ -101,6 +112,26 @@
     CachePropF(trackerMagneticForceRadiusBig);    
     CachePropF(alpha);
     
+    
+    //---------------- TRACKER ------------------
+    
+    ofxCvGrayscaleImage tracker = [GetPlugin(Tracker) trackerImageWithResolution:GRID_SIZE];
+  //  grid += tracker;
+    
+    diff = tracker;
+    diff -= grid;
+    diff.threshold(254);
+  //  diff.absDiff(tracker, grid);
+    
+    grid -= fade;
+    grid += diff;
+    
+    
+    contourFinder.findContours(grid, 0, GRID_SIZE*GRID_SIZE, 10, NO);
+    /*    cvDistTransform(tracker.getCvImage(), distanceImage.getCvImage());
+     distanceImage.flagImageChanged();*/
+    
+    
     //--------------------------------------------
     
     
@@ -132,42 +163,42 @@
     
     float numberParticles = PropF(@"numberParticles");
     if(numberParticles > (alive+livingUp)){
-        int diff = numberParticles*NUMP - (livingUp+alive)*NUMP;
+        int diffNum = numberParticles*NUMP - (livingUp+alive)*NUMP;
         for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
             Particle * particle =  &particles[u][0];
             for(int i = 0; i < NUM_PARTICLES; i++) {
-                if(diff > 0 && particle->dead && !particle->livingUp){
+                if(diffNum > 0 && particle->dead && !particle->livingUp){
                     particle->livingUp = true;
-                    diff--;
-                    if(diff == 0) break;
+                    diffNum--;
+                    if(diffNum == 0) break;
                 }
                 particle++;
                 
             }
-            if(diff == 0) break;
+            if(diffNum == 0) break;
         }
     }
     
     if(PropB(@"die")){
         if(numberParticles < 1-(alive)){
-            int diff = (alive)*NUMP- (numberParticles)*NUMP;
+            int diffNum = (alive)*NUMP- (numberParticles)*NUMP;
             for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
                 Particle * particle =  &particles[u][0];
                 for(int i = 0; i < NUM_PARTICLES; i++) {
-                    if(diff > 0 && particle->alive && !particle->dying){
+                    if(diffNum > 0 && particle->alive && !particle->dying){
                         particle->dying = true;
-                        diff--;
-                        if(diff == 0) break;
+                        diffNum--;
+                        if(diffNum == 0) break;
                     }
                     particle++;
                     
                 }
-                if(diff == 0) break;
+                if(diffNum == 0) break;
             }
         }
     }
     
-    vector <ofVec2f> trackers = [GetPlugin(Tracker) trackerCentroidVector];
+    // vector <ofVec2f> trackers = [GetPlugin(Tracker) trackerCentroidVector];
     vector < vector<ofVec2f> > trackersPoints = [GetPlugin(Tracker) trackerBlobVector];
     
     CachePropF(trackerSpawner);
@@ -181,13 +212,12 @@
                     }
                     
                     
-                    int diff = 100.0*trackerSpawner;
+                    int diffNum = 100.0*trackerSpawner;
                     
                     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
                         Particle * particle =  &particles[u][0];
                         for(int i = 0; i < NUM_PARTICLES; i++) {
-                            if(diff > 0 && particle->dead && !particle->livingUp){
-                                particle->livingUp = true;
+                            if(diffNum > 0 && particle->dead && !particle->livingUp){
                                 
                                 ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
                                 while(!ofInsidePoly(p.x, p.y, vector)){
@@ -196,12 +226,14 @@
                                 
                                 particle->x = p.x;
                                 particle->y = p.y;
-                                diff--;
-                                if(diff == 0) break;
+                                particle->livingUp = true;
+
+                                diffNum--;
+                                if(diffNum == 0) break;
                             }
                             particle++;
                         }
-                        if(diff == 0) break;
+                        if(diffNum == 0) break;
                     }
                 }
             }
@@ -217,55 +249,98 @@
             for(int i = 0; i < NUM_PARTICLES; i++) {
                 particle->resetForce();
                 
-                for(int t=trackers.size()-1;t>=0;t--){
-                    const ofVec2f * tracker = &trackers[t];
+                //----------- Inside blob -----------
+                
+                int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
+                
+                
+                if(gridIndex >= 0 && gridIndex < GRID_SIZE*GRID_SIZE && grid.getPixels()[gridIndex] > 0){
                     
-                    if(trackerRepulsionForce){
-                        
-                        if(tracker->x > particle->x - trackerRepulsionForceRadius 
-                           && tracker->x < particle->x + trackerRepulsionForceRadius 
-                           &&tracker->y > particle->y - trackerRepulsionForceRadius 
-                           && tracker->y < particle->y + trackerRepulsionForceRadius){
-                            
-                            ofVec2f p = ofVec2f(particle->x, particle->y);
-                            float dist = p.distance(*tracker);
-                            if(dist < trackerRepulsionForceRadius){
-                                ofVec2f f = (p - *tracker) / dist;
-                                f *= 1.0-(dist/trackerRepulsionForceRadius);
-                                f *= trackerRepulsionForce;
-                                particle->xf += f.x;
-                                particle->yf += f.y;
+                    
+                    float bestDist = -1;
+                    ofVec2f tracker;
+                    ofVec2f p = ofVec2f(particle->x, particle->y);
+                    
+                    
+                    
+                    for(int ii=0;ii<contourFinder.blobs.size();ii++){
+                        for(int uu=0;uu<contourFinder.blobs[ii].nPts;uu+=3){                            
+                            float _dist = contourFinder.blobs[ii].pts[uu].distanceSquared(p);
+                            if(bestDist == -1 || bestDist > _dist){
+                                bestDist = _dist;
+                                tracker = contourFinder.blobs[ii].pts[uu];
                             }
-                        } 
+                        }
                     }
                     
-                    if(trackerMagneticForce){
-                        if(tracker->x > particle->x - trackerMagneticForceRadiusBig 
-                           && tracker->x < particle->x + trackerMagneticForceRadiusBig 
-                           &&tracker->y > particle->y - trackerMagneticForceRadiusBig 
-                           && tracker->y < particle->y + trackerMagneticForceRadiusBig){
+                    
+                    if(trackerRepulsionForce){
+                        ofVec2f f = (tracker-p);
+                        f *= trackerRepulsionForce;
+                        particle->xf += f.x;
+                        particle->yf += f.y;
+                    }
+                    
+                   /* if(trackerMagneticForce){
+                        
+                        float dist = p.distance(tracker);
+                        if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
+                            ofVec2f f = (p - tracker) / dist;
+                            f *= 1.0-(dist/trackerMagneticForceRadiusBig);
+                            f *= trackerMagneticForce;
+                            particle->xf -= f.x;
+                            particle->yf -= f.y;
                             
-                            ofVec2f p = ofVec2f(particle->x, particle->y);
-                            float dist = p.distance(*tracker);
-                            if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
-                                ofVec2f f = (p - *tracker) / dist;
-                                f *= 1.0-(dist/trackerMagneticForceRadiusBig);
-                                f *= trackerMagneticForce;
-                                particle->xf -= f.x;
-                                particle->yf -= f.y;
-                            }                        
                         }                         
-                    }                   
+                    }  */                 
                 }
+                
+                /*for(int t=trackers.size()-1;t>=0;t--){
+                 const ofVec2f * tracker = &trackers[t];
+                 
+                 if(trackerRepulsionForce){
+                 
+                 if(tracker->x > particle->x - trackerRepulsionForceRadius 
+                 && tracker->x < particle->x + trackerRepulsionForceRadius 
+                 &&tracker->y > particle->y - trackerRepulsionForceRadius 
+                 && tracker->y < particle->y + trackerRepulsionForceRadius){
+                 
+                 ofVec2f p = ofVec2f(particle->x, particle->y);
+                 float dist = p.distance(*tracker);
+                 if(dist < trackerRepulsionForceRadius){
+                 ofVec2f f = (p - *tracker) / dist;
+                 f *= 1.0-(dist/trackerRepulsionForceRadius);
+                 f *= trackerRepulsionForce;
+                 particle->xf += f.x;
+                 particle->yf += f.y;
+                 }
+                 } 
+                 }
+                 
+                 if(trackerMagneticForce){
+                 if(tracker->x > particle->x - trackerMagneticForceRadiusBig 
+                 && tracker->x < particle->x + trackerMagneticForceRadiusBig 
+                 &&tracker->y > particle->y - trackerMagneticForceRadiusBig 
+                 && tracker->y < particle->y + trackerMagneticForceRadiusBig){
+                 
+                 ofVec2f p = ofVec2f(particle->x, particle->y);
+                 float dist = p.distance(*tracker);
+                 if(dist < trackerMagneticForceRadiusBig && dist > trackerMagneticForceRadius){
+                 ofVec2f f = (p - *tracker) / dist;
+                 f *= 1.0-(dist/trackerMagneticForceRadiusBig);
+                 f *= trackerMagneticForce;
+                 particle->xf -= f.x;
+                 particle->yf -= f.y;
+                 }                        
+                 }                         
+                 }                   
+                 }*/
                 
                 particle->bounceOffWalls(0, 0, 1,1);
                 particle->addDampingForce(0.5*globalDampingForce);
                 particle->updatePosition(1.0);
                 
                 pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
-                
-                ;
-                
                 
                 particle++;
             }
@@ -276,6 +351,7 @@
     
     [queue waitUntilAllOperationsAreFinished];
     
+    //-------------- COLOR ------------------
     
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
     int first = -1;
@@ -296,17 +372,21 @@
                 
             }
             else if(first != -1){
-                glBufferSubData(GL_ARRAY_BUFFER, first, (num)*sizeof(ofVec4f), &color[first].x);
+                glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &color[first].x);
                 first = -1;
             }
+            particle++;
         }
     }
     
     if(first != -1){
-        glBufferSubData(GL_ARRAY_BUFFER, first, (num)*sizeof(ofVec4f), &color[first].x);
+        glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &color[first].x);
     }
+  //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
     
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    
+    //--------------  POSITION ------------------    
     
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofPoint), &pos[0].x);
@@ -342,7 +422,9 @@
         glEnableClientState(GL_COLOR_ARRAY);
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
         glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
+        
         glDrawArrays(GL_POINTS, 0, NUMP);
+        
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         
@@ -376,6 +458,11 @@
     ofSetColor(0,255,0);
     ofRect(x,0,alive*ofGetWidth(),30);
     x += alive*ofGetWidth();
+    
+    ofSetColor(255,255,255);
+    grid.draw(0,40,ofGetWidth(), ofGetHeight()-40);
+    
+    contourFinder.draw(0,40,ofGetWidth(), ofGetHeight()-40);
     
 }
 

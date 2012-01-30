@@ -11,9 +11,9 @@
         controlMouse = ofVec2f(-1,-1);
         [[self addPropF:@"generatedBlobPoints"] setMinValue:1 maxValue:300];
         [[self addPropF:@"generatedBlobSize"] setMinValue:0.01 maxValue:1];
-
+        
         [self addPropB:@"drawDebug"];
-}
+    }
     
     return self;
 }
@@ -32,7 +32,7 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
-//    cout<<[self numberTrackers]<<endl;
+    //    cout<<[self numberTrackers]<<endl;
 }
 
 //
@@ -44,7 +44,7 @@
         ApplySurface(@"Floor");
         
         int n = [self numberTrackers];
-
+        
         
         for(int i=0; i<n;i++){
             ofVec2f centroid = [self trackerCentroid:i];
@@ -99,12 +99,17 @@
     ofBackground(0,0,0);
     
     int n = [self numberTrackers];
-
+    
     int w = ofGetWidth();
     int h = ofGetHeight();
+    
+    ofSetColor(100,100,100);
+    [self trackerImageWithResolution:400].draw(0,0,w,h);
+    
+    
     for(int i=0; i<n;i++){
         ofVec2f centroid = [self trackerCentroid:i];
-
+        
         ofSetColor(255,255,255);
         ofCircle(centroid.x*w, centroid.y*h, 5);
         
@@ -137,11 +142,13 @@
         
         vector< ofVec2f > blob = [self trackerBlob:i];
         for(int u=0;u<blob.size();u++){
-           ofCircle(blob[u].x*w, blob[u].y*h, 2);
-         //   ofRect(blob[u].x*w, blob[u].y*h, 6,6);
+            ofCircle(blob[u].x*w, blob[u].y*h, 2);
+            //   ofRect(blob[u].x*w, blob[u].y*h, 6,6);
             
         }
     }
+    
+
 }
 
 
@@ -171,13 +178,13 @@
 
 -(vector<ofVec2f>) trackerBlob:(int)n{
     vector<ofVec2f> v;
-
+    
     // OSC Control blobs
     {
         vector<ofVec2f> blobs = [GetPlugin(OSCControl) getTrackerCoordinates];
         if(blobs.size() > n){
             ofVec2f p = [self trackerCentroid:n];
-
+            
             CachePropF(generatedBlobPoints);
             CachePropF(generatedBlobSize);
             
@@ -212,13 +219,13 @@
     {
         int num = [[GetPlugin(BlobTracker2d) getInstance:0] numPBlobs];
         if(num > n){
-//            return *[[GetPlugin(BlobTracker2d) getInstance:0] getPBlob:n]->;
+            //            return *[[GetPlugin(BlobTracker2d) getInstance:0] getPBlob:n]->;
             
         }
         n -= num;
     }
     
-
+    
     
     
     
@@ -252,7 +259,7 @@
             }
             n --;            
         }
-
+        
     }
     
     // Camera tracker
@@ -276,5 +283,27 @@
     return v;
 }
 
+-(ofxCvGrayscaleImage)trackerImageWithResolution:(int)res{
+    ofxCvGrayscaleImage ret;
+    ret.allocate(res,res);
+    ret.set(0);
+    vector< vector<ofVec2f> > trackerBlobVector = [self trackerBlobVector];
+    
+    for(int i=0;i<trackerBlobVector.size();i++){
+        int nPoints = trackerBlobVector[i].size();
+        CvPoint _cp[nPoints];
+        for(int u=0;u<nPoints;u++){
+            _cp[u] = cvPoint(trackerBlobVector[i][u].x*res, trackerBlobVector[i][u].y*res);
+        }
+	
+        CvPoint* cp = _cp;    
+        cvFillPoly(ret.getCvImage(), &cp, &nPoints, 1, cvScalar(255));
+    }
+    
+    ret.flagImageChanged();
+    
+    
+    return ret;
+}
 
 @end
