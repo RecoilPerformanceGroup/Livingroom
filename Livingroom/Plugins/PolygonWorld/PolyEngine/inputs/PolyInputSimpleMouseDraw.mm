@@ -77,6 +77,7 @@
         glLineWidth(1);
     }
     
+    ofSetLineWidth(2.0);
     for(int i=0;i<debugSegments.size();i++){
         ofVec2f p1 = ofVec2f(CGAL::to_double(debugSegments[i].source().x()), CGAL::to_double(debugSegments[i].source().y()));
         ofVec2f p2 = ofVec2f(CGAL::to_double(debugSegments[i].target().x()), CGAL::to_double(debugSegments[i].target().y()));
@@ -84,6 +85,7 @@
         ofSetColor(0,255,255);
         ofLine(p1.x, p1.y, p2.x, p2.y);
     }
+    ofSetLineWidth(1.0);
     /*  
      ofSetColor(100,20,20);
      
@@ -159,18 +161,17 @@
                     lines.push_back(Segment_2(pointsBuffer[i-1], pointsBuffer[i]));
                 }
                 
-                
-                
+                //Insert the lines in arrangement 
                 for(int i=0;i<lines.size();i++){
-                    
                     CGAL::insert(*[[engine arrangement] arrData],  lines[i]);
                 }
                 
-                
+                //Offset to the right
                 vector<Segment_2> linesModified;
+                ofVec2f offset = ofVec2f(0.01,0);
                 for(int i=1;i<pointsBuffer.size();i++){
-                    Point_2 p1 = Point_2(pointsBuffer[i-1].x(), pointsBuffer[i-1].y()+0.1);
-                    Point_2 p2 = Point_2(pointsBuffer[i].x(), pointsBuffer[i].y()+0.1);
+                    Point_2 p1 = Point_2(pointsBuffer[i-1].x()+offset.x, pointsBuffer[i-1].y()+offset.y);
+                    Point_2 p2 = Point_2(pointsBuffer[i].x()+offset.x, pointsBuffer[i].y()+offset.y);
                     
                     if(i == pointsBuffer.size()-1){
                         linesModified.push_back(Segment_2(p1,pointsBuffer[i]));                        
@@ -179,26 +180,134 @@
                     }
                 }
                 
+                //Insert offset
                 for(int i=0;i<linesModified.size();i++){                    
                     CGAL::insert(*[[engine arrangement] arrData],  linesModified[i]);
                 }
                 
+                
+                vector<ofPoint> polygon;
+                for(int i=0;i<pointsBuffer.size();i++){
+                    polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x()),CGAL::to_double(pointsBuffer[i].y()),0));
+                }
+                for(int i=pointsBuffer.size()-2;i>=0;i--){
+                    polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x())+offset.x, CGAL::to_double(pointsBuffer[i].y())+offset.y,0));
+                }
+                
+                /*      debugSegments.clear();
+                 for(int i=1;i<polygon.size();i++){
+                 debugSegments.push_back(Segment_2(Point_2(polygon[i-1].x, polygon[i-1].y), Point_2(polygon[i].x, polygon[i].y)));
+                 }
+                 */
+                
+                // ofInsidePoly(<#float x#>, <#float y#>, <#const vector<ofPoint> &poly#>)
+                
                 //Now find what we need to delete
                 //Find intersections
+                /*      __block int u=0;
+                 debugSegments.clear();
+                 [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                 for(int i=0;i<lines.size();i++){
+                 Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+                 
+                 if(CGAL::do_intersect(arrSegment, lines[i])){
+                 if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
+                 cout<<"Intersection "<<u++<<endl;
+                 debugSegments.push_back(arrSegment);
+                 }
+                 }
+                 }
+                 }];*/
+                
                 __block int u=0;
                 debugSegments.clear();
+                __block vector<Halfedge_handle> deleteHandles;
                 [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                    for(int i=0;i<lines.size();i++){
-                        Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+                    eit->data().crumbleOptimalLength = -1;
+                    eit->data().crumbleOptimalAngle = -1;
+                    eit->source()->data().hullOptimalAngle = -1;
+                    eit->target()->data().hullOptimalAngle = -1;
+                    
+                    
+                    ofVec2f p1 = handleToVec2(eit->source());
+                    ofVec2f p2 = handleToVec2(eit->target());
+                    ofVec2f p3 = p2+(p1-p2)*0.5;
+                    Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+                    
+                    // if(ofInsidePoly(p1.x, p1.y, polygon) || ofInsidePoly(p2.x, p2.y, polygon) || ofInsidePoly(p3.x, p3.y, polygon))){
+                    if(ofInsidePoly(p3.x, p3.y, polygon)){
+                        bool intersection = NO;
                         
-                        if(CGAL::do_intersect(arrSegment, lines[i])){
-                            if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
-                                cout<<"Intersection "<<u++<<endl;
-                                debugSegments.push_back(arrSegment);
+                        for(int i=0;i<lines.size();i++){                        
+                            if(CGAL::do_intersect(arrSegment, lines[i])){
+                                if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
+                                    intersection = YES;
+                                    //                                    debugSegments.push_back(arrSegment);
+                                }
                             }
                         }
+                        for(int i=0;i<linesModified.size();i++){                        
+                            if(CGAL::do_intersect(arrSegment, linesModified[i])){
+                                if(linesModified[i].has_on(arrSegment.source()) && linesModified[i].has_on(arrSegment.target())){
+                                    intersection = YES;
+                                    //                                    debugSegments.push_back(arrSegment);
+                                }
+                            }
+                        }
+                        
+                        
+                        if(!intersection){
+                            cout<<"!Intersection "<<u++<<endl;
+                            debugSegments.push_back(arrSegment);
+                            deleteHandles.push_back(eit);
+                        }
+                    }
+                    
+                    
+                    
+                }];
+                
+           
+                
+                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                    if(eit->target()->degree() <= 1 || eit->source()->degree() <= 1){
+                        deleteHandles.push_back(eit);
                     }
                 }];
+                
+                for(int i=0;i<deleteHandles.size();i++){
+                    [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
+                }
+                
+                /*
+                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
+                
+                for(int i=0;i<boundaryHandles.size();i++){
+                    for(int u=1;u<boundaryHandles[i].size();u++){
+                        Halfedge_handle h1 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u-1]);
+                        Halfedge_handle h2 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
+                        h1->target()->data().hullOptimalAngle = -1;
+                        h2->target()->data().hullOptimalAngle = -1;
+                    }
+                }*/
+
+               /* 
+                
+                Arrangement_2 * newArr = new Arrangement_2();
+                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                    bool doDelete = NO;
+                    for(int i=0;i<deleteHandles.size();i++){
+                        if(deleteHandles[i] == eit)
+                            doDelete = YES;
+                    }
+                    if(!doDelete){
+                        Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+                        CGAL::insert(*newArr,  arrSegment);
+                    }
+                }];
+                
+                [[engine arrangement] setArrData:newArr];*/
+                
             }                
         } else {
             if(pointsBuffer.size() > 2){        

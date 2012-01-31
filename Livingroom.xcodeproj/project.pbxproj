@@ -89,11 +89,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3D07198414693F930057E0B9 /* PolyInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInclude.h; sourceTree = "<group>"; };
+		3D07198414693F930057E0B9 /* PolyInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PolyInclude.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3D071986146941D60057E0B9 /* PolyAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimator.h; sourceTree = "<group>"; };
 		3D071987146941D60057E0B9 /* PolyAnimator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimator.mm; sourceTree = "<group>"; };
 		3D071988146941D60057E0B9 /* PolyArrangement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyArrangement.h; sourceTree = "<group>"; };
-		3D071989146941D60057E0B9 /* PolyArrangement.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyArrangement.mm; sourceTree = "<group>"; };
+		3D071989146941D60057E0B9 /* PolyArrangement.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = PolyArrangement.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3D07198A146941D60057E0B9 /* PolyEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyEngine.h; sourceTree = "<group>"; };
 		3D07198B146941D60057E0B9 /* PolyEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyEngine.mm; sourceTree = "<group>"; };
 		3D07198C146941D60057E0B9 /* PolyInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInput.h; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 		3D100A2D14927AAD0067A46E /* CGALEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGALEnumerator.h; sourceTree = "<group>"; };
 		3D100A2E14927AAD0067A46E /* CGALEnumerator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CGALEnumerator.mm; sourceTree = "<group>"; };
 		3D16C0A4146AEC9800718ADC /* PolyAnimatorSimplePushPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSimplePushPop.h; sourceTree = "<group>"; };
-		3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSimplePushPop.mm; sourceTree = "<group>"; };
+		3D16C0A5146AEC9800718ADC /* PolyAnimatorSimplePushPop.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = PolyAnimatorSimplePushPop.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3D1E7087149257360040822A /* PolyInputTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputTracker.h; sourceTree = "<group>"; };
 		3D1E7088149257360040822A /* PolyInputTracker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyInputTracker.mm; sourceTree = "<group>"; };
 		3D2FC23A1462FEDC0028BC01 /* PolygonWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonWorld.h; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 		3D9F6BCD14939029004AEA70 /* PolyAnimatorCrumble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCrumble.h; sourceTree = "<group>"; };
 		3D9F6BCE14939029004AEA70 /* PolyAnimatorCrumble.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCrumble.mm; sourceTree = "<group>"; };
 		3DA00420149A11E800EECA9B /* PolyAnimatorPhysics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorPhysics.h; sourceTree = "<group>"; };
-		3DA00421149A11E800EECA9B /* PolyAnimatorPhysics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorPhysics.mm; sourceTree = "<group>"; };
+		3DA00421149A11E800EECA9B /* PolyAnimatorPhysics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = PolyAnimatorPhysics.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3DAF18CA14B35EEE003B6B81 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
 		3DAF18CB14B35EEE003B6B81 /* Tracker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tracker.mm; sourceTree = "<group>"; };
 		3DAF18CC14B35EEE003B6B81 /* Tracker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Tracker.xib; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 		7F462710149511F60095786B /* ofx3dModelLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofx3dModelLoader.cpp; sourceTree = "<group>"; };
 		7F462711149511F60095786B /* ofx3DModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofx3DModelLoader.h; sourceTree = "<group>"; };
 		7F6D5759146BFEE8006F8CF0 /* PolyAnimatorCracks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorCracks.h; sourceTree = "<group>"; };
-		7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorCracks.mm; sourceTree = "<group>"; };
+		7F6D575A146BFEE8006F8CF0 /* PolyAnimatorCracks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = PolyAnimatorCracks.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7F6D5776146C0F90006F8CF0 /* PolyRenderCrackLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyRenderCrackLines.h; sourceTree = "<group>"; };
 		7F6D5777146C0F91006F8CF0 /* PolyRenderCrackLines.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyRenderCrackLines.mm; sourceTree = "<group>"; };
 		7FE39E791495023C00EFA4CB /* Perspective.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Perspective.h; sourceTree = "<group>"; };

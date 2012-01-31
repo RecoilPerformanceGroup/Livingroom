@@ -41,6 +41,8 @@
 {
     @synchronized(self)
     {
+        if(arr)
+            delete arr;
         arr = aArr;
     }
 }
@@ -72,7 +74,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     {
         output.assign(*arr);
     }    
-    vector<Arrangement_2::Halfedge_handle> deleteHandles;
+    vector<Halfedge_handle> deleteHandles;
     
     Arrangement_2::Edge_iterator eit = output.edges_begin();
     
@@ -252,7 +254,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
  {
  output.assign(*arr);
  }    
- vector<Arrangement_2::Halfedge_handle> deleteHandles;
+ vector<Halfedge_handle> deleteHandles;
  
  Arrangement_2::Edge_iterator eit = output.edges_begin();
  

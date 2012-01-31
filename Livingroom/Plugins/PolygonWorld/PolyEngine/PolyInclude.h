@@ -40,6 +40,7 @@ typedef Traits_2::Line_2                    Line_2;
 typedef CGAL::Arr_extended_dcel<Traits_2,LRVertex_data, LRHalfedge_data, LRFace_data>
 Dcel;
 typedef CGAL::Arrangement_2<Traits_2, Dcel> Arrangement_2;
+typedef Arrangement_2::Halfedge_handle Halfedge_handle;
 
 //typedef CGAL::Triangulation_vertex_base_2<K> Vb;
 //typedef CGAL::DelaunA.y_mesh_face_base_2<K> Fb;
@@ -159,7 +160,7 @@ static float edgeLength(Arrangement_2::Halfedge_const_handle hit){
     return dir.length();    
 }
 
-/*static ofVec2f calculateEdgeNormal (Arrangement_2::Halfedge_handle hit){
+/*static ofVec2f calculateEdgeNormal (Halfedge_handle hit){
     ofVec2f v1 = handleToVec2(hit->source());
     ofVec2f v2 = handleToVec2(hit->target());    
     ofVec2f dir = v2-v1;

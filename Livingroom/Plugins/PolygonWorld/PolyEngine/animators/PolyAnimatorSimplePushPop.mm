@@ -12,7 +12,7 @@
 -(void)update:(NSDictionary *)drawingInformation{
     float v = 99.2;
     
-    vector<Arrangement_2::Halfedge_handle> deleteHandles;
+    vector<Halfedge_handle> deleteHandles;
     
     Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();    
     for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {

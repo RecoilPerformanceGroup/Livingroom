@@ -62,7 +62,7 @@
         vector< vector<Arrangement_2::Halfedge_const_handle> > v = [[engine arrangement] boundaryHandles];
         for(int i=0;i<v.size();i++){
             for(int u=0;u<v[i].size();u++){
-                Arrangement_2::Halfedge_handle h= [[engine arrangement] arrData]->non_const_handle(v[i][u]);
+                Halfedge_handle h= [[engine arrangement] arrData]->non_const_handle(v[i][u]);
                 if(edgeLength(h) > deleteLength)
                     [[engine arrangement] arrData]->remove_edge(h);
             }
@@ -70,7 +70,7 @@
     }
     
     if(PropB(@"triangleFilter")){
-        __block vector< Arrangement_2::Halfedge_handle > deleteHandles;
+        __block vector< Halfedge_handle > deleteHandles;
         
         ofVec2f corner1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
         ofVec2f corner2 = [GetPlugin(Mask) triangleFloorCoordinate:1];

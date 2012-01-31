@@ -121,14 +121,21 @@
     
     //Tracker
     {
+        glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+
         vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
         ofFill();
         ofSetColor(0,0,255,100);
         for(int i=0;i<v.size();i++){
+            glBegin(GL_POLYGON);
             for(int u=0;u<v[i].size();u++){
-                ofCircle(v[i][u].x,v[i][u].y,0.02);
+                glVertex2f(v[i][u].x,v[i][u].y);
             }
+            glEnd();
         }
+        
+        glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+
         
     }
 }

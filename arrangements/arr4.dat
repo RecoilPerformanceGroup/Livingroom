@@ -1,0 +1,2872 @@
+# BEGIN ARRANGEMENT
+# number_of_vertices
+100
+# number_of_edges
+288
+# number_of_faces
+190
+# BEGIN VERTICES
+4 4 1 0.886144 0.422757
+4 4 1 0.994725 0.347444
+4 4 1 0.861916 0.218916
+4 4 1 0.588223 0.256179
+4 4 1 0.637543 0.181071
+4 4 1 0.573343 0.175248
+4 4 1 0.66092 0.0891083
+4 4 1 0.796821 0.168175
+4 4 1 0.0320116 0.0197398
+4 4 1 0.642532 0.0416033
+4 4 1 0.202835 0.0549628
+4 4 1 0.938062 0.00777673
+4 4 1 0.252913 0.712887
+4 4 1 0.426944 0.656157
+4 4 1 0.491153 0.805844
+4 4 1 0.556386 0.18457
+4 4 1 0.718718 0.498616
+4 4 1 0.781379 0.639267
+4 4 1 0.889725 0.612428
+4 4 1 0.576638 0.561149
+4 4 1 0.633997 0.580475
+4 4 1 0.621141 0.524754
+4 4 1 0.165126 0.28055
+4 4 1 0.205702 0.235415
+4 4 1 0.112759 0.136525
+4 4 1 0.397956 0.44174
+4 4 1 0.448888 0.463658
+4 4 1 0.377493 0.526531
+4 4 1 0.56741 0.45569
+4 4 1 0.661239 0.447009
+4 4 1 0.378256 0.342813
+4 4 1 0.480052 0.241065
+4 4 1 0.416099 0.374124
+4 4 1 0.774934 0.318677
+4 4 1 0.767017 0.248767
+4 4 1 0.575915 0.397218
+4 4 1 0.000440098 0.396733
+4 4 1 0.153413 0.412387
+4 4 1 0.00271764 0.675317
+4 4 1 0.202033 0.568368
+4 4 1 0.235478 0.682665
+4 4 1 0.987857 0.914978
+4 4 1 0.697307 0.646517
+4 4 1 0.0024236 0.733372
+4 4 1 0.0218828 0.783694
+4 4 1 0.0315598 0.426307
+4 4 1 0.340884 0.238354
+4 4 1 0.404426 0.192404
+4 4 1 0.328146 0.143797
+4 4 1 0.0546266 0.108756
+4 4 1 0.759371 0.750342
+4 4 1 0.735448 0.667264
+4 4 1 0.586581 0.665191
+4 4 1 0.613067 0.811074
+4 4 1 0.605914 0.600006
+4 4 1 0.556587 0.564646
+4 4 1 0.0742814 0.447147
+4 4 1 0.554398 0.769002
+4 4 1 0.490907 0.672472
+4 4 1 0.035572 0.858179
+4 4 1 0.0713888 0.831267
+4 4 1 0.226629 0.946478
+4 4 1 0.703513 0.940182
+4 4 1 0.858978 0.837211
+4 4 1 0.866048 0.664404
+4 4 1 0.602807 0.379051
+4 4 1 0.495412 0.386115
+4 4 1 0.317941 0.627944
+4 4 1 0.00594542 0.924633
+4 4 1 0.0290838 0.811302
+4 4 1 0.554428 0.275681
+4 4 1 0.547047 0.213696
+4 4 1 0.500295 0.459652
+4 4 1 0.516142 0.804397
+4 4 1 0.308824 0.406637
+4 4 1 0.377546 0.413313
+4 4 1 0.901763 0.933449
+4 4 1 0.771522 0.967489
+4 4 1 0.54598 0.278115
+4 4 1 0.307684 0.24932
+4 4 1 0.326907 0.331133
+4 4 1 0.519687 0.38077
+4 4 1 0.0137703 0.438066
+4 4 1 0.280664 0.117779
+4 4 1 0.230583 0.411058
+4 4 1 0.226296 0.36522
+4 4 1 0.246045 0.280429
+4 4 1 0.272343 0.266141
+4 4 1 0.239948 0.805127
+4 4 1 0.606945 0.918282
+4 4 1 0.645537 0.545814
+4 4 1 0.500698 0.237139
+4 4 1 0.0390575 0.438937
+4 4 1 0.356812 0.934862
+4 4 1 0.248341 0.862214
+4 4 1 0.336496 0.48924
+4 4 1 0.818151 0.666359
+4 4 1 0.220318 0.889947
+4 4 1 0.704319 0.497426
+4 4 1 0.0372127 0.433272
+# END VERTICES
+# BEGIN EDGES
+1 0 1 1 0.886144 0.422757 0.994725 0.347444
+2 0 0 1 0.861916 0.218916 0.886144 0.422757
+1 2 1 1 0.861916 0.218916 0.994725 0.347444
+4 3 1 1 0.588223 0.256179 0.637543 0.181071
+5 3 0 1 0.573343 0.175248 0.588223 0.256179
+4 5 1 1 0.573343 0.175248 0.637543 0.181071
+7 6 1 1 0.66092 0.0891083 0.796821 0.168175
+7 4 1 1 0.637543 0.181071 0.796821 0.168175
+6 4 1 1 0.637543 0.181071 0.66092 0.0891083
+9 8 1 1 0.0320116 0.0197398 0.642532 0.0416033
+10 9 0 1 0.202835 0.0549628 0.642532 0.0416033
+8 10 0 1 0.0320116 0.0197398 0.202835 0.0549628
+6 9 1 1 0.642532 0.0416033 0.66092 0.0891083
+11 9 1 1 0.642532 0.0416033 0.938062 0.00777673
+6 11 0 1 0.66092 0.0891083 0.938062 0.00777673
+13 12 1 1 0.252913 0.712887 0.426944 0.656157
+14 13 1 1 0.426944 0.656157 0.491153 0.805844
+12 14 0 1 0.252913 0.712887 0.491153 0.805844
+15 9 0 1 0.556386 0.18457 0.642532 0.0416033
+9 5 1 1 0.573343 0.175248 0.642532 0.0416033
+15 5 0 1 0.556386 0.18457 0.573343 0.175248
+17 16 1 1 0.718718 0.498616 0.781379 0.639267
+18 16 1 1 0.718718 0.498616 0.889725 0.612428
+17 18 0 1 0.781379 0.639267 0.889725 0.612428
+20 19 1 1 0.576638 0.561149 0.633997 0.580475
+21 19 1 1 0.576638 0.561149 0.621141 0.524754
+20 21 1 1 0.621141 0.524754 0.633997 0.580475
+23 22 1 1 0.165126 0.28055 0.205702 0.235415
+24 22 0 1 0.112759 0.136525 0.165126 0.28055
+23 24 1 1 0.112759 0.136525 0.205702 0.235415
+26 25 1 1 0.397956 0.44174 0.448888 0.463658
+27 26 0 1 0.377493 0.526531 0.448888 0.463658
+25 27 1 1 0.377493 0.526531 0.397956 0.44174
+29 28 1 1 0.56741 0.45569 0.661239 0.447009
+29 21 1 1 0.621141 0.524754 0.661239 0.447009
+28 21 0 1 0.56741 0.45569 0.621141 0.524754
+31 30 1 1 0.378256 0.342813 0.480052 0.241065
+32 31 0 1 0.416099 0.374124 0.480052 0.241065
+30 32 0 1 0.378256 0.342813 0.416099 0.374124
+33 3 1 1 0.588223 0.256179 0.774934 0.318677
+34 3 1 1 0.588223 0.256179 0.767017 0.248767
+33 34 1 1 0.767017 0.248767 0.774934 0.318677
+35 28 1 1 0.56741 0.45569 0.575915 0.397218
+29 35 1 1 0.575915 0.397218 0.661239 0.447009
+37 36 1 1 0.000440098 0.396733 0.153413 0.412387
+22 36 1 1 0.000440098 0.396733 0.165126 0.28055
+37 22 0 1 0.153413 0.412387 0.165126 0.28055
+39 38 1 1 0.00271764 0.675317 0.202033 0.568368
+40 39 1 1 0.202033 0.568368 0.235478 0.682665
+38 40 0 1 0.00271764 0.675317 0.235478 0.682665
+1 18 1 1 0.889725 0.612428 0.994725 0.347444
+41 1 0 1 0.994725 0.347444 0.987857 0.914978
+18 41 0 1 0.889725 0.612428 0.987857 0.914978
+42 16 0 1 0.697307 0.646517 0.718718 0.498616
+42 17 0 1 0.697307 0.646517 0.781379 0.639267
+44 43 1 1 0.0024236 0.733372 0.0218828 0.783694
+40 43 1 1 0.0024236 0.733372 0.235478 0.682665
+44 40 0 1 0.0218828 0.783694 0.235478 0.682665
+45 37 0 1 0.0315598 0.426307 0.153413 0.412387
+36 45 0 1 0.000440098 0.396733 0.0315598 0.426307
+47 46 1 1 0.340884 0.238354 0.404426 0.192404
+48 46 0 1 0.328146 0.143797 0.340884 0.238354
+47 48 1 1 0.328146 0.143797 0.404426 0.192404
+49 10 0 1 0.0546266 0.108756 0.202835 0.0549628
+10 24 1 1 0.112759 0.136525 0.202835 0.0549628
+49 24 0 1 0.0546266 0.108756 0.112759 0.136525
+50 42 1 1 0.697307 0.646517 0.759371 0.750342
+51 42 1 1 0.697307 0.646517 0.735448 0.667264
+50 51 1 1 0.735448 0.667264 0.759371 0.750342
+53 52 1 1 0.586581 0.665191 0.613067 0.811074
+42 52 1 1 0.586581 0.665191 0.697307 0.646517
+53 42 0 1 0.613067 0.811074 0.697307 0.646517
+33 16 1 1 0.718718 0.498616 0.774934 0.318677
+0 33 1 1 0.774934 0.318677 0.886144 0.422757
+0 16 1 1 0.718718 0.498616 0.886144 0.422757
+54 52 1 1 0.586581 0.665191 0.605914 0.600006
+55 52 0 1 0.556587 0.564646 0.586581 0.665191
+54 55 1 1 0.556587 0.564646 0.605914 0.600006
+56 45 1 1 0.0315598 0.426307 0.0742814 0.447147
+56 37 0 1 0.0742814 0.447147 0.153413 0.412387
+57 14 1 1 0.491153 0.805844 0.554398 0.769002
+58 14 0 1 0.490907 0.672472 0.491153 0.805844
+57 58 1 1 0.490907 0.672472 0.554398 0.769002
+60 59 1 1 0.035572 0.858179 0.0713888 0.831267
+61 60 1 1 0.0713888 0.831267 0.226629 0.946478
+59 61 0 1 0.035572 0.858179 0.226629 0.946478
+52 57 1 1 0.554398 0.769002 0.586581 0.665191
+57 53 0 1 0.554398 0.769002 0.613067 0.811074
+53 50 0 1 0.613067 0.811074 0.759371 0.750342
+63 62 1 1 0.703513 0.940182 0.858978 0.837211
+50 62 1 1 0.703513 0.940182 0.759371 0.750342
+63 50 1 1 0.759371 0.750342 0.858978 0.837211
+64 63 1 1 0.858978 0.837211 0.866048 0.664404
+64 41 0 1 0.866048 0.664404 0.987857 0.914978
+63 41 0 1 0.858978 0.837211 0.987857 0.914978
+64 50 1 1 0.759371 0.750342 0.866048 0.664404
+65 35 1 1 0.575915 0.397218 0.602807 0.379051
+29 65 1 1 0.602807 0.379051 0.661239 0.447009
+66 31 1 1 0.480052 0.241065 0.495412 0.386115
+32 66 0 1 0.416099 0.374124 0.495412 0.386115
+12 40 1 1 0.235478 0.682665 0.252913 0.712887
+67 40 1 1 0.235478 0.682665 0.317941 0.627944
+12 67 0 1 0.252913 0.712887 0.317941 0.627944
+68 59 0 1 0.00594542 0.924633 0.035572 0.858179
+69 68 1 1 0.00594542 0.924633 0.0290838 0.811302
+59 69 1 1 0.0290838 0.811302 0.035572 0.858179
+70 3 0 1 0.554428 0.275681 0.588223 0.256179
+71 70 0 1 0.547047 0.213696 0.554428 0.275681
+3 71 1 1 0.547047 0.213696 0.588223 0.256179
+66 26 1 1 0.448888 0.463658 0.495412 0.386115
+72 66 1 1 0.495412 0.386115 0.500295 0.459652
+26 72 0 1 0.448888 0.463658 0.500295 0.459652
+13 27 1 1 0.377493 0.526531 0.426944 0.656157
+55 27 1 1 0.377493 0.526531 0.556587 0.564646
+55 13 1 1 0.426944 0.656157 0.556587 0.564646
+73 57 0 1 0.516142 0.804397 0.554398 0.769002
+14 73 0 1 0.491153 0.805844 0.516142 0.804397
+44 68 1 1 0.00594542 0.924633 0.0218828 0.783694
+43 68 0 1 0.00594542 0.924633 0.0024236 0.733372
+38 43 1 1 0.0024236 0.733372 0.00271764 0.675317
+32 26 0 1 0.416099 0.374124 0.448888 0.463658
+74 30 0 1 0.308824 0.406637 0.378256 0.342813
+75 30 0 1 0.377546 0.413313 0.378256 0.342813
+74 75 0 1 0.308824 0.406637 0.377546 0.413313
+76 41 0 1 0.901763 0.933449 0.987857 0.914978
+77 41 0 1 0.987857 0.914978 0.771522 0.967489
+76 77 1 1 0.771522 0.967489 0.901763 0.933449
+63 77 1 1 0.771522 0.967489 0.858978 0.837211
+62 77 0 1 0.703513 0.940182 0.771522 0.967489
+78 31 1 1 0.480052 0.241065 0.54598 0.278115
+66 78 0 1 0.495412 0.386115 0.54598 0.278115
+80 79 1 1 0.307684 0.24932 0.326907 0.331133
+46 79 1 1 0.307684 0.24932 0.340884 0.238354
+80 46 0 1 0.326907 0.331133 0.340884 0.238354
+81 35 0 1 0.519687 0.38077 0.575915 0.397218
+65 81 1 1 0.519687 0.38077 0.602807 0.379051
+81 72 1 1 0.500295 0.459652 0.519687 0.38077
+81 28 0 1 0.519687 0.38077 0.56741 0.45569
+72 28 0 1 0.500295 0.459652 0.56741 0.45569
+56 38 1 1 0.00271764 0.675317 0.0742814 0.447147
+39 56 1 1 0.0742814 0.447147 0.202033 0.568368
+82 45 0 1 0.0137703 0.438066 0.0315598 0.426307
+36 82 0 1 0.000440098 0.396733 0.0137703 0.438066
+48 79 1 1 0.307684 0.24932 0.328146 0.143797
+83 79 0 1 0.280664 0.117779 0.307684 0.24932
+48 83 1 1 0.280664 0.117779 0.328146 0.143797
+84 74 0 1 0.230583 0.411058 0.308824 0.406637
+85 84 0 1 0.226296 0.36522 0.230583 0.411058
+74 85 1 1 0.226296 0.36522 0.308824 0.406637
+53 62 0 1 0.613067 0.811074 0.703513 0.940182
+58 13 1 1 0.426944 0.656157 0.490907 0.672472
+2 33 1 1 0.774934 0.318677 0.861916 0.218916
+52 58 1 1 0.490907 0.672472 0.586581 0.665191
+55 58 1 1 0.490907 0.672472 0.556587 0.564646
+86 23 1 1 0.205702 0.235415 0.246045 0.280429
+87 23 1 1 0.205702 0.235415 0.272343 0.266141
+87 86 1 1 0.246045 0.280429 0.272343 0.266141
+39 37 1 1 0.153413 0.412387 0.202033 0.568368
+49 36 1 1 0.000440098 0.396733 0.0546266 0.108756
+22 49 1 1 0.0546266 0.108756 0.165126 0.28055
+86 22 1 1 0.165126 0.28055 0.246045 0.280429
+13 67 1 1 0.317941 0.627944 0.426944 0.656157
+27 67 1 1 0.317941 0.627944 0.377493 0.526531
+88 60 1 1 0.0713888 0.831267 0.239948 0.805127
+60 40 0 1 0.0713888 0.831267 0.235478 0.682665
+88 40 1 1 0.235478 0.682665 0.239948 0.805127
+89 73 1 1 0.516142 0.804397 0.606945 0.918282
+73 53 0 1 0.516142 0.804397 0.613067 0.811074
+89 53 0 1 0.606945 0.918282 0.613067 0.811074
+90 20 1 1 0.633997 0.580475 0.645537 0.545814
+42 90 1 1 0.645537 0.545814 0.697307 0.646517
+42 20 1 1 0.633997 0.580475 0.697307 0.646517
+91 71 0 1 0.500698 0.237139 0.547047 0.213696
+15 91 1 1 0.500698 0.237139 0.556386 0.18457
+15 71 1 1 0.547047 0.213696 0.556386 0.18457
+5 71 1 1 0.547047 0.213696 0.573343 0.175248
+34 4 1 1 0.637543 0.181071 0.767017 0.248767
+54 19 1 1 0.576638 0.561149 0.605914 0.600006
+20 54 1 1 0.605914 0.600006 0.633997 0.580475
+42 54 1 1 0.605914 0.600006 0.697307 0.646517
+80 85 1 1 0.226296 0.36522 0.326907 0.331133
+80 74 1 1 0.308824 0.406637 0.326907 0.331133
+32 25 1 1 0.397956 0.44174 0.416099 0.374124
+25 75 1 1 0.377546 0.413313 0.397956 0.44174
+32 75 1 1 0.377546 0.413313 0.416099 0.374124
+83 23 1 1 0.205702 0.235415 0.280664 0.117779
+83 24 1 1 0.112759 0.136525 0.280664 0.117779
+30 46 1 1 0.340884 0.238354 0.378256 0.342813
+31 46 1 1 0.340884 0.238354 0.480052 0.241065
+92 82 1 1 0.0137703 0.438066 0.0390575 0.438937
+92 38 1 1 0.00271764 0.675317 0.0390575 0.438937
+82 38 1 1 0.00271764 0.675317 0.0137703 0.438066
+56 92 1 1 0.0390575 0.438937 0.0742814 0.447147
+91 31 1 1 0.480052 0.241065 0.500698 0.237139
+78 91 1 1 0.500698 0.237139 0.54598 0.278115
+65 78 1 1 0.54598 0.278115 0.602807 0.379051
+70 78 1 1 0.54598 0.278115 0.554428 0.275681
+65 70 1 1 0.554428 0.275681 0.602807 0.379051
+83 10 1 1 0.202835 0.0549628 0.280664 0.117779
+9 83 1 1 0.280664 0.117779 0.642532 0.0416033
+81 66 1 1 0.495412 0.386115 0.519687 0.38077
+78 81 1 1 0.519687 0.38077 0.54598 0.278115
+93 77 0 1 0.356812 0.934862 0.771522 0.967489
+61 77 0 1 0.771522 0.967489 0.226629 0.946478
+93 61 1 1 0.226629 0.946478 0.356812 0.934862
+94 88 1 1 0.239948 0.805127 0.248341 0.862214
+93 88 1 1 0.239948 0.805127 0.356812 0.934862
+93 94 1 1 0.248341 0.862214 0.356812 0.934862
+6 5 1 1 0.573343 0.175248 0.66092 0.0891083
+95 67 1 1 0.317941 0.627944 0.336496 0.48924
+27 95 1 1 0.336496 0.48924 0.377493 0.526531
+95 39 1 1 0.202033 0.568368 0.336496 0.48924
+84 39 1 1 0.202033 0.568368 0.230583 0.411058
+95 84 1 1 0.230583 0.411058 0.336496 0.48924
+18 64 1 1 0.866048 0.664404 0.889725 0.612428
+76 63 1 1 0.858978 0.837211 0.901763 0.933449
+69 44 1 1 0.0218828 0.783694 0.0290838 0.811302
+96 18 0 1 0.818151 0.666359 0.889725 0.612428
+64 96 1 1 0.818151 0.666359 0.866048 0.664404
+96 51 1 1 0.735448 0.667264 0.818151 0.666359
+96 50 1 1 0.759371 0.750342 0.818151 0.666359
+85 22 1 1 0.165126 0.28055 0.226296 0.36522
+86 85 1 1 0.226296 0.36522 0.246045 0.280429
+84 37 1 1 0.153413 0.412387 0.230583 0.411058
+60 44 1 1 0.0218828 0.783694 0.0713888 0.831267
+60 69 1 1 0.0290838 0.811302 0.0713888 0.831267
+15 47 1 1 0.404426 0.192404 0.556386 0.18457
+9 47 1 1 0.404426 0.192404 0.642532 0.0416033
+97 94 0 1 0.220318 0.889947 0.248341 0.862214
+88 97 1 1 0.220318 0.889947 0.239948 0.805127
+19 55 1 1 0.556587 0.564646 0.576638 0.561149
+28 55 1 1 0.556587 0.564646 0.56741 0.45569
+19 28 1 1 0.56741 0.45569 0.576638 0.561149
+85 37 1 1 0.153413 0.412387 0.226296 0.36522
+80 86 1 1 0.246045 0.280429 0.326907 0.331133
+14 88 1 1 0.239948 0.805127 0.491153 0.805844
+14 93 1 1 0.356812 0.934862 0.491153 0.805844
+97 60 1 1 0.0713888 0.831267 0.220318 0.889947
+67 39 1 1 0.202033 0.568368 0.317941 0.627944
+12 88 1 1 0.239948 0.805127 0.252913 0.712887
+71 78 1 1 0.54598 0.278115 0.547047 0.213696
+65 3 1 1 0.588223 0.256179 0.602807 0.379051
+75 95 1 1 0.336496 0.48924 0.377546 0.413313
+25 95 1 1 0.336496 0.48924 0.397956 0.44174
+55 26 1 1 0.448888 0.463658 0.556587 0.564646
+55 72 1 1 0.500295 0.459652 0.556587 0.564646
+68 61 0 1 0.226629 0.946478 0.00594542 0.924633
+79 23 1 1 0.205702 0.235415 0.307684 0.24932
+30 80 1 1 0.326907 0.331133 0.378256 0.342813
+80 87 1 1 0.272343 0.266141 0.326907 0.331133
+89 93 1 1 0.356812 0.934862 0.606945 0.918282
+77 89 1 1 0.606945 0.918282 0.771522 0.967489
+94 61 1 1 0.226629 0.946478 0.248341 0.862214
+61 97 1 1 0.220318 0.889947 0.226629 0.946478
+95 74 1 1 0.308824 0.406637 0.336496 0.48924
+33 29 1 1 0.661239 0.447009 0.774934 0.318677
+16 29 1 1 0.661239 0.447009 0.718718 0.498616
+98 29 1 1 0.661239 0.447009 0.704319 0.497426
+98 21 1 1 0.621141 0.524754 0.704319 0.497426
+18 0 1 1 0.886144 0.422757 0.889725 0.612428
+79 87 1 1 0.272343 0.266141 0.307684 0.24932
+8 49 0 1 0.0320116 0.0197398 0.0546266 0.108756
+2 34 1 1 0.767017 0.248767 0.861916 0.218916
+34 7 0 1 0.767017 0.248767 0.796821 0.168175
+2 7 1 1 0.796821 0.168175 0.861916 0.218916
+99 56 0 1 0.0372127 0.433272 0.0742814 0.447147
+99 45 1 1 0.0315598 0.426307 0.0372127 0.433272
+99 82 1 1 0.0137703 0.438066 0.0372127 0.433272
+11 8 1 1 0.0320116 0.0197398 0.938062 0.00777673
+62 89 1 1 0.606945 0.918282 0.703513 0.940182
+90 21 1 1 0.621141 0.524754 0.645537 0.545814
+92 99 1 1 0.0372127 0.433272 0.0390575 0.438937
+36 43 0 1 0.0024236 0.733372 0.000440098 0.396733
+38 36 1 1 0.000440098 0.396733 0.00271764 0.675317
+8 36 1 1 0.000440098 0.396733 0.0320116 0.0197398
+2 11 0 1 0.861916 0.218916 0.938062 0.00777673
+1 11 1 1 0.938062 0.00777673 0.994725 0.347444
+9 48 1 1 0.328146 0.143797 0.642532 0.0416033
+31 47 1 1 0.404426 0.192404 0.480052 0.241065
+11 7 1 1 0.796821 0.168175 0.938062 0.00777673
+89 14 1 1 0.491153 0.805844 0.606945 0.918282
+91 47 1 1 0.404426 0.192404 0.500698 0.237139
+33 65 1 1 0.602807 0.379051 0.774934 0.318677
+16 98 1 1 0.704319 0.497426 0.718718 0.498616
+16 90 1 1 0.645537 0.545814 0.718718 0.498616
+98 90 1 1 0.645537 0.545814 0.704319 0.497426
+96 17 1 1 0.781379 0.639267 0.818151 0.666359
+17 51 1 1 0.735448 0.667264 0.781379 0.639267
+# END EDGES
+# BEGIN FACES
+# BEGIN FACE
+1 1 
+# number_of_outer_ccbs
+0
+# number_of_inner_ccbs
+1
+# halfedges_on_inner_ccb
+9
+492 406 250 102 552 536 548 544 236 
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+5 0 3 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+11 6 9 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+17 13 14 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+23 19 21 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+29 24 27 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+35 31 33 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+416 39 25 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+41 36 38 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+47 42 45 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+53 48 51 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+59 54 57 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+65 61 63 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+71 67 68 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+77 73 75 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+83 78 81 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+87 66 85 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+93 88 91 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+99 95 97 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+105 101 103 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+109 106 43 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+115 110 113 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+119 89 117 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+125 120 123 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+131 126 128 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+137 132 135 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+143 138 141 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+148 145 147 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+518 1 100 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+155 150 153 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+159 156 116 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+165 160 163 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+171 167 169 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+175 173 139 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+177 142 133 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+183 178 181 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+436 434 428 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+189 185 186 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+191 184 182 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+195 86 193 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+199 74 197 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+205 200 203 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+211 207 209 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+217 213 215 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+223 219 221 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+228 224 227 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+306 300 229 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+233 161 231 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+237 111 234 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+239 98 112 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+241 198 218 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+247 242 245 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+253 248 251 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+430 188 249 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+257 179 254 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+261 196 259 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+267 262 265 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+271 192 269 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+275 268 84 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+277 273 274 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+312 308 311 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+281 94 279 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+285 118 283 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+287 122 264 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+291 286 289 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+297 293 295 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+299 176 180 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+301 162 32 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+303 2 146 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+305 172 164 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+307 152 304 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+320 55 309 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+315 280 158 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+318 130 56 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+319 90 317 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+362 296 361 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+323 30 204 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+325 225 322 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+448 114 329 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+331 326 328 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+335 230 174 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+337 332 334 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+342 339 341 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+356 354 49 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+348 345 347 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+350 349 40 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+351 8 216 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+353 80 7 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+490 276 462 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+358 357 343 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+359 140 151 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+368 244 76 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+365 240 60 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+398 396 20 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+369 364 366 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+444 442 321 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+373 370 58 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+496 266 375 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+377 72 374 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+532 157 531 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+383 379 380 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+385 278 381 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+480 388 344 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+389 258 387 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+402 400 260 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+564 482 79 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+395 390 393 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+397 372 129 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+554 290 399 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+401 272 220 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+403 391 270 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+478 330 201 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+409 404 407 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+414 410 413 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+474 327 458 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+417 16 10 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+421 324 419 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+476 423 418 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+508 246 484 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+427 422 425 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+429 104 187 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+431 252 255 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+433 208 235 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+572 46 435 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+440 136 439 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+441 437 190 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+466 92 443 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+494 371 288 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+447 424 314 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+450 432 449 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+451 166 210 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+562 453 346 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+455 37 452 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+459 411 457 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+461 355 154 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+464 70 50 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+465 460 463 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+467 294 446 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+469 360 445 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+472 412 471 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+560 232 333 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+506 456 504 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+477 202 96 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+479 34 470 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+481 214 392 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+483 394 212 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+486 485 367 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+487 64 420 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+489 226 62 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+491 488 222 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+493 206 170 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+520 310 495 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+497 243 363 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+499 468 313 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+538 336 298 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+503 405 501 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+505 415 408 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+507 168 475 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+509 426 292 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+512 511 144 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+516 69 515 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+566 514 513 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+519 44 149 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+521 263 498 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+523 22 127 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+525 302 82 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+527 352 15 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+529 524 526 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+534 282 533 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+542 530 384 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+537 26 18 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+539 256 502 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+541 338 52 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+543 378 535 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+546 284 382 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+547 238 545 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+549 522 316 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+558 12 28 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+553 4 550 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+555 454 124 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+557 376 121 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+559 551 528 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+561 500 473 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+563 386 556 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+565 510 194 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+570 540 517 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+569 107 340 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+571 567 568 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+574 134 108 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# BEGIN FACE
+0 1 
+# number_of_outer_ccbs
+1
+# halfedges_on_outer_ccb
+3
+575 573 438 
+# number_of_inner_ccbs
+0
+# number_of_isolated_vertices
+0
+
+# END FACE
+# END FACES
+# END ARRANGEMENT

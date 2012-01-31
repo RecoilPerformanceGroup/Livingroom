@@ -232,7 +232,7 @@ struct VectorSortY {
                     Arrangement_2::Halfedge_around_vertex_circulator first, curr;             
                     first = curr = h2->incident_halfedges();
                     do {
-                        if((Arrangement_2::Halfedge_handle) curr != eit){
+                        if((Halfedge_handle) curr != eit){
                             // Note that the current halfedge is directed from u to h1:
                             Arrangement_2::Vertex_handle u = curr->source(); 
                             ofVec2f odir = handleToVec2(u) - handleToVec2(h2);
@@ -297,7 +297,7 @@ struct VectorSortY {
                     //                //Flow
                     //                first = curr = h2->incident_halfedges();
                     //                do {
-                    //                    if((Arrangement_2::Halfedge_handle) curr != eit){
+                    //                    if((Halfedge_handle) curr != eit){
                     //                        if(curr->data().crackAmount < crackAmm){
                     //                            curr->data().crackAmount +=  overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
                     //                            eit->data().crackAmount -= overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;

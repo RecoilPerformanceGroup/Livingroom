@@ -47,11 +47,6 @@
         
         
         for(int i=0; i<n;i++){
-            ofVec2f centroid = [self trackerCentroid:i];
-            
-            ofSetColor(255,255,255);
-            ofCircle(centroid.x, centroid.y, 0.01);
-            
             
             switch (i) {
                 case 0:
@@ -78,13 +73,26 @@
                     break;
             }
             
+             glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
             
             vector< ofVec2f > blob = [self trackerBlob:i];
+            glBegin(GL_POLYGON);
             for(int u=0;u<blob.size();u++){
-                ofCircle(blob[u].x, blob[u].y, 0.01);
+                //  ofCircle(blob[u].x, blob[u].y, 0.01);
                 //   ofRect(blob[u].x*w, blob[u].y*h, 6,6);
-                
+                glVertex2f(blob[u].x, blob[u].y);
             }
+            glEnd();
+            glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+
+            ofVec2f centroid = [self trackerCentroid:i];
+            
+            ofSetColor(255,255,255);
+            ofCircle(centroid.x, centroid.y, 0.003);
+            
+
+            
+
         }
         
         PopSurface();

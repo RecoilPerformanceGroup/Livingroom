@@ -36,6 +36,9 @@
         
         [self addPropF:@"deleteStrength"];
         
+        [self addPropF:@"hullStiffness"];
+        
+        
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
         NSTextField * textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 300, 300)];
@@ -73,14 +76,14 @@ static void updateInitialLength(Arrangement_2::Edge_iterator eit){
     eit->data().crumbleOptimalLength = edgeLength(eit);
 }
 
-//The angle between the provided edge and its next edge. Returns also optionaly a middle dir (for straighten up)
-static float edgeAngleToNext(Arrangement_2::Ccb_halfedge_circulator eit, ofVec2f * middleDir = nil){
+static float angleBetweenEdges(Halfedge_handle h1, Halfedge_handle h2, ofVec2f * middleDir = nil){
+    
     //Middle point
-    ofVec2f middle = handleToVec2(eit->target());
+    ofVec2f middle = handleToVec2(h1->target());
     
     //Vectors to left and right point
-    ofVec2f left = handleToVec2(eit->source()) - middle;
-    ofVec2f right = handleToVec2(eit->next()->target()) - middle;
+    ofVec2f left = handleToVec2(h1->source()) - middle;
+    ofVec2f right = handleToVec2(h2->target()) - middle;
     
     float angle = left.angle(right);
     if(angle < 0){
@@ -101,6 +104,11 @@ static float edgeAngleToNext(Arrangement_2::Ccb_halfedge_circulator eit, ofVec2f
     }
     
     return angle;
+}
+
+//The angle between the provided edge and its next edge. Returns also optionaly a middle dir (for straighten up)
+static float edgeAngleToNext(Arrangement_2::Ccb_halfedge_circulator eit, ofVec2f * middleDir = nil){
+    return angleBetweenEdges(eit, eit->next(), middleDir);
 }
 
 //Updates the initial angle for a specific edge
@@ -142,6 +150,21 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 updateInitialAngle(hc);
             }
         }];
+        
+        vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
+        
+        for(int i=0;i<boundaryHandles.size();i++){
+            for(int u=1;u<boundaryHandles[i].size();u++){
+                Halfedge_handle h1 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u-1]);
+                Halfedge_handle h2 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
+                
+                if(h1->target()->data().hullOptimalAngle == -1){
+                    float angle = angleBetweenEdges(h1, h2);
+                    h1->target()->data().hullOptimalAngle = angle;
+                }
+            }
+        }
+        
         
         
         //Random z value (so its never 0)
@@ -218,6 +241,66 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 }];
             }];
         }
+        
+        
+        //
+        //Calculate the hull Stiffness
+        //
+        f = PropF(@"hullStiffness");
+        if(f > 0){
+            [self addPhysicsBlock:@"hullStiffness" block:^(PolyArrangement *arrangement) {
+                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
+                
+                for(int i=0;i<boundaryHandles.size();i++){
+                    for(int u=1;u<boundaryHandles[i].size();u++){
+                        Halfedge_handle h1 = [arrangement arrData]->non_const_handle(boundaryHandles[i][u-1]);
+                        Halfedge_handle h2 = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
+                        
+                        ofVec2f dir;
+                        float angle = angleBetweenEdges(h1, h2, &dir);
+                        float optimalAngle = h1->target()->data().hullOptimalAngle;
+                        
+                        int minus = (angle*optimalAngle < 0) ? -1 : 1;                        
+                        float diff = minus*(fabs(angle)-fabs(optimalAngle));
+                        
+                        h1->target()->data().springF +=  dir*diff*f*0.0001;
+                        
+                    }
+                }
+                
+                
+                
+                
+            }];
+        }
+        
+        
+        
+        //
+        //Calculate the hull Stiffness
+        //
+        //        f = PropF(@"hullStiffness");
+        //        if(f > 0){
+        //            [self addPhysicsBlock:@"hullStiffness" block:^(PolyArrangement *arrangement) {
+        //                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
+        //                
+        //                for(int i=0;i<boundaryHandles.size();i++){
+        //                    for(int u=0;u<boundaryHandles[i].size();u++){
+        //                        Halfedge_handle h = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
+        //                        
+        //                        ofVec3f v1 =  h->source()->data().springF;
+        //                        ofVec3f v2 =  h->target()->data().springF;
+        //
+        //                        h->source()->data().springF -= v1*(f);
+        //                        h->target()->data().springF -= v2*(f);
+        //                        
+        //                        h->source()->data().springF += v2 * f;
+        //                        h->target()->data().springF += v1 * f;
+        //                    }
+        //                }
+        //                
+        //              }];
+        //        }
         
         
         f = PropF(@"FlatNormalForce");
@@ -322,7 +405,27 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 }];
             }
             
-            
+            /*
+             float f = PropF(@"hullStiffness");
+             if(f > 0){
+             vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
+             
+             for(int i=0;i<boundaryHandles.size();i++){
+             for(int u=0;u<boundaryHandles[i].size();u++){
+             Halfedge_handle h = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
+             
+             ofVec3f v1 =  h->source()->data().springF;
+             ofVec3f v2 =  h->target()->data().springF;
+             
+             h->source()->data().springF -= v1*(f);
+             h->target()->data().springF -= v2*(f);
+             
+             h->source()->data().springF += v2 * f;
+             h->target()->data().springF += v1 * f;
+             }
+             }
+             }
+             */
             
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // !!!! Vertex position update !!!!
@@ -358,7 +461,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     
     CachePropF(deleteStrength);
     if(deleteStrength > 0){
-        __block vector<Arrangement_2::Halfedge_handle> deletehandles;
+        __block vector<Halfedge_handle> deletehandles;
         [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
             ofVec3f f1 = eit->source()->data().accumF;
             ofVec3f f2 = eit->target()->data().accumF;

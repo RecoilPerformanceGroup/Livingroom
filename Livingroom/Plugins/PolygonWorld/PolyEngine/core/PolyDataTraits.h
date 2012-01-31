@@ -50,6 +50,8 @@ struct LRVertex_data {
     //CrumbleAnimator
     ofVec3f crumbleforce        = ofVec3f(0,0,0);
     bool crumbleAnchor          = true;
+    
+    float hullOptimalAngle      = -1;
 };
 
 // --------
