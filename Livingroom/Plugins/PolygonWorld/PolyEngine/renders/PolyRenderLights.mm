@@ -66,7 +66,6 @@
         
         Arrangement_2::Face_iterator fit = [[engine arrangement] arrData]->faces_begin();  
         
-        glBegin(GL_TRIANGLES);
         for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {
             ofVec3f color;
             
@@ -112,10 +111,14 @@
                 
                 if(!fit->is_fictitious()){
                     if(fit->number_of_outer_ccbs() == 1){
+                        glBegin(GL_POLYGON);
+
                         Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
                         Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
                         
                         do { 
+                    //        ofVec2f v2 = point2ToVec2(hc->source()->point());
+
                             ofVec3f p = handleToVec3(hc->source());                        
                             glVertex3d(p.x , p.y, (p.z)*zScale);
                             // cout<<p.z<<endl;
@@ -123,6 +126,8 @@
                             //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                             ++hc; 
                         } while (hc != ccb_start); 
+                        glEnd();  
+
                     }            
                 }
                 
@@ -132,7 +137,6 @@
             
             
         } 
-        glEnd();  
         glDisable(GL_DEPTH_TEST);
         
     } PopPerspective();
