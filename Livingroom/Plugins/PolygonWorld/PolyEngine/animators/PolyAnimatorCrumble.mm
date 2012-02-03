@@ -21,6 +21,7 @@
         [self addPropF:@"mouseRadius"];
         
         [self addPropF:@"crumbleForce"];
+        [self addPropF:@"crumbleForce2"];
         [self addPropF:@"decrumbleForce"];
         
         [self addPropF:@"cutHole"];
@@ -231,7 +232,49 @@
         
     }
     
+    CachePropF(crumbleForce2);
+    if(crumbleForce2 > 0 && v.size() > 0){
+        [GetPhysics() addPhysicsBlock:@"CrumbleForce2" block:^(PolyArrangement *arrangement) {
+            
+            for(int i=0;i<v.size();i++){
+                for(int u=0;u<v[i].size();u++){
+                    if([[engine arrangement] vecInsideBoundary:v[i][u]]){
+                        //Inside boundary
+                        ofVec2f p = v[i][u];
+                        
+                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i][u]];
+                        
+                        Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
+                        Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
+                        
+                        ofVec2f p1 = handleToVec2(h1);
+                        ofVec2f p2 = handleToVec2(h2);
+                        
+                        float dist1 = p1.distance(p);
+                        float dist2 = p2.distance(p);
+                        
+                        float factor2 = dist1 / (dist1 + dist2);
+                        float factor1 = dist2 / (dist1 + dist2);
+                        
+/*                        ofVec2f dir1 = (p-p1).normalized();
+                        ofVec2f dir2 = (p-p2).normalized();*/
+                        ofVec2f dir1 = -calculateEdgeNormal(handle).normalized();
+                        ofVec2f dir2 = dir1;
+                        
+                        float dist = distanceVecToHalfedge(p, handle);
+                        
+                        h1->data().springF += crumbleForce2*dir1*dist*factor1;      
+                        h2->data().springF += crumbleForce2*dir2*dist*factor2;      
+                    }
+                }
+                //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
+                //            
+            }
+        }];
+        
+    }
     
+  
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{

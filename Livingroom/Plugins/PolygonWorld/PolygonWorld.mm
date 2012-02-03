@@ -115,7 +115,7 @@
     
     ofFill();
     ofColor(255,0,0,255);
-    ofCircle(cMouseX, cMouseY, 0.01);
+  //  ofCircle(cMouseX, cMouseY, 0.01);
     
 }
 

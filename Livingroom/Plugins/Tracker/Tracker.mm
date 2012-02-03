@@ -2,6 +2,7 @@
 #import "OSCControl.h"
 #import <ofxCocoaPlugins/BlobTracker2d.h>
 #import <ofxCocoaPlugins/Keystoner.h>
+#import <ofxCocoaPlugins/CameraCalibrationObject.h>
 
 @implementation Tracker
 
@@ -73,7 +74,7 @@
                     break;
             }
             
-             glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+            glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
             
             vector< ofVec2f > blob = [self trackerBlob:i];
             glBegin(GL_POLYGON);
@@ -84,15 +85,15 @@
             }
             glEnd();
             glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
-
+            
             ofVec2f centroid = [self trackerCentroid:i];
             
             ofSetColor(255,255,255);
             ofCircle(centroid.x, centroid.y, 0.003);
             
-
             
-
+            
+            
         }
         
         PopSurface();
@@ -156,7 +157,7 @@
         }
     }
     
-
+    
 }
 
 
@@ -227,7 +228,15 @@
     {
         int num = [[GetPlugin(BlobTracker2d) getInstance:0] numPBlobs];
         if(num > n){
-            //            return *[[GetPlugin(BlobTracker2d) getInstance:0] getPBlob:n]->;
+            NSArray * blobs = [[[GetPlugin(BlobTracker2d) getInstance:0] getPBlob:n] blobs];
+            for(Blob2d * blob in blobs){       
+                vector<ofPoint> pts = [blob pts];
+                v.insert(v.end(), pts.begin(), pts.end());
+/*                for(int i=0;i<pts.size();i++){
+                    v.push_back(pts[i]);
+                }*/
+            }
+            return v;
             
         }
         n -= num;
@@ -295,6 +304,20 @@
     ofxCvGrayscaleImage ret;
     ret.allocate(res,res);
     ret.set(0);
+    
+    CameraCalibrationObject * calib = [[GetPlugin(BlobTracker2d) getInstance:0] calibrator];
+    
+    ofPoint src[4];
+    ofPoint dst[4];
+    
+
+    for(int i=0;i<4;i++){
+        src[i] = [calib camHandle:i]*ofVec2f([[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->width, [[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->height);   
+        dst[i] = [calib projHandle:i] * ofVec2f(res,res);   
+    }
+    
+    ret.warpIntoMe(*[[GetPlugin(BlobTracker2d) getInstance:0] grayDiff], src, dst);
+    
     vector< vector<ofVec2f> > trackerBlobVector = [self trackerBlobVector];
     
     for(int i=0;i<trackerBlobVector.size();i++){
@@ -303,7 +326,7 @@
         for(int u=0;u<nPoints;u++){
             _cp[u] = cvPoint(trackerBlobVector[i][u].x*res, trackerBlobVector[i][u].y*res);
         }
-	
+        
         CvPoint* cp = _cp;    
         cvFillPoly(ret.getCvImage(), &cp, &nPoints, 1, cvScalar(255));
     }

@@ -33,6 +33,9 @@
 		3D3FAB5D14CEAA50006B9B36 /* Mask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D3FAB5B14CEAA50006B9B36 /* Mask.mm */; };
 		3D3FAB5E14CEAA50006B9B36 /* Mask.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3FAB5C14CEAA50006B9B36 /* Mask.xib */; };
 		3D67E44E14C5A06D00CB1696 /* Gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D67E44D14C5A06D00CB1696 /* Gradient.png */; };
+		3D6A9FD514DBF6C600AFC7D6 /* LEDGrid.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD314DBF6C600AFC7D6 /* LEDGrid.mm */; };
+		3D6A9FD614DBF6C600AFC7D6 /* LEDGrid.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD414DBF6C600AFC7D6 /* LEDGrid.xib */; };
+		3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */; };
 		3D8C5FF41497A28500A3CA6D /* OSCControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF21497A28500A3CA6D /* OSCControl.mm */; };
 		3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF31497A28500A3CA6D /* OSCControl.xib */; };
 		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
@@ -137,6 +140,10 @@
 		3D3FAB5B14CEAA50006B9B36 /* Mask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Mask.mm; sourceTree = "<group>"; };
 		3D3FAB5C14CEAA50006B9B36 /* Mask.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Mask.xib; sourceTree = "<group>"; };
 		3D67E44D14C5A06D00CB1696 /* Gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gradient.png; sourceTree = "<group>"; };
+		3D6A9FD214DBF6C600AFC7D6 /* LEDGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LEDGrid.h; sourceTree = "<group>"; };
+		3D6A9FD314DBF6C600AFC7D6 /* LEDGrid.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LEDGrid.mm; sourceTree = "<group>"; };
+		3D6A9FD414DBF6C600AFC7D6 /* LEDGrid.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LEDGrid.xib; sourceTree = "<group>"; };
+		3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chess.jpg; sourceTree = "<group>"; };
 		3D8C5FF11497A28500A3CA6D /* OSCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCControl.h; sourceTree = "<group>"; };
 		3D8C5FF21497A28500A3CA6D /* OSCControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OSCControl.mm; sourceTree = "<group>"; };
 		3D8C5FF31497A28500A3CA6D /* OSCControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSCControl.xib; sourceTree = "<group>"; };
@@ -308,6 +315,7 @@
 		3D2FC2381462FE3E0028BC01 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				3D6A9FD014DBF6B800AFC7D6 /* LEDGrid */,
 				3DF0F51614C6D42300B1EDED /* Prolog */,
 				3DAF18C814B35EE7003B6B81 /* Tracker */,
 				3D8C5FF01497A28500A3CA6D /* OSCControl */,
@@ -410,6 +418,16 @@
 			path = Livingroom/Plugins/Mask;
 			sourceTree = SOURCE_ROOT;
 		};
+		3D6A9FD014DBF6B800AFC7D6 /* LEDGrid */ = {
+			isa = PBXGroup;
+			children = (
+				3D6A9FD214DBF6C600AFC7D6 /* LEDGrid.h */,
+				3D6A9FD314DBF6C600AFC7D6 /* LEDGrid.mm */,
+				3D6A9FD414DBF6C600AFC7D6 /* LEDGrid.xib */,
+			);
+			path = LEDGrid;
+			sourceTree = "<group>";
+		};
 		3D8C5FEF149799C200A3CA6D /* Addons */ = {
 			isa = PBXGroup;
 			children = (
@@ -431,6 +449,7 @@
 		3D9D181914BDF03D00DD2093 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */,
 				3D97F4C514D2F49400981D15 /* particles.fs */,
 				3D97F4C614D2F49400981D15 /* particles.vs */,
 				3D67E44D14C5A06D00CB1696 /* Gradient.png */,
@@ -619,6 +638,8 @@
 				3D3FAB5E14CEAA50006B9B36 /* Mask.xib in Resources */,
 				3D97F4C914D2F50A00981D15 /* particles.fs in Resources */,
 				3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */,
+				3D6A9FD614DBF6C600AFC7D6 /* LEDGrid.xib in Resources */,
+				3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -668,6 +689,7 @@
 				3D97F4C814D2F49400981D15 /* particles.vs in Sources */,
 				3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */,
 				3D9A105414D6E2C50050C8E2 /* perlin.cpp in Sources */,
+				3D6A9FD514DBF6C600AFC7D6 /* LEDGrid.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -176,11 +176,11 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     Arrangement_2::Ccb_halfedge_const_circulator nearestPoint;
     float bestDist = -1;
     
-    if(insideBoundary){
+    /*if(insideBoundary){
         //TODO
         cout<<"Inside Boundary TODO"<<endl;
         return Arrangement_2::Halfedge_const_handle();
-    } else {
+    } else */{
         Arrangement_2::Unbounded_face_iterator ufit = arr->unbounded_faces_begin();
         for( ; ufit != arr->unbounded_faces_end(); ++ufit){
             if(!ufit->is_fictitious() && ufit->number_of_inner_ccbs() >= 1){
@@ -214,6 +214,11 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
             
             Arrangement_2::Halfedge_const_handle handle2 = nearestPoint;
             Arrangement_2::Halfedge_const_handle handle1 = nearestPoint->prev();
+            if(insideBoundary){
+                handle2 = nearestPoint;
+                handle1 = nearestPoint->prev();
+                
+            }
             
             ofVec2f normal1 = calculateEdgeNormal(handle1);
             ofVec2f normal2 = calculateEdgeNormal(handle2);

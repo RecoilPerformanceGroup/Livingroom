@@ -25,8 +25,10 @@
         
         //State 1:
         [self addPropF:@"springStrength"];
+        [self addPropF:@"spring2dStrength"];
         [self addPropF:@"ZzeroForce"];  
         [self addPropF:@"FlatNormalForce"];
+        [[self addPropF:@"FlatNormalForceAngle"] setMaxValue:180.0];
         
         //State 2:
         [self addPropF:@"angleStiffnesForce"];
@@ -38,6 +40,7 @@
         
         [self addPropF:@"hullStiffness"];
         
+        [self addPropF:@"burn"];
         
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
@@ -204,6 +207,58 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         }
         
         
+        
+        //
+        //Calculate the vertex to vertex spring force
+        //
+        springStrength = PropF(@"spring2dStrength");
+        if(springStrength > 0){
+            [self addPhysicsBlock:@"Spring2dStrength" block:^(PolyArrangement *arrangement) {
+                
+                [arrangement enumerateEdges:^(Arrangement_2::Edge_iterator eit) {                   
+                    ofVec2f p1 = handleToVec2(eit->source());
+                    ofVec2f p2 = handleToVec2(eit->target());
+                    
+                    ofVec2f dir = p2-p1;
+                    
+                    float length = p1.distance(p2);
+                    float optimalLength = eit->data().crumbleOptimalLength;
+                    
+                    dir.normalize();
+                    
+                    dir *= (length - optimalLength) * springStrength;
+                    
+                    //float elasticity = PropF(@"elasticity");
+                    
+                    eit->source()->data().springF += dir;// * (1-elasticity);
+                    eit->target()->data().springF +=  -dir;// * (1-elasticity);
+                }];
+            }];
+        }
+        
+        //
+        //Burn
+        //
+        float burn = PropF(@"burn");
+        if(burn > 0){
+            [self addPhysicsBlock:@"burn" block:^(PolyArrangement *arrangement) {
+                ofVec2f center = ofVec2f(0.5,0.5);
+                
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL *stop) {
+                    
+                    
+                    if(handleToVec2(vit).y > (1-burn)){
+                        ofVec3f p = handleToVec3(vit);
+                        ofVec3f dir = ofVec3f(0,-1,0);;
+                        
+                        vit->data().springF += (dir*0.5 + ofVec3f(0,0,ofRandom(-0.1,0.1)))*0.1;
+                    }
+                }];
+                
+            }];
+        }
+        
+        
         //
         //Calculate angular stiffness force
         //
@@ -304,6 +359,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
         
         f = PropF(@"FlatNormalForce");
+        float minAngle = PropF(@"FlatNormalForceAngle");
         if(f > 0){
             [self addPhysicsBlock:@"FlatNormalForce" block:^(PolyArrangement *arrangement) {
                 //
@@ -341,22 +397,25 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                     ofVec3f rotVec;
                     q.getRotate(angle, rotVec);
                     
-                    ofVec3f vv1 = v1-middle;
-                    ofVec3f vv2 = v2-middle;
-                    ofVec3f vv3 = v3-middle;
-                    
-                    
-                    vv1.rotate(angle, rotVec);
-                    vv2.rotate(angle, rotVec);
-                    vv3.rotate(angle, rotVec);
-                    
-                    ofVec3f v1goal = middle+vv1;
-                    ofVec3f v2goal = middle+vv2;
-                    ofVec3f v3goal = middle+vv3;
-                    
-                    h1->data().springF += (v1goal-v1)*f;
-                    h2->data().springF += (v2goal-v2)*f;
-                    h3->data().springF += (v3goal-v3)*f;
+                    if(angle > minAngle){
+                        
+                        ofVec3f vv1 = v1-middle;
+                        ofVec3f vv2 = v2-middle;
+                        ofVec3f vv3 = v3-middle;
+                        
+                        
+                        vv1.rotate(angle-minAngle, rotVec);
+                        vv2.rotate(angle-minAngle, rotVec);
+                        vv3.rotate(angle-minAngle, rotVec);
+                        
+                        ofVec3f v1goal = middle+vv1;
+                        ofVec3f v2goal = middle+vv2;
+                        ofVec3f v3goal = middle+vv3;
+                        
+                        h1->data().springF += (v1goal-v1)*f;
+                        h2->data().springF += (v2goal-v2)*f;
+                        h3->data().springF += (v3goal-v3)*f;
+                    }
                 }];
             }];
         }
@@ -502,6 +561,29 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         ofVec2f v = handleToVec2(vit)   + ofVec2f(vit->data().accumF.x, vit->data().accumF.y) ;
         of2DArrow( handleToVec2(vit) ,  handleToVec2(vit) + 0.1*ofVec2f(vit->data().accumF.x, vit->data().accumF.y) , 0.01);
     }];
+    
+    
+    
+    vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
+    ofSetColor(255,255,255);
+    for(int i=0;i<boundaryHandles.size();i++){
+        for(int u=1;u<boundaryHandles[i].size();u++){
+            Halfedge_handle h1 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u-1]);
+            Halfedge_handle h2 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
+            
+            ofVec2f dir;
+            float angle = angleBetweenEdges(h1, h2, &dir);
+            float optimalAngle = h1->target()->data().hullOptimalAngle;
+            
+            int minus = (angle*optimalAngle < 0) ? -1 : 1;                        
+            float diff = minus*(fabs(angle)-fabs(optimalAngle));
+            
+            of2DArrow( handleToVec2(h1->target()) ,  handleToVec2(h1->target()) + 0.1*dir , 0.01);
+
+        }
+    }
+    
+
     
     
     /* //Visualize angualar stress
