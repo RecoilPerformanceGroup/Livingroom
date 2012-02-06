@@ -8,6 +8,7 @@ public:
 	float xv, yv;
 	float xf, yf;
     float size;
+    float randomForce;
     
     float alpha;
     bool dying;
@@ -15,6 +16,8 @@ public:
     
     bool dead;
     bool alive;
+    
+    bool kill;
     
     Particle(){};
     
@@ -27,6 +30,7 @@ public:
             livingUp = false;
             dead = true;
             alive = false;
+            kill = false;
 	}
 	void updatePosition(float timeStep) {
 		// f = ma, m = 1, f = a, v = int(a)
@@ -42,7 +46,7 @@ public:
                 dead = true;
                 dying = false;
                 alive = false;
-            }
+            }   
         }
         
         if(livingUp && !alive){
@@ -55,6 +59,11 @@ public:
                 //cout<<"Alive"<<endl;
             }
         }
+        
+        if(alpha > 1)
+            alpha = 1;
+        if(alpha < 0)
+            alpha = 0;
 	}
 	void resetForce() {
 		xf = 0;

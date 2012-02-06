@@ -4,6 +4,8 @@
 #import <ofxCocoaPlugins/Keystoner.h>
 #import <ofxCocoaPlugins/CustomGraphics.h>
 
+#define DEBUG_PARTICLES
+
 @implementation AshParticles
 
 - (id)init{
@@ -49,12 +51,100 @@
     
     
     
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:10] named:@"blackBlur"];
+    
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5] named:@"blackFade"];    
+    [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:255] named:@"blackFadeUp"];     
     
 }
 
 //
 //----------------
 //
+
+
+-(int) numParticles{
+    return lastParticleSystem*NUM_PARTICLES + lastParticleNumber;
+}
+
+
+-(void) killParticle:(Particle*)p{   
+    p->dying = NO;
+    p->alive = NO;
+    p->kill = NO;      
+    p->dead = YES;      
+    p->livingUp = NO;      
+    p->alpha = 0;
+}
+-(void) killParticle:(int)system number:(int)number{   
+    
+    
+    
+    //------ HERE WE ARE ------
+    /*if(system != lastParticleSystem || number != lastParticleNumber){
+     Particle dyingParticle = particles[system][number];
+     
+     particles[system][number] = particles[lastParticleSystem][lastParticleNumber];
+     particles[lastParticleSystem][lastParticleNumber] = dyingParticle;
+     
+     particles[lastParticleSystem][lastParticleNumber].dying = NO;
+     particles[lastParticleSystem][lastParticleNumber].alive = NO;
+     particles[lastParticleSystem][lastParticleNumber].kill = NO;
+     particles[lastParticleSystem][lastParticleNumber].dead = YES;
+     particles[lastParticleSystem][lastParticleNumber].livingUp = NO;
+     
+     // cout<<"Switch "<<system<<", "<<number<<" <-> "<<lastParticleSystem<<", "<<lastParticleNumber<<endl;
+     
+     if(lastParticleSystem != system){
+     cout<<"Kill other system"<<endl;
+     }
+     } else {*/
+    Particle * p = &particles[system][number];
+    [self killParticle:p];
+    
+    //  cout<<"Kill "<<system<<", "<<number<<endl;
+    //}
+    
+    
+    /*
+     lastParticleNumber--;
+     if(lastParticleNumber < 0){
+     lastParticleNumber = NUM_PARTICLES-1;
+     lastParticleSystem --;
+     }
+     
+     if(lastParticleSystem < 0){
+     lastParticleSystem = 0;
+     }*/
+    
+    //  cout<<"Kill num "<<[self numParticles]<<endl;
+}
+
+
+-(Particle*) newParticle{
+    for(int u=lastParticleSystem;u<NUM_PARTICLE_SYSTEMS;u++){
+        //    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+        Particle * particle =  &particles[u][0];
+        for(int i = lastParticleNumber; i < NUM_PARTICLES; i++) {
+            if(particle->dead && !particle->livingUp){
+                lastParticleSystem = u;
+                lastParticleNumber = i;
+                /* if(lastParticleSystem == NUM_PARTICLE_SYSTEMS-1 && lastParticleNumber == NUM_PARTICLES-1){
+                 lastParticleSystem = lastParticleNumber = 0;
+                 }*/
+                
+                
+                particle->livingUp = YES;
+                particle->dead = NO;
+                return particle;
+            }
+            particle++;
+        }
+        lastParticleNumber = 0;
+    }
+    lastParticleSystem = 0;
+    return nil;
+}
 
 
 -(void)setup{
@@ -73,6 +163,7 @@
             float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
             particles[u][i] = Particle(x, y, xv, yv);
             particles[u][i].size = ofRandom(0.5,1);
+            particles[u][i].randomForce = ofRandom(0,1);
             pos[NUM_PARTICLES*u+i] = ofPoint(x,y,0);
             color[NUM_PARTICLES*u+i] = ofVec4f(0.0,0.0,0.0,1.0);
         }        
@@ -90,9 +181,17 @@
     fade.allocate(GRID_SIZE, GRID_SIZE);
     fade.set(10);
     
-    
     distanceImage.allocate(GRID_SIZE, GRID_SIZE);
     distanceImage.set(0);
+    
+    blackImage.allocate(GRID_SIZE, GRID_SIZE);
+    blackImage.set(0);
+    
+    blackImageThreshold.allocate(GRID_SIZE, GRID_SIZE);
+    blackImageThreshold.set(0);
+    
+    blackImageLast.allocate(GRID_SIZE, GRID_SIZE);
+    blackImageLast.set(0);    
     
     //   NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"ash8x8" ofType:@"jpg"];
@@ -105,7 +204,7 @@
     
     
     glewInit();
-    glGenBuffersARB(2, &particleVBO[0]);
+    glGenBuffersARB(3, &particleVBO[0]);
     
     // color
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
@@ -117,7 +216,14 @@
     glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec3f), &pos[0].x, GL_STREAM_DRAW_ARB);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
+#ifdef DEBUG_PARTICLES
     
+    // debug
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec4f), &colorDebug[0].x, GL_STREAM_DRAW_ARB);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
+#endif
     
     perlinX = new Perlin(4, 8, 1, 0);
     perlinY = new Perlin(4, 8, 1, 1);
@@ -139,7 +245,7 @@
     CachePropF(alpha);
     CachePropF(windForce);    
     CachePropF(windForceRadius);    
-    float d = PropF(@"particleOverlap")*0.01;
+    float particleOverlap = PropF(@"particleOverlap")*0.01;
     
     //---------------- RESET ------------------
     
@@ -162,6 +268,14 @@
                 particles[u][i].alpha = 0;
             }
         }
+        
+        grid.set(0);
+        diff.set(0);
+        timeDiff.set(0);
+        distanceImage.set(0);
+        blackImage.set(0);
+        blackImageThreshold.set(0);
+        blackImageLast.set(0);    
     }
     
     if(PropB(@"resetBurn")){
@@ -206,7 +320,7 @@
     
     //  diff.absDiff(tracker, grid);
     
-    grid -= fade;
+    grid -= 20;
     grid += diff;
     
     
@@ -214,9 +328,56 @@
     
     timeDiff = tracker;
     
+    tracker -= PropI(@"blackFadeUp");
+    
+    tracker.blur(PropF(@"blackBlur"));
+    blackImage += tracker;
+    
+    
+    /* float fadeOut =  PropF(@"blackFade");
+     if(fadeOut< 1){
+     int n = fadeOut * 10;
+     if(fadeOutCounter++ < n)
+     blackImage -= 1;
+     if(fadeOutCounter >= 10)
+     fadeOutCounter = 0;
+     } else {
+     blackImage -= fadeOut;
+     }*/
+    // blackImage.blur(PropF(@"blackBlur"));
+    
+    blackImageThreshold = blackImage;
+    blackImageThreshold.threshold(10);
     /*    cvDistTransform(tracker.getCvImage(), distanceImage.getCvImage());
      distanceImage.flagImageChanged();*/
     
+    //--------------------------------------------
+    
+    //New particles from image
+    {
+        // int i=0;
+        unsigned char * blackLast = blackImageLast.getPixels();
+        unsigned char * black = blackImage.getPixels();
+        for(int y=0;y<GRID_SIZE;y+=1){
+            for(int x=0;x<GRID_SIZE;x+=1){
+                //                i = y*GRID_SIZE + x;
+                if(*blackLast <= 5 && *black > 5){
+                    Particle* p = [self newParticle];
+                    if(p != nil){
+                        p->x = x/(float)GRID_SIZE;
+                        p->y = y/(float)GRID_SIZE;
+                        p->livingUp = NO;
+                        p->alive = YES;
+                        p->alpha = 1;
+                    }
+                }
+                blackLast ++;
+                black++;
+                //            i++;
+            }
+        }
+    }
+    blackImageLast = blackImage;
     
     //--------------------------------------------
     
@@ -300,36 +461,56 @@
                     
                     int diffNum = 100.0*trackerSpawner;
                     
-                    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-                        Particle * particle =  &particles[u][0];
-                        for(int i = 0; i < NUM_PARTICLES; i++) {
-                            if(diffNum > 0 && particle->dead && !particle->livingUp){
-                                
-                                ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
-                                int w=0;
-                                bool ok = NO;
-                                while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
-                                    p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.1,0.1),ofRandom(-0.1,0.1));
-                                    ok = YES;
-                                }
-                                if(ok){
-                                    particle->x = p.x;
-                                    particle->y = p.y;
-                                    particle->livingUp = true;
-                                    
-                                    diffNum--;
-                                    if(diffNum == 0) break;
-                                }
+                    for(int i=0;i<diffNum;i++){
+                        Particle * particle = [self newParticle];
+                        if(particle != nil){
+                            ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
+                            int w=0;
+                            bool ok = NO;
+                            while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
+                                p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.1,0.1),ofRandom(-0.1,0.1));
+                                ok = YES;
                             }
-                            particle++;
+                            if(ok){
+                                particle->x = p.x;
+                                particle->y = p.y;
+                                particle->livingUp = true;
+                            }
                         }
-                        if(diffNum == 0) break;
                     }
+                    
+                    /*  for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+                     Particle * particle =  &particles[u][0];
+                     for(int i = 0; i < NUM_PARTICLES; i++) {
+                     if(diffNum > 0 && particle->dead && !particle->livingUp){
+                     
+                     ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
+                     int w=0;
+                     bool ok = NO;
+                     while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
+                     p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.1,0.1),ofRandom(-0.1,0.1));
+                     ok = YES;
+                     }
+                     if(ok){
+                     particle->x = p.x;
+                     particle->y = p.y;
+                     particle->livingUp = true;
+                     
+                     diffNum--;
+                     if(diffNum == 0) break;
+                     }
+                     }
+                     particle++;
+                     }
+                     if(diffNum == 0) break;
+                     }
+                     */
                 }
             }
             
         }
     }
+    
     
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
@@ -339,18 +520,19 @@
             
             int rand[10];
             for(int j=0;j<10;j++){
-                rand[j] = ofRandom(0,NUM_PARTICLES);   
+                rand[j] = ofRandom(1,NUM_PARTICLES);   
             }
             for(int i = 0; i < NUM_PARTICLES; i++) {
                 if(particle->alive || particle->livingUp || particle->dying){
                     particle->resetForce();
                     ofVec2f p = ofVec2f(particle->x, particle->y);
                     
+                    // --------- Tracker push force ---------
                     
                     int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
                     if(gridIndex >=0  && gridIndex < grid.width*grid.height){
                         unsigned char pixel = grid.getPixels()[gridIndex];
-                        if(gridIndex >= 0 && gridIndex < GRID_SIZE*GRID_SIZE &&  pixel > 0){
+                        if(pixel > 0){
                             //----------- Inside blob -----------
                             
                             if(contourFinder.blobs.size() > 0){
@@ -373,7 +555,7 @@
                                 
                                 if(trackerRepulsionForce){
                                     ofVec2f f = (tracker-p);
-                                    f *= trackerRepulsionForce * (pixel/255.0);
+                                    f *= trackerRepulsionForce * (pixel/255.0) * particle->randomForce;
                                     particle->xf += f.x;
                                     particle->yf += f.y;
                                 }
@@ -381,6 +563,17 @@
                         }
                     }
                     
+                    // --------- Black image ---------
+                    if(gridIndex >=0  && gridIndex < grid.width*grid.height){
+                        // unsigned char pixel = grid.getPixels()[gridIndex];
+                        unsigned char pixelBlack = blackImage.getPixels()[gridIndex];
+                        if(pixelBlack == 0){
+                            //Kill because its outside blackImage
+                            [self killParticle:particle];
+                            
+                            //                            particle->kill = YES;
+                        }
+                    }
                     
                     //----------- Wind -----------
                     int numWinds = wind.size();
@@ -447,21 +640,25 @@
                      }                   
                      }*/
                     
-                    if(d > 0){
+                    if(particleOverlap > 0){
                         for(int iii=0;iii<10;iii++){
                             // Particle * otherParticle = &particles[int(ofRandom(0,NUM_PARTICLE_SYSTEMS-1))][int(ofRandom(0,NUM_PARTICLES-1))];
                             if(u != NUM_PARTICLE_SYSTEMS-1){
-                                Particle * otherParticle = particle+rand[iii];
-                                if(otherParticle->alive && fabs(particle->x - otherParticle->x) < d &&  fabs(particle->y - otherParticle->y)){
-                                    ofVec2f v = ofVec2f(d,0).rotate(ofRandom(0,360));
-                                    /*                            particle->x += v.x;
-                                     particle->y += v.y;*/
-                                    particle->xf += v.x;
-                                    particle->yf += v.y;
-                                    
-                                    
-                                    //    particle->dying = true;
-                                    //    particle->alive = false;
+                                if(rand[iii] + i < NUM_PARTICLES){
+                                    Particle * otherParticle = particle+rand[iii];
+                                    if(otherParticle->alive && fabs(particle->x - otherParticle->x) < particleOverlap &&  fabs(particle->y - otherParticle->y) < particleOverlap){
+                                        // ofVec2f v = ofVec2f(particleOverlap,0).rotate(ofRandom(0,360));
+                                        /*
+                                         particle->xf += v.x;
+                                         particle->yf += v.y;
+                                         */
+                                        //                                    [self killParticle:otherParticle];
+                                        particle->dying = YES;
+                                        particle->alive = NO;
+                                        
+                                        //    particle->dying = true;
+                                        //    particle->alive = false;
+                                    }
                                 }
                             }
                         }
@@ -470,7 +667,12 @@
                     particle->bounceOffWalls(0, 0, 1,1);
                     particle->addDampingForce(0.5*globalDampingForce);
                     particle->updatePosition(1.0);
-                    
+                    /*
+                    if(particle->alpha < 0){
+                        particle->kill = YES;
+                        particle->alpha = 0;
+                    }
+                    */
                     pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
                 }
                 
@@ -483,7 +685,20 @@
     
     [queue waitUntilAllOperationsAreFinished];
     
-    //-------------- COLOR ------------------
+    /*
+     //-------------- KILL -----------------
+     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+     Particle * particle =  &particles[u][0];
+     for(int i = 0; i < NUM_PARTICLES; i++) {
+     if(particle->kill){
+     [self killParticle:u number:i];
+     }
+     particle++;
+     }
+     }
+     */
+    
+    //-------------- COLOR VBO ------------------
     
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
     int first = -1;
@@ -518,10 +733,64 @@
     
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
     
-    //--------------  POSITION ------------------    
+    
+    //--------------  DEBUG VBO ------------------        
+#ifdef DEBUG_PARTICLES
+    
+    {
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
+        int first = -1;
+        int num = 0;
+        
+        for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+            Particle * particle =  &particles[u][0];
+            for(int i = 0; i < NUM_PARTICLES; i++) {
+                int j = NUM_PARTICLES*u+i;
+                ofVec4f newVec;
+                if(particle->dead){
+                    newVec = ofVec4f(0.0,0,0,1);
+                }
+                if(particle->livingUp){
+                    newVec = ofVec4f(0,0,1,1);
+                }
+                if(particle->alive){
+                    newVec = ofVec4f(0,1,0,1);
+                }
+                if(particle->dying){
+                    newVec = ofVec4f(1,0,1,1);
+                }
+                
+                if(colorDebug[j] != newVec){
+                    if(first == -1){
+                        first = j;
+                        num = 0;
+                    }
+                    num++;
+                    
+                    colorDebug[j] = newVec;
+                } else if(first != -1){
+                    glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &colorDebug[first].x);
+                    first = -1;
+                }
+                particle++;
+            }
+        }
+        
+        if(first != -1){
+            glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &colorDebug[first].x);
+        }
+        //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
+        
+        glBindBufferARB(GL_ARRAY_BUFFER, 0);
+    }
+#endif
+    
+    
+    //--------------  POSITION VBO ------------------    
     
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, ((alive+livingUp)*NUMP)*sizeof(ofPoint), &pos[0].x);
+    //    glBufferSubData(GL_ARRAY_BUFFER, 0, [self numParticles]*sizeof(ofPoint), &pos[0].x);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, NUMP*sizeof(ofPoint), &pos[0].x);
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
     
     
@@ -565,8 +834,9 @@
         
         ofSetColor(255, 255, 255);
         ofFill();
-        ofRect(0,0,1,1);
-        
+        //ofRect(0,0,1,1);
+        blackImageThreshold.draw(0,0,1,1);
+        ofEnableAlphaBlending();
         glEnable (GL_BLEND);
         glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_COLOR);
         
@@ -583,7 +853,8 @@
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
         glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
         
-        glDrawArrays(GL_POINTS, 0, ((alive+livingUp+dying)*NUMP));
+        //        glDrawArrays(GL_POINTS, 0, [self numParticles]);
+        glDrawArrays(GL_POINTS, 0, NUMP);      
         
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
@@ -599,46 +870,113 @@
 //
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
+    glPushMatrix();
+    glScaled(0.5,1,1);
     
     float x = 0;    
+    /*
+     ofSetColor(255,0,0);    
+     ofRect(x,0,dead*ofGetWidth(),30);
+     x += dead*ofGetWidth();
+     
+     ofSetColor(255,180,180);    
+     ofRect(x,0,dying*ofGetWidth(),30);
+     x += dying*ofGetWidth();
+     
+     ofSetColor(180,255,180);    
+     ofRect(x,0,livingUp*ofGetWidth(),30);
+     x += livingUp*ofGetWidth();
+     
+     
+     ofSetColor(0,255,0);
+     ofRect(x,0,alive*ofGetWidth(),30);
+     x += alive*ofGetWidth();*/
     
-    ofSetColor(255,0,0);    
-    ofRect(x,0,dead*ofGetWidth(),30);
-    x += dead*ofGetWidth();
-    
-    ofSetColor(255,180,180);    
-    ofRect(x,0,dying*ofGetWidth(),30);
-    x += dying*ofGetWidth();
-    
-    ofSetColor(180,255,180);    
-    ofRect(x,0,livingUp*ofGetWidth(),30);
-    x += livingUp*ofGetWidth();
-    
-    
-    ofSetColor(0,255,0);
-    ofRect(x,0,alive*ofGetWidth(),30);
-    x += alive*ofGetWidth();
-    
+    {
+        glBegin(GL_LINES);
+        BOOL lastDrawn = NO;
+        for(int i=0;i<NUM_PARTICLE_SYSTEMS;i++){
+            for(int u=0;u<NUM_PARTICLES;u+=90){
+                glColor3f(0,0,1);
+                if(particles[i][u].alive)
+                    glColor3f(0,1,0);
+                if(particles[i][u].dead)
+                    glColor3f(1,0,0);
+                if(particles[i][u].livingUp)
+                    glColor3f(0,0,1);
+                if(particles[i][u].dying)
+                    glColor3f(1,0,1);
+                
+                
+                
+                glVertex2f(x,0);
+                glVertex2f(x,35);
+                
+                if(i >= lastParticleSystem && u >= lastParticleNumber && !lastDrawn){
+                    lastDrawn = YES;
+                    
+                    glColor3f(0,1,1);
+                    glVertex2f(x,0);
+                    glVertex2f(x,40);
+                    
+                }
+                x++;
+                
+            }
+        }
+        glEnd();
+    }
     ofSetColor(255,255,255);
     grid.draw(0,40,ofGetWidth(), ofGetHeight()-40);
     
     contourFinder.draw(0,40,ofGetWidth(), ofGetHeight()-40);
     
-    for(float x=0;x<1;x+= 0.025){
-        for(float y=0;y<1;y+= 0.025){
-            ofVec2f p = ofVec2f(x*ofGetWidth(), y*(ofGetHeight()-40)+40);
-            of2DArrow(p, p + 10*ofVec2f(perlinX->Get(x, y), perlinY->Get(x,y)), 2);
+    
+    if(PropF(@"wind") > 0){
+        for(float x=0;x<1;x+= 0.025){
+            for(float y=0;y<1;y+= 0.025){
+                ofVec2f p = ofVec2f(x*ofGetWidth(), y*(ofGetHeight()-40)+40);
+                of2DArrow(p, p + 10*ofVec2f(perlinX->Get(x, y), perlinY->Get(x,y)), 2);
+            }
+        }
+        
+        ofSetColor(255,255,0);
+        for(int i=0;i<wind.size();i++){
+            ofVec2f p = ofVec2f(wind[i].p.x*ofGetWidth(), wind[i].p.y*(ofGetHeight()-40)+40);
+            of2DArrow(p, p + 10*wind[i].v, 2);
         }
     }
     
-    ofSetColor(255,255,0);
-    for(int i=0;i<wind.size();i++){
-        ofVec2f p = ofVec2f(wind[i].p.x*ofGetWidth(), wind[i].p.y*(ofGetHeight()-40)+40);
-        of2DArrow(p, p + 10*wind[i].v, 2);
+    glTranslated(ofGetWidth(),0,0);
+    blackImage.draw(0,40,ofGetWidth(), ofGetHeight()-40);
+    
+#ifdef DEBUG_PARTICLES
+    glPushMatrix();
+    glTranslated(0,40,0);
+    glScaled(ofGetWidth(), ofGetHeight()-40,1);{
+        ofDisableAlphaBlending();
+        //Points
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
+        glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), 0);
+        
+        glEnableClientState(GL_COLOR_ARRAY);
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
+        glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
+        
+        //        glDrawArrays(GL_POINTS, 0, [self numParticles]);
+        glDrawArrays(GL_POINTS, 0, NUMP);      
+        
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        
+        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         
     }
+    glPopMatrix();
+#endif
     
-    
+    glPopMatrix();
 }
 
 @end

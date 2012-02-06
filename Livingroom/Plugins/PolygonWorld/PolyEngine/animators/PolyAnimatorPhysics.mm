@@ -19,6 +19,9 @@
     if(self = [super init]){
         [[self addPropF:@"state"] setMaxValue:3];
         [[self addPropF:@"iterations"] setMinValue:1];
+        [[self addPropF:@"forceIterations"] setMinValue:1];
+        [[self addPropF:@"forceIterationsRatio"] setMinValue:0];
+        [[self addPropF:@"forceIterationsRatioZ"] setMinValue:0];
         
         [self addPropF:@"minForce"];
         [self addPropF:@"floorFriction"];
@@ -492,18 +495,47 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             int state = PropI(@"state");
             float minForce = PropF(@"minForce");
             float floorFriction = PropF(@"floorFriction");
+            
+            CachePropF(forceIterationsRatio);
+            CachePropI(forceIterations);
+            CachePropF(forceIterationsRatioZ);
+
+            for(int i=0;i<forceIterations;i++){
+                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                    ofVec3f * source = &eit->source()->data().springF;
+                    ofVec3f * target = &eit->target()->data().springF;
+                    
+                    ofVec3f vSource = *source * (forceIterationsRatio);
+                    ofVec3f vTarget = *target * (forceIterationsRatio);
+                    
+                    vSource.z *= forceIterationsRatioZ;
+                    vTarget.z *= forceIterationsRatioZ;                    
+                    //                    eit->source()->data().springF *= forceIterationsRatio;
+                    //                  eit->target()->data().springF *= forceIterationsRatio;
+                    
+                    *source += vTarget;                    
+                    *source -= vSource;
+                    
+                    *target += vSource;
+                    *target -= vTarget;
+                }];
+            } 
+            
             [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                 vit->data().springV *= 0;//PropF(@"springDamping");
                 
-                if(state < 3 || !vit->data().crumbleAnchor){
+                
+                
+//                if(state < 3 || !vit->data().crumbleAnchor){
                     if( vit->data().springF.length() > minForce){
+                        vit->data().accumF +=  vit->data().springF;
+
                         vit->data().springV += vit->data().springF * 0.01 * (1.0-vit->data().physicsLock);
                     }
-                }
+//                }
                 
                 //Friction
-                vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
-                vit->data().accumF +=  vit->data().springF;
+              //  vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
                 
                 setHandlePos(vit->data().springV + vit->data().pos, vit);
             }];
@@ -579,11 +611,11 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             float diff = minus*(fabs(angle)-fabs(optimalAngle));
             
             of2DArrow( handleToVec2(h1->target()) ,  handleToVec2(h1->target()) + 0.1*dir , 0.01);
-
+            
         }
     }
     
-
+    
     
     
     /* //Visualize angualar stress

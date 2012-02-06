@@ -36,6 +36,7 @@
 		3D6A9FD514DBF6C600AFC7D6 /* LEDGrid.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD314DBF6C600AFC7D6 /* LEDGrid.mm */; };
 		3D6A9FD614DBF6C600AFC7D6 /* LEDGrid.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD414DBF6C600AFC7D6 /* LEDGrid.xib */; };
 		3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */; };
+		3D6A9FDC14DC312D00AFC7D6 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FDB14DC312D00AFC7D6 /* icon.icns */; };
 		3D8C5FF41497A28500A3CA6D /* OSCControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF21497A28500A3CA6D /* OSCControl.mm */; };
 		3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF31497A28500A3CA6D /* OSCControl.xib */; };
 		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
@@ -144,6 +145,7 @@
 		3D6A9FD314DBF6C600AFC7D6 /* LEDGrid.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LEDGrid.mm; sourceTree = "<group>"; };
 		3D6A9FD414DBF6C600AFC7D6 /* LEDGrid.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LEDGrid.xib; sourceTree = "<group>"; };
 		3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chess.jpg; sourceTree = "<group>"; };
+		3D6A9FDB14DC312D00AFC7D6 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../icon.icns; sourceTree = "<group>"; };
 		3D8C5FF11497A28500A3CA6D /* OSCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCControl.h; sourceTree = "<group>"; };
 		3D8C5FF21497A28500A3CA6D /* OSCControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OSCControl.mm; sourceTree = "<group>"; };
 		3D8C5FF31497A28500A3CA6D /* OSCControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSCControl.xib; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 		3D9D181914BDF03D00DD2093 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D6A9FDB14DC312D00AFC7D6 /* icon.icns */,
 				3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */,
 				3D97F4C514D2F49400981D15 /* particles.fs */,
 				3D97F4C614D2F49400981D15 /* particles.vs */,
@@ -640,6 +643,7 @@
 				3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */,
 				3D6A9FD614DBF6C600AFC7D6 /* LEDGrid.xib in Resources */,
 				3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */,
+				3D6A9FDC14DC312D00AFC7D6 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,7 +742,7 @@
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
