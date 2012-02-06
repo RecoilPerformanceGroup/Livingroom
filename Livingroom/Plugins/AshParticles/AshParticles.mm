@@ -56,6 +56,9 @@
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5] named:@"blackFade"];    
     [self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:255] named:@"blackFadeUp"];     
     
+    [self addPropB:@"debug"];    
+    
+    [self addPropF:@"randomAdd"];
 }
 
 //
@@ -122,9 +125,16 @@
 
 
 -(Particle*) newParticle{
+    CachePropF(numberParticles);
+
+    if(dead == 0){
+        return nil;
+    }
+    
+    //  cout<<"New particle"<<lastParticleSystem<<", "<<lastParticleNumber<<endl;
     for(int u=lastParticleSystem;u<NUM_PARTICLE_SYSTEMS;u++){
         //    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-        Particle * particle =  &particles[u][0];
+        Particle * particle =  &particles[u][lastParticleNumber];
         for(int i = lastParticleNumber; i < NUM_PARTICLES; i++) {
             if(particle->dead && !particle->livingUp){
                 lastParticleSystem = u;
@@ -133,6 +143,7 @@
                  lastParticleSystem = lastParticleNumber = 0;
                  }*/
                 
+                // cout<<"Returning at "<<u<<", "<<i<<endl;
                 
                 particle->livingUp = YES;
                 particle->dead = NO;
@@ -148,14 +159,15 @@
 
 
 -(void)setup{
-    
+    //CachePropF(numberParticles);
+
     
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     
 	float padding = 0.0;
 	float maxVelocity = .05;
     
-    for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+    for(int u=0;u<NUM_PARTICLE_SYSTEMS_MAX;u++){
         for(int i = 0; i < NUM_PARTICLES; i++) {
             float x = ofRandom(padding, 1.0 - padding);
             float y = ofRandom(padding, 1.0 - padding);
@@ -163,7 +175,7 @@
             float yv = 0;//ofRandom(-maxVelocity, maxVelocity);
             particles[u][i] = Particle(x, y, xv, yv);
             particles[u][i].size = ofRandom(0.5,1);
-            particles[u][i].randomForce = ofRandom(0,1);
+            particles[u][i].randomForce = ofRandom(0.1,1);
             pos[NUM_PARTICLES*u+i] = ofPoint(x,y,0);
             color[NUM_PARTICLES*u+i] = ofVec4f(0.0,0.0,0.0,1.0);
         }        
@@ -193,6 +205,9 @@
     blackImageLast.allocate(GRID_SIZE, GRID_SIZE);
     blackImageLast.set(0);    
     
+    spawner.allocate(GRID_SIZE, GRID_SIZE);
+    spawner.set(0);    
+
     //   NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"ash8x8" ofType:@"jpg"];
     ashTexture = new ofImage();
@@ -208,19 +223,19 @@
     
     // color
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
-    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec4f), &color[0].x, GL_STREAM_DRAW_ARB);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMPMAX)*sizeof(ofVec4f), &color[0].x, GL_STREAM_DRAW_ARB);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     // vertices
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
-    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec3f), &pos[0].x, GL_STREAM_DRAW_ARB);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMPMAX)*sizeof(ofVec3f), &pos[0].x, GL_STREAM_DRAW_ARB);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
 #ifdef DEBUG_PARTICLES
     
     // debug
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
-    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMP)*sizeof(ofVec4f), &colorDebug[0].x, GL_STREAM_DRAW_ARB);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, (NUMPMAX)*sizeof(ofVec4f), &colorDebug[0].x, GL_STREAM_DRAW_ARB);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
     
 #endif
@@ -245,6 +260,9 @@
     CachePropF(alpha);
     CachePropF(windForce);    
     CachePropF(windForceRadius);    
+    CachePropF(randomAdd);    
+    CachePropF(numberParticles);
+
     float particleOverlap = PropF(@"particleOverlap")*0.01;
     
     //---------------- RESET ------------------
@@ -276,6 +294,7 @@
         blackImage.set(0);
         blackImageThreshold.set(0);
         blackImageLast.set(0);    
+        spawner.set(0);    
     }
     
     if(PropB(@"resetBurn")){
@@ -330,9 +349,10 @@
     
     tracker -= PropI(@"blackFadeUp");
     
-    tracker.blur(PropF(@"blackBlur"));
+    //tracker.blur(PropF(@"blackBlur"));
     blackImage += tracker;
-    
+    blackImage -= spawner;
+    spawner -= grid;
     
     /* float fadeOut =  PropF(@"blackFade");
      if(fadeOut< 1){
@@ -344,10 +364,12 @@
      } else {
      blackImage -= fadeOut;
      }*/
-    // blackImage.blur(PropF(@"blackBlur"));
+ //    blackImage. blur(PropF(@"blackBlur"));
     
     blackImageThreshold = blackImage;
-    blackImageThreshold.threshold(10);
+  //  blackImageThreshold.threshold(10);
+   blackImageThreshold.convertToRange(0,10000);
+    
     /*    cvDistTransform(tracker.getCvImage(), distanceImage.getCvImage());
      distanceImage.flagImageChanged();*/
     
@@ -356,8 +378,12 @@
     //New particles from image
     {
         // int i=0;
-        unsigned char * blackLast = blackImageLast.getPixels();
-        unsigned char * black = blackImage.getPixels();
+        //unsigned char * blackLast = blackImageLast.getPixels();
+        //unsigned char * black = blackImage.getPixels();
+        uchar * black = (uchar*)(blackImage.getCvImage()->imageData);
+        uchar * blackLast = (uchar*)(blackImageLast.getCvImage()->imageData);
+        uchar * spawnerRef = (uchar*)(spawner.getCvImage()->imageData);
+
         for(int y=0;y<GRID_SIZE;y+=1){
             for(int x=0;x<GRID_SIZE;x+=1){
                 //                i = y*GRID_SIZE + x;
@@ -371,8 +397,22 @@
                         p->alpha = 1;
                     }
                 }
+                
+               /* if(*black > 0 && ofRandom(0,1)* (1-(*black)/255) > randomAdd){
+                    Particle* p = [self newParticle];
+                    if(p != nil){
+                        p->x = x/(float)GRID_SIZE;
+                        p->y = y/(float)GRID_SIZE;
+                    }
+                }*/
+                
+                if(*black > 0 && ofRandom(0,1)* (1-(*black)/255) > randomAdd){
+                    *spawnerRef = 1;
+                }
+                
                 blackLast ++;
                 black++;
+                spawnerRef++;
                 //            i++;
             }
         }
@@ -398,6 +438,15 @@
                 livingUp++;
             if(particle->dying)
                 dying++;
+            
+            int sum = particle->dead + particle->alive + particle->livingUp + particle->dying;
+            if(sum != 1){
+                //  cout<<"State wront on "<<u<<", "<<i<<"  "<<particle->dead<<"  "<<particle->alive<<"  "<<particle->livingUp<<"  "<<particle->dying<<endl;
+                if(sum == 0){
+                    particle->dead = YES;
+                    particle->alpha = 0;
+                }
+            }
             particle++;
         }
     }
@@ -408,8 +457,7 @@
     
     //--------------------------------------------
     
-    float numberParticles = PropF(@"numberParticles");
-    if(numberParticles > (alive+livingUp)){
+   /*if(numberParticles > (alive+livingUp)){
         int diffNum = numberParticles*NUMP - (livingUp+alive)*NUMP;
         for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
             Particle * particle =  &particles[u][0];
@@ -424,8 +472,8 @@
             }
             if(diffNum == 0) break;
         }
-    }
-    
+    }*/
+   /* 
     if(PropB(@"die")){
         if(numberParticles < (alive)){
             int diffNum = (alive)*NUMP- (numberParticles)*NUMP;
@@ -443,14 +491,14 @@
                 if(diffNum == 0) break;
             }
         }
-    }
+    }*/
     
     // vector <ofVec2f> trackers = [GetPlugin(Tracker) trackerCentroidVector];
-    vector < vector<ofVec2f> > trackersPoints = [GetPlugin(Tracker) trackerBlobVector];
     
     CachePropF(trackerSpawner);
     if(trackerSpawner){
         if(alive < 1){
+            vector < vector<ofVec2f> > trackersPoints = [GetPlugin(Tracker) trackerBlobVector];
             for(int t=0;t<trackersPoints.size();t++){
                 if(trackersPoints[t].size() > 0){
                     vector<ofPoint> vector;
@@ -475,36 +523,12 @@
                                 particle->x = p.x;
                                 particle->y = p.y;
                                 particle->livingUp = true;
+                            } else {
+                                particle->livingUp = NO;
+                                particle->dead = YES;
                             }
                         }
                     }
-                    
-                    /*  for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-                     Particle * particle =  &particles[u][0];
-                     for(int i = 0; i < NUM_PARTICLES; i++) {
-                     if(diffNum > 0 && particle->dead && !particle->livingUp){
-                     
-                     ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
-                     int w=0;
-                     bool ok = NO;
-                     while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
-                     p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.1,0.1),ofRandom(-0.1,0.1));
-                     ok = YES;
-                     }
-                     if(ok){
-                     particle->x = p.x;
-                     particle->y = p.y;
-                     particle->livingUp = true;
-                     
-                     diffNum--;
-                     if(diffNum == 0) break;
-                     }
-                     }
-                     particle++;
-                     }
-                     if(diffNum == 0) break;
-                     }
-                     */
                 }
             }
             
@@ -532,6 +556,7 @@
                     int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
                     if(gridIndex >=0  && gridIndex < grid.width*grid.height){
                         unsigned char pixel = grid.getPixels()[gridIndex];
+                     
                         if(pixel > 0){
                             //----------- Inside blob -----------
                             
@@ -561,17 +586,23 @@
                                 }
                             }
                         }
-                    }
-                    
-                    // --------- Black image ---------
-                    if(gridIndex >=0  && gridIndex < grid.width*grid.height){
+                        
+                        // --------- Black image ---------
+                        {
                         // unsigned char pixel = grid.getPixels()[gridIndex];
-                        unsigned char pixelBlack = blackImage.getPixels()[gridIndex];
-                        if(pixelBlack == 0){
+                        uchar * blackPixel = (uchar*)(blackImage.getCvImage()->imageData + gridIndex);
+                        if(particle->alive && *blackPixel > 0){
+                            *blackPixel -= 1;
+                        }
+                        if(*blackPixel == 0){
                             //Kill because its outside blackImage
-                            [self killParticle:particle];
+                            //[self killParticle:particle];
+                            particle->alive = NO;
+                            particle->dying = YES;
+                            
                             
                             //                            particle->kill = YES;
+                        }
                         }
                     }
                     
@@ -655,6 +686,7 @@
                                         //                                    [self killParticle:otherParticle];
                                         particle->dying = YES;
                                         particle->alive = NO;
+                                        particle->dying = NO;
                                         
                                         //    particle->dying = true;
                                         //    particle->alive = false;
@@ -668,11 +700,11 @@
                     particle->addDampingForce(0.5*globalDampingForce);
                     particle->updatePosition(1.0);
                     /*
-                    if(particle->alpha < 0){
-                        particle->kill = YES;
-                        particle->alpha = 0;
-                    }
-                    */
+                     if(particle->alpha < 0){
+                     particle->kill = YES;
+                     particle->alpha = 0;
+                     }
+                     */
                     pos[NUM_PARTICLES*u+i] = ofPoint(particle->x,particle->y,0);
                 }
                 
@@ -703,7 +735,6 @@
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[0]);
     int first = -1;
     int num = 0;
-    
     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
         Particle * particle =  &particles[u][0];
         for(int i = 0; i < NUM_PARTICLES; i++) {
@@ -729,7 +760,7 @@
     if(first != -1){
         glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &color[first].x);
     }
-    //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
+    // glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
     
     glBindBufferARB(GL_ARRAY_BUFFER, 0);
     
@@ -737,7 +768,7 @@
     //--------------  DEBUG VBO ------------------        
 #ifdef DEBUG_PARTICLES
     
-    {
+    if(PropB(@"debug")){
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
         int first = -1;
         int num = 0;
@@ -779,7 +810,7 @@
         if(first != -1){
             glBufferSubData(GL_ARRAY_BUFFER, first*sizeof(ofVec4f), (num)*sizeof(ofVec4f), &colorDebug[first].x);
         }
-        //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &color[0].x);
+        //  glBufferSubData(GL_ARRAY_BUFFER, 0, (NUMP)*sizeof(ofVec4f), &colorDebug[0].x);
         
         glBindBufferARB(GL_ARRAY_BUFFER, 0);
     }
@@ -829,7 +860,8 @@
 //
 
 -(void)draw:(NSDictionary *)drawingInformation{
-    
+    CachePropF(numberParticles);
+
     ApplySurfaceForProjector(@"Floor",0); {
         
         ofSetColor(255, 255, 255);
@@ -870,6 +902,8 @@
 //
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
+    CachePropF(numberParticles);
+
     glPushMatrix();
     glScaled(0.5,1,1);
     
@@ -897,7 +931,7 @@
         BOOL lastDrawn = NO;
         for(int i=0;i<NUM_PARTICLE_SYSTEMS;i++){
             for(int u=0;u<NUM_PARTICLES;u+=90){
-                glColor3f(0,0,1);
+                glColor3f(0,0,0);
                 if(particles[i][u].alive)
                     glColor3f(0,1,0);
                 if(particles[i][u].dead)
@@ -951,29 +985,31 @@
     blackImage.draw(0,40,ofGetWidth(), ofGetHeight()-40);
     
 #ifdef DEBUG_PARTICLES
-    glPushMatrix();
-    glTranslated(0,40,0);
-    glScaled(ofGetWidth(), ofGetHeight()-40,1);{
-        ofDisableAlphaBlending();
-        //Points
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
-        glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), 0);
-        
-        glEnableClientState(GL_COLOR_ARRAY);
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
-        glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
-        
-        //        glDrawArrays(GL_POINTS, 0, [self numParticles]);
-        glDrawArrays(GL_POINTS, 0, NUMP);      
-        
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-        
+    if(PropB(@"debug")){
+        glPushMatrix();
+        glTranslated(0,40,0);
+        glScaled(ofGetWidth(), ofGetHeight()-40,1);{
+            ofDisableAlphaBlending();
+            //Points
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[1]);
+            glVertexPointer(3, GL_FLOAT, sizeof(ofVec3f), 0);
+            
+            glEnableClientState(GL_COLOR_ARRAY);
+            glBindBufferARB(GL_ARRAY_BUFFER_ARB, particleVBO[2]);
+            glColorPointer(4, GL_FLOAT, sizeof(ofVec4f), 0);
+            
+            //        glDrawArrays(GL_POINTS, 0, [self numParticles]);
+            glDrawArrays(GL_POINTS, 0, NUMP);      
+            
+            glDisableClientState(GL_COLOR_ARRAY);
+            glDisableClientState(GL_VERTEX_ARRAY);
+            
+            glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+            
+        }
+        glPopMatrix();
     }
-    glPopMatrix();
 #endif
     
     glPopMatrix();

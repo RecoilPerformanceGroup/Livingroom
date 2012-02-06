@@ -103,7 +103,7 @@
 
 -(void)draw:(NSDictionary *)drawingInformation{
     ofEnableAlphaBlending();
-    
+    ofFill();
     ofSetColor(0,0,0,255.0*PropF(@"rightBlind"));
     ofRect(0,0,0.5,1);
     

@@ -40,7 +40,7 @@ public:
 		y += yv * timeStep;
         
         if(dying && !dead){
-            alpha -= 0.01;
+            alpha -= 0.1;
             if(alpha < 0){
                 alpha = 0;
                 dead = true;
@@ -50,7 +50,7 @@ public:
         }
         
         if(livingUp && !alive){
-            alpha += 0.01;
+            alpha += 0.05;
             if(alpha > 1){
                 alpha = 1;
                 alive = true;

@@ -5,12 +5,14 @@
 #include "ofxCvMain.h"
 #import "perlin.h"
 
+#define NUM_PARTICLE_SYSTEMS_MAX (20*1)
 
-#define NUM_PARTICLE_SYSTEMS (48/2)
+#define NUM_PARTICLE_SYSTEMS (int(NUM_PARTICLE_SYSTEMS_MAX * numberParticles))
 #define NUM_K_PARTICLES 5
 //#define NUM_PARTICLES NUM_K_PARTICLES*1024
 #define NUM_PARTICLES (1024*NUM_K_PARTICLES)
 #define NUMP (NUM_PARTICLE_SYSTEMS*NUM_PARTICLES)
+#define NUMPMAX (NUM_PARTICLE_SYSTEMS_MAX*NUM_PARTICLES)
 
 #define GRID_SIZE (1024/2)
 //#define GRID_SIZE 10
@@ -22,7 +24,7 @@ struct WindObject {
 
 @interface AshParticles : ofPlugin {
    	int kParticles;
-    Particle particles[NUM_PARTICLE_SYSTEMS][NUM_PARTICLES];
+    Particle particles[NUM_PARTICLE_SYSTEMS_MAX][NUM_PARTICLES];
     int lastParticleSystem;
     int lastParticleNumber;
     
@@ -44,12 +46,13 @@ struct WindObject {
     ofxCvGrayscaleImage blackImage; 
     ofxCvGrayscaleImage blackImageThreshold; 
    ofxCvGrayscaleImage blackImageLast; 
+    ofxCvGrayscaleImage spawner; 
     int fadeOutCounter;
     
     GLuint particleVBO[3];
-    ofPoint  pos[NUMP]; 
-    ofVec4f color[NUMP];
-    ofVec4f colorDebug[NUMP];
+    ofPoint  pos[NUMPMAX]; 
+    ofVec4f color[NUMPMAX];
+    ofVec4f colorDebug[NUMPMAX];
     
     Perlin * perlinX;
     Perlin * perlinY;

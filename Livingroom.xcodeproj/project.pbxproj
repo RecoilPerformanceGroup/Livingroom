@@ -38,7 +38,6 @@
 		3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FD714DBFBE000AFC7D6 /* chess.jpg */; };
 		3D6A9FDC14DC312D00AFC7D6 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3D6A9FDB14DC312D00AFC7D6 /* icon.icns */; };
 		3D8C5FF41497A28500A3CA6D /* OSCControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF21497A28500A3CA6D /* OSCControl.mm */; };
-		3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D8C5FF31497A28500A3CA6D /* OSCControl.xib */; };
 		3D956F9A146BFB5200A59811 /* PolyAnimatorSprings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */; };
 		3D96D7AA146962BB009DABB9 /* PolyInputSimpleMouseDraw.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D96D7A9146962BB009DABB9 /* PolyInputSimpleMouseDraw.mm */; };
 		3D9715CD148D0A17009A8068 /* ofxCocoaPlugins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D9715CC148D0A17009A8068 /* ofxCocoaPlugins.framework */; };
@@ -148,7 +147,6 @@
 		3D6A9FDB14DC312D00AFC7D6 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../icon.icns; sourceTree = "<group>"; };
 		3D8C5FF11497A28500A3CA6D /* OSCControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSCControl.h; sourceTree = "<group>"; };
 		3D8C5FF21497A28500A3CA6D /* OSCControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OSCControl.mm; sourceTree = "<group>"; };
-		3D8C5FF31497A28500A3CA6D /* OSCControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSCControl.xib; sourceTree = "<group>"; };
 		3D956F98146BFB5200A59811 /* PolyAnimatorSprings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyAnimatorSprings.h; sourceTree = "<group>"; };
 		3D956F99146BFB5200A59811 /* PolyAnimatorSprings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PolyAnimatorSprings.mm; sourceTree = "<group>"; };
 		3D96D7A8146962BB009DABB9 /* PolyInputSimpleMouseDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolyInputSimpleMouseDraw.h; sourceTree = "<group>"; };
@@ -443,7 +441,6 @@
 			children = (
 				3D8C5FF11497A28500A3CA6D /* OSCControl.h */,
 				3D8C5FF21497A28500A3CA6D /* OSCControl.mm */,
-				3D8C5FF31497A28500A3CA6D /* OSCControl.xib */,
 			);
 			path = OSCControl;
 			sourceTree = "<group>";
@@ -629,7 +626,6 @@
 				7F26374E148D33C10055DCFA /* Source Code License.rtf in Resources */,
 				7F26374F148D33C10055DCFA /* TODO in Resources */,
 				7F462712149511F60095786B /* install.xml in Resources */,
-				3D8C5FF51497A28500A3CA6D /* OSCControl.xib in Resources */,
 				3DE3C34614B3512800A7E9E0 /* AshParticles.xib in Resources */,
 				3DAF18CE14B35EEE003B6B81 /* Tracker.xib in Resources */,
 				3D9D181B14BDF03D00DD2093 /* 6943.jpg in Resources */,
