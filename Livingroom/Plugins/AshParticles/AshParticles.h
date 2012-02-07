@@ -43,10 +43,11 @@ struct WindObject {
     ofxCvContourFinder contourFinder;
     ofxCvFloatImage distanceImage;
 
-    ofxCvGrayscaleImage blackImage; 
-    ofxCvGrayscaleImage blackImageThreshold; 
-   ofxCvGrayscaleImage blackImageLast; 
-    ofxCvGrayscaleImage spawner; 
+    ofxCvFloatImage trackerFloat;
+    ofxCvFloatImage blackImage; 
+    ofxCvFloatImage blackImageThreshold; 
+    ofxCvFloatImage blackImageLast; 
+    ofxCvFloatImage spawner; 
     int fadeOutCounter;
     
     GLuint particleVBO[3];

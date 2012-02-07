@@ -124,9 +124,8 @@
 }
 
 
--(Particle*) newParticle{
-    CachePropF(numberParticles);
-
+-(Particle*) newParticle:(float)numberParticles{
+   
     if(dead == 0){
         return nil;
     }
@@ -160,7 +159,7 @@
 
 -(void)setup{
     //CachePropF(numberParticles);
-
+    
     
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     
@@ -207,7 +206,9 @@
     
     spawner.allocate(GRID_SIZE, GRID_SIZE);
     spawner.set(0);    
-
+    
+    trackerFloat.allocate(GRID_SIZE, GRID_SIZE);
+    trackerFloat.set(0); 
     //   NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"ash8x8" ofType:@"jpg"];
     ashTexture = new ofImage();
@@ -262,7 +263,7 @@
     CachePropF(windForceRadius);    
     CachePropF(randomAdd);    
     CachePropF(numberParticles);
-
+    
     float particleOverlap = PropF(@"particleOverlap")*0.01;
     
     //---------------- RESET ------------------
@@ -349,11 +350,26 @@
     
     tracker -= PropI(@"blackFadeUp");
     
-    //tracker.blur(PropF(@"blackBlur"));
-    blackImage += tracker;
-    blackImage -= spawner;
-    spawner -= grid;
     
+    //Float: 
+    trackerFloat = tracker;
+    
+    //tracker.blur(PropF(@"blackBlur"));
+    blackImage += trackerFloat;
+    blackImage -= spawner;
+    spawner -= trackerFloat;
+
+    blackImage -= PropF(@"blackFade")*0.1*0.001;
+
+    cvThreshold(spawner.getCvImage(), spawner.getCvImage(), 1, 255, CV_THRESH_TRUNC);
+	cvThreshold(spawner.getCvImage(), spawner.getCvImage(), 0, 255, CV_THRESH_TOZERO);
+    spawner.flagImageChanged();
+    
+	cvThreshold(blackImage.getCvImage(), blackImage.getCvImage(), 1, 255, CV_THRESH_TRUNC);
+	cvThreshold(blackImage.getCvImage(), blackImage.getCvImage(), 0, 255, CV_THRESH_TOZERO);
+    
+	blackImage.flagImageChanged();
+
     /* float fadeOut =  PropF(@"blackFade");
      if(fadeOut< 1){
      int n = fadeOut * 10;
@@ -364,11 +380,11 @@
      } else {
      blackImage -= fadeOut;
      }*/
- //    blackImage. blur(PropF(@"blackBlur"));
+    //    blackImage. blur(PropF(@"blackBlur"));
     
     blackImageThreshold = blackImage;
-  //  blackImageThreshold.threshold(10);
-   blackImageThreshold.convertToRange(0,10000);
+    //  blackImageThreshold.threshold(10);
+    blackImageThreshold.convertToRange(0,10000/255.0);
     
     /*    cvDistTransform(tracker.getCvImage(), distanceImage.getCvImage());
      distanceImage.flagImageChanged();*/
@@ -380,15 +396,15 @@
         // int i=0;
         //unsigned char * blackLast = blackImageLast.getPixels();
         //unsigned char * black = blackImage.getPixels();
-        uchar * black = (uchar*)(blackImage.getCvImage()->imageData);
-        uchar * blackLast = (uchar*)(blackImageLast.getCvImage()->imageData);
-        uchar * spawnerRef = (uchar*)(spawner.getCvImage()->imageData);
-
+        float * black = (float*)(blackImage.getCvImage()->imageData);
+        float * blackLast = (float*)(blackImageLast.getCvImage()->imageData);
+        float * spawnerRef = (float*)(spawner.getCvImage()->imageData);
+        
         for(int y=0;y<GRID_SIZE;y+=1){
             for(int x=0;x<GRID_SIZE;x+=1){
                 //                i = y*GRID_SIZE + x;
-                if(*blackLast <= 5 && *black > 5){
-                    Particle* p = [self newParticle];
+                if(*blackLast <= 5/255.0 && *black > 5/255.0){
+                    Particle* p = [self newParticle:numberParticles];
                     if(p != nil){
                         p->x = x/(float)GRID_SIZE;
                         p->y = y/(float)GRID_SIZE;
@@ -398,17 +414,21 @@
                     }
                 }
                 
-               /* if(*black > 0 && ofRandom(0,1)* (1-(*black)/255) > randomAdd){
+                if(*black > 0 && ofRandom(0,1)*(1-0.01* *black) > (1-randomAdd*0.05)*(1)){
+                    *spawnerRef = 0.005;
+                    //*black = 0.0;
+                }
+                
+                /*if(x == GRID_SIZE/2 && y == GRID_SIZE/2){
+                    cout<<*black<<"   "<<ofRandom(0,1)*(1-*black*0.1) <<" > "<< (1-randomAdd*0.01)*(1-0.1)<<endl;
+                }*/
+                /*if(*black > 0 && ofRandom(0,1)* (1.0-(*black)) > randomAdd){
                     Particle* p = [self newParticle];
                     if(p != nil){
                         p->x = x/(float)GRID_SIZE;
                         p->y = y/(float)GRID_SIZE;
                     }
                 }*/
-                
-                if(*black > 0 && ofRandom(0,1)* (1-(*black)/255) > randomAdd){
-                    *spawnerRef = 1;
-                }
                 
                 blackLast ++;
                 black++;
@@ -457,41 +477,41 @@
     
     //--------------------------------------------
     
-   /*if(numberParticles > (alive+livingUp)){
-        int diffNum = numberParticles*NUMP - (livingUp+alive)*NUMP;
-        for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-            Particle * particle =  &particles[u][0];
-            for(int i = 0; i < NUM_PARTICLES; i++) {
-                if(diffNum > 0 && particle->dead && !particle->livingUp){
-                    particle->livingUp = true;
-                    diffNum--;
-                    if(diffNum == 0) break;
-                }
-                particle++;
-                
-            }
-            if(diffNum == 0) break;
-        }
-    }*/
-   /* 
-    if(PropB(@"die")){
-        if(numberParticles < (alive)){
-            int diffNum = (alive)*NUMP- (numberParticles)*NUMP;
-            for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
-                Particle * particle =  &particles[u][0];
-                for(int i = 0; i < NUM_PARTICLES; i++) {
-                    if(diffNum > 0 && particle->alive && !particle->dying){
-                        particle->dying = true;
-                        diffNum--;
-                        if(diffNum == 0) break;
-                    }
-                    particle++;
-                    
-                }
-                if(diffNum == 0) break;
-            }
-        }
-    }*/
+    /*if(numberParticles > (alive+livingUp)){
+     int diffNum = numberParticles*NUMP - (livingUp+alive)*NUMP;
+     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+     Particle * particle =  &particles[u][0];
+     for(int i = 0; i < NUM_PARTICLES; i++) {
+     if(diffNum > 0 && particle->dead && !particle->livingUp){
+     particle->livingUp = true;
+     diffNum--;
+     if(diffNum == 0) break;
+     }
+     particle++;
+     
+     }
+     if(diffNum == 0) break;
+     }
+     }*/
+    /* 
+     if(PropB(@"die")){
+     if(numberParticles < (alive)){
+     int diffNum = (alive)*NUMP- (numberParticles)*NUMP;
+     for(int u=0;u<NUM_PARTICLE_SYSTEMS;u++){
+     Particle * particle =  &particles[u][0];
+     for(int i = 0; i < NUM_PARTICLES; i++) {
+     if(diffNum > 0 && particle->alive && !particle->dying){
+     particle->dying = true;
+     diffNum--;
+     if(diffNum == 0) break;
+     }
+     particle++;
+     
+     }
+     if(diffNum == 0) break;
+     }
+     }
+     }*/
     
     // vector <ofVec2f> trackers = [GetPlugin(Tracker) trackerCentroidVector];
     
@@ -510,7 +530,7 @@
                     int diffNum = 100.0*trackerSpawner;
                     
                     for(int i=0;i<diffNum;i++){
-                        Particle * particle = [self newParticle];
+                        Particle * particle = [self newParticle:numberParticles];
                         if(particle != nil){
                             ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
                             int w=0;
@@ -556,7 +576,7 @@
                     int gridIndex = (int)(int(GRID_SIZE*particle->y)*GRID_SIZE + int(GRID_SIZE*particle->x));
                     if(gridIndex >=0  && gridIndex < grid.width*grid.height){
                         unsigned char pixel = grid.getPixels()[gridIndex];
-                     
+                        
                         if(pixel > 0){
                             //----------- Inside blob -----------
                             
@@ -589,20 +609,20 @@
                         
                         // --------- Black image ---------
                         {
-                        // unsigned char pixel = grid.getPixels()[gridIndex];
-                        uchar * blackPixel = (uchar*)(blackImage.getCvImage()->imageData + gridIndex);
-                        if(particle->alive && *blackPixel > 0){
-                            *blackPixel -= 1;
-                        }
-                        if(*blackPixel == 0){
-                            //Kill because its outside blackImage
-                            //[self killParticle:particle];
-                            particle->alive = NO;
-                            particle->dying = YES;
-                            
-                            
-                            //                            particle->kill = YES;
-                        }
+                            // unsigned char pixel = grid.getPixels()[gridIndex];
+                            float * blackPixel = (float*)(blackImage.getCvImage()->imageData + gridIndex*sizeof(float));
+                            if(particle->alive && *blackPixel > 0){
+                                //                            *blackPixel -= 0.01;
+                            }
+                            if(*blackPixel == 0){
+                                //Kill because its outside blackImage
+                                //[self killParticle:particle];
+                                particle->alive = NO;
+                                particle->dying = YES;
+                                
+                                
+                                //                            particle->kill = YES;
+                            }
                         }
                     }
                     
@@ -861,7 +881,7 @@
 
 -(void)draw:(NSDictionary *)drawingInformation{
     CachePropF(numberParticles);
-
+    
     ApplySurfaceForProjector(@"Floor",0); {
         
         ofSetColor(255, 255, 255);
@@ -903,7 +923,7 @@
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     CachePropF(numberParticles);
-
+    
     glPushMatrix();
     glScaled(0.5,1,1);
     
