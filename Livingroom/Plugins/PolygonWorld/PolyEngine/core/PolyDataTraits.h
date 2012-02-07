@@ -53,6 +53,9 @@ struct LRVertex_data {
     bool crumbleAnchor          = true;
     
     float hullOptimalAngle      = -1;
+    
+    int cache;
+
 };
 
 // --------
@@ -72,6 +75,9 @@ struct LRHalfedge_data {
     //Crumble
     float crumbleOptimalLength  = -1;
     float crumbleOptimalAngle   = -1;
+    
+    int cache;
+
 };
 
 // ----
@@ -81,6 +87,8 @@ struct LRHalfedge_data {
 struct LRFace_data {
     ofColor color;
     BOOL hole                   = false;
+    
+    int cache;
 };
 
 #endif

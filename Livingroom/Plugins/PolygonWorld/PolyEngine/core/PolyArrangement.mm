@@ -48,6 +48,15 @@
 }
 
 
+-(void) updateHoles{
+    holes.clear();
+    [self enumerateFaces:^(Arrangement_2::Face_iterator fit) {
+        if(fit->data().hole)
+            holes.push_back(fit);
+    }];
+    
+}
+
 CGAL::Cartesian_converter<Kernel,CGAL::Convex_hull_traits_2<Kernel> > converter;
 CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter2;
 
@@ -120,7 +129,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
             Arrangement_2::Hole_iterator hit = ufit->holes_begin();
             for( ; hit != ufit->holes_end(); ++hit){
                 vector<Arrangement_2::Halfedge_const_handle> v;
-
+                
                 Arrangement_2::Ccb_halfedge_const_circulator ccb_start = *hit;
                 Arrangement_2::Ccb_halfedge_const_circulator hc = ccb_start; 
                 do { 
@@ -129,11 +138,48 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
                     ++hc; 
                 } while (hc != ccb_start); 
                 output.push_back(v);
-
+                
             }
         }
     }
     return output;
+}
+
+-( vector< vector<Arrangement_2::Halfedge_const_handle> >) holesHandles{
+    vector< vector<Arrangement_2::Halfedge_const_handle> > output;
+    for(int i=0 ; i<holes.size(); i++){
+        Arrangement_2::Face_handle fit = holes[i];
+        
+        if(!fit->is_fictitious()){
+            if(fit->number_of_outer_ccbs() == 1){
+                vector<Arrangement_2::Halfedge_const_handle> v;
+                
+                Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                do { 
+                    v.push_back(hc);
+                } while (++hc != ccb_start); 
+                
+                output.push_back(v);
+                
+            }            
+        }
+    }
+    return output;
+}
+
+
+-(BOOL) vecInsideHole:(ofVec3f)p {
+    for(int i=0 ; i<holes.size(); i++){
+        Arrangement_2::Face_handle fit = holes[i];
+        if(!fit->is_fictitious() && fit->number_of_outer_ccbs() >= 1){
+            if(vecInCCB(fit->outer_ccb(), p)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }
 
 -(BOOL) vecInsideBoundary:(ofVec3f)p {
@@ -151,6 +197,7 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     
     return false;
 }
+
 
 -(Arrangement_2::Halfedge_const_handle) nearestBoundaryHalfedge:(ofVec2f)p{
     //Could be more sophisticated with multiple boundaries
@@ -177,79 +224,100 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     float bestDist = -1;
     
     /*if(insideBoundary){
-        //TODO
-        cout<<"Inside Boundary TODO"<<endl;
-        return Arrangement_2::Halfedge_const_handle();
-    } else */{
-        Arrangement_2::Unbounded_face_iterator ufit = arr->unbounded_faces_begin();
-        for( ; ufit != arr->unbounded_faces_end(); ++ufit){
-            if(!ufit->is_fictitious() && ufit->number_of_inner_ccbs() >= 1){
-                Arrangement_2::Hole_iterator hit = ufit->holes_begin();
-                for( ; hit != ufit->holes_end(); ++hit){
-                    Arrangement_2::Ccb_halfedge_const_circulator hc = *hit;                     
-                    do { 
-                        ofVec2f source = handleToVec2(hc->source());
-                        
-                        float dist = source.distance(p);
-                        if(bestDist == -1 || dist < bestDist){
-                            nearestPoint = hc;
-                            bestDist = dist;
-                        }
-
-                        ++hc; 
-                    } while (hc != *hit); 
-                }
-            }
-        }
-        
-        if(bestDist == -1){
-            cout<<"ARRGGH: No point"<<endl;
-            return Arrangement_2::Halfedge_const_handle();
-        } else {
-            //cout<<bestDist<<"  ";
-           // printVertexHandle(nearestPoint->source());
-            
-            ofVec2f vertex = handleToVec2(nearestPoint->source());
-            ofVec2f pDir = p-vertex;
-            
-            Arrangement_2::Halfedge_const_handle handle2 = nearestPoint;
-            Arrangement_2::Halfedge_const_handle handle1 = nearestPoint->prev();
-            if(insideBoundary){
-                handle2 = nearestPoint;
-                handle1 = nearestPoint->prev();
-                
-            }
-            
-            ofVec2f normal1 = calculateEdgeNormal(handle1);
-            ofVec2f normal2 = calculateEdgeNormal(handle2);
-            
-            float angle1;
-            float angle2;
-            
-            if(normal1.angle(normal2) < 0){
-                angle1 = normal1.angle(pDir);
-                angle2 = normal2.angle(pDir);
-            } else {
-                angle2 = normal1.angle(pDir);
-                angle1 = normal2.angle(pDir);                
-            }
-            
-        //    cout<<angle1<<"  "<<angle2<<endl;
-        
-            if(fabs(angle1) < fabs(angle2)){
-                return handle1;
-            } else {
-                return handle2;
-            }
-        }
-    }
-/*    vector< vector<Arrangement_2::Halfedge_const_handle> > points = [self boundaryHandles];
-    for(int i=0;i<points.size();i++){
-        
-    }
-  */  
+     //TODO
+     cout<<"Inside Boundary TODO"<<endl;
+     return Arrangement_2::Halfedge_const_handle();
+     } else */{
+         Arrangement_2::Unbounded_face_iterator ufit = arr->unbounded_faces_begin();
+         for( ; ufit != arr->unbounded_faces_end(); ++ufit){
+             if(!ufit->is_fictitious() && ufit->number_of_inner_ccbs() >= 1){
+                 Arrangement_2::Hole_iterator hit = ufit->holes_begin();
+                 for( ; hit != ufit->holes_end(); ++hit){
+                     Arrangement_2::Ccb_halfedge_const_circulator hc = *hit;                     
+                     do { 
+                         ofVec2f source = handleToVec2(hc->source());
+                         
+                         float dist = source.distance(p);
+                         if(bestDist == -1 || dist < bestDist){
+                             nearestPoint = hc;
+                             bestDist = dist;
+                         }
+                         
+                         ++hc; 
+                     } while (hc != *hit); 
+                 }
+             }
+         }
+         
+         if(bestDist == -1){
+             cout<<"ARRGGH: No point"<<endl;
+             return Arrangement_2::Halfedge_const_handle();
+         } else {
+             //cout<<bestDist<<"  ";
+             // printVertexHandle(nearestPoint->source());
+             
+             ofVec2f vertex = handleToVec2(nearestPoint->source());
+             ofVec2f pDir = p-vertex;
+             
+             Arrangement_2::Halfedge_const_handle handle2 = nearestPoint;
+             Arrangement_2::Halfedge_const_handle handle1 = nearestPoint->prev();
+             if(insideBoundary){
+                 handle2 = nearestPoint;
+                 handle1 = nearestPoint->prev();
+                 
+             }
+             
+             ofVec2f normal1 = calculateEdgeNormal(handle1);
+             ofVec2f normal2 = calculateEdgeNormal(handle2);
+             
+             float angle1;
+             float angle2;
+             
+             if(normal1.angle(normal2) < 0){
+                 angle1 = normal1.angle(pDir);
+                 angle2 = normal2.angle(pDir);
+             } else {
+                 angle2 = normal1.angle(pDir);
+                 angle1 = normal2.angle(pDir);                
+             }
+             
+             //    cout<<angle1<<"  "<<angle2<<endl;
+             
+             if(fabs(angle1) < fabs(angle2)){
+                 return handle1;
+             } else {
+                 return handle2;
+             }
+         }
+     }
+    /*    vector< vector<Arrangement_2::Halfedge_const_handle> > points = [self boundaryHandles];
+     for(int i=0;i<points.size();i++){
+     
+     }
+     */  
     return Arrangement_2::Halfedge_const_handle();
     
+}
+
+
+
+-(Arrangement_2::Halfedge_const_handle) nearestHoleHalfedge:(ofVec2f)p{
+    vector< vector<Arrangement_2::Halfedge_const_handle> > holesHandles = [self holesHandles];
+    
+    Arrangement_2::Halfedge_const_handle nearest;
+    float bestDist = -1;
+    
+    for(int i=0;i<holesHandles.size();i++){
+        for(int u=0;u<holesHandles[i].size();u++){
+            float dist = distanceVecToHalfedge(p, holesHandles[i][u]);
+            if(bestDist == -1 || dist < bestDist){
+                bestDist = dist;
+                nearest = holesHandles[i][u];
+            }
+        }
+    }
+    
+    return nearest;
 }
 
 /*

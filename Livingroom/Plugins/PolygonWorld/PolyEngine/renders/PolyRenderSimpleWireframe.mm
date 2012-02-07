@@ -37,14 +37,12 @@
             if(drawFillMode == 2){
                 glColor3f(1,1,1);
             }
-            if(fit->data().hole){
-                glColor3f(0.1,0.1,0.1);
-            }
-            glBegin(GL_POLYGON);
             
             
-            if(!fit->is_fictitious()){
+            if(!fit->is_fictitious() && !fit->data().hole){
                 if(fit->number_of_outer_ccbs() == 1){
+                    glBegin(GL_POLYGON);
+
                     Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
                     Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
                     
@@ -60,11 +58,12 @@
                         //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                         ++hc; 
                     } while (hc != ccb_start); 
+                    glEnd();   
+
                 }            
             }
             
             //        
-            glEnd();   
             
         }      
     }

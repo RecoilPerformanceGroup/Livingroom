@@ -103,9 +103,7 @@
                 }
                 glColor4f(color.x,color.y,color.z,1);
 
-                if(fit->data().hole){
-                    glColor4f(0,0,0,0);
-                }
+                if(!fit->data().hole){
                 
                 
                 
@@ -129,6 +127,7 @@
                         glEnd();  
 
                     }            
+                }
                 }
                 
             }

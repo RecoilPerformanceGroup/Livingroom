@@ -44,6 +44,7 @@ typedef CGAL::Delaunay_mesher_2<Delaunay, Criteria> Mesher;
     
     
     vector<Segment_2> debugSegments;
+    vector<ofVec2f> debugPolygon;
     
 
 

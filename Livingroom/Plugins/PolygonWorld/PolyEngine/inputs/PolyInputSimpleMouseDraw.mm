@@ -8,6 +8,12 @@
 
 
 #import "PolyInputSimpleMouseDraw.h"
+#import "Mask.h"
+#import "PolyInputTracker.h"
+
+static Point_2 vec2ToPoint2(ofVec2f v){
+    return Point_2(v.x, v.y);
+}
 
 
 @implementation PolyInputSimpleMouseDraw
@@ -16,6 +22,9 @@
 -(id)init{
     if(self = [super init]){
         [[self addPropF:@"split"] setMaxValue:1];        
+        [[self addPropF:@"lockTriangle"] setMaxValue:1];        
+        [[self addPropF:@"nelsonSplit"] setMaxValue:1];        
+        
     }
     
     return self;
@@ -85,6 +94,23 @@
         ofSetColor(0,255,255);
         ofLine(p1.x, p1.y, p2.x, p2.y);
     }
+    
+    
+    glPolygonMode(GL_FRONT_AND_BACK , GL_LINE);
+    
+    glBegin(GL_POLYGON);
+    
+    for(int i=0;i<debugPolygon.size();i++){
+        ofSetColor(255,100,0);
+        glVertex2f(debugPolygon[i].x, debugPolygon[i].y);
+    }
+    glEnd();
+    
+    glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
+    
+    
+    
+    
     ofSetLineWidth(1.0);
     /*  
      ofSetColor(100,20,20);
@@ -148,6 +174,276 @@
      */
 }
 
+
+
+- (void) split:(vector<Point_2>)points{
+    float offsetVal = 0.003;
+    debugSegments.clear();
+    debugPolygon.clear();
+    
+    //Lines generation
+    vector<Segment_2> lines;
+    for(int i=1;i<points.size();i++){
+        cout<<"points.push_back(Point_2("<<points[i].x()<<", "<<points[i].y()<<"));"<<endl;
+        
+        lines.push_back(Segment_2(points[i-1], points[i]));
+    }
+    
+    
+    
+    //Offset to the right
+    vector<Segment_2> linesModified;                
+    Point_2 p1 = points[0];
+    for(int i=1;i<points.size();i++){
+        ofVec2f offset = ofVec2f(offsetVal,0);
+        ofVec2f dir = point2ToVec2(points[i]) - point2ToVec2(points[i-1]);
+        if(i != points.size() -1){
+            dir = point2ToVec2(points[i+1]) - point2ToVec2(points[i-1]);
+        }
+        offset.rotate(-dir.angle(ofVec2f(0,1)));
+        
+        
+        Point_2 p2 = Point_2(points[i].x()+offset.x, points[i].y()+offset.y);
+        
+        if(i == points.size()-1){
+            linesModified.push_back(Segment_2(p1,points[i]));                        
+        } else {
+            linesModified.push_back(Segment_2(p1,p2));
+        }
+        p1 = p2;
+    }
+    
+    //Insert the lines in arrangement 
+    for(int i=0;i<lines.size();i++){
+        CGAL::insert(*[[engine arrangement] arrData],  lines[i]);
+    }
+    
+    //Insert offset
+    for(int i=0;i<linesModified.size();i++){                    
+        CGAL::insert(*[[engine arrangement] arrData],  linesModified[i]);
+    }
+    
+    
+    //Polygon
+    vector<ofPoint> polygon;
+    for(int i=0;i<lines.size();i++){
+        if(i==0)
+            polygon.push_back(point2ToVec2(lines[i].source()));
+        polygon.push_back(point2ToVec2(lines[i].target()));
+    }
+    
+    for(int i=linesModified.size()-1;i>=0;i--){
+        polygon.push_back(point2ToVec2(linesModified[i].source()));
+    }
+    
+    for(int i=0;i<polygon.size();i++){
+        debugPolygon.push_back(polygon[i]);
+    }
+    
+    /*{
+     ofVec2f offset = ofVec2f(offsetVal,0);
+     ofVec2f dir = point2ToVec2(pointsBuffer[1]) - point2ToVec2(pointsBuffer[0]);
+     offset.rotate(dir.angle(ofVec2f(0,1)));
+     polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[0].x())+offset.x,CGAL::to_double(pointsBuffer[0].y())+offset.y,0));
+     }
+     
+     for(int i=1;i<pointsBuffer.size();i++){
+     polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x()),CGAL::to_double(pointsBuffer[i].y()),0));
+     }
+     for(int i=pointsBuffer.size()-2;i>=0;i--){
+     ofVec2f offset = ofVec2f(offsetVal,0);
+     ofVec2f dir = point2ToVec2(pointsBuffer[i]) - point2ToVec2(pointsBuffer[i-1]);
+     offset.rotate(dir.angle(ofVec2f(0,1)));
+     
+     polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x())+offset.x, CGAL::to_double(pointsBuffer[i].y())+offset.y,0));
+     }
+     */
+    
+    
+    
+    
+    
+    
+    
+    
+    //    __block int u=0;
+    __block vector<Halfedge_handle> deleteHandles;
+    [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+        eit->data().crumbleOptimalLength = -1;
+        eit->data().crumbleOptimalAngle = -1;
+        eit->source()->data().hullOptimalAngle = -1;
+        eit->target()->data().hullOptimalAngle = -1;
+        
+        
+        ofVec2f p1 = handleToVec2(eit->source());
+        ofVec2f p2 = handleToVec2(eit->target());
+        ofVec2f p3 = p2+(p1-p2)*0.5;
+        Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+        
+        // if(ofInsidePoly(p1.x, p1.y, polygon) || ofInsidePoly(p2.x, p2.y, polygon) || ofInsidePoly(p3.x, p3.y, polygon))){
+        if(ofInsidePoly(p3.x, p3.y, polygon)){
+            bool intersection = NO;
+            
+            for(int i=0;i<lines.size();i++){                        
+                if(CGAL::do_intersect(arrSegment, lines[i])){
+                    if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
+                        intersection = YES;
+                        //                                    debugSegments.push_back(arrSegment);
+                    }
+                }
+            }
+            for(int i=0;i<linesModified.size();i++){                        
+                if(CGAL::do_intersect(arrSegment, linesModified[i])){
+                    if(linesModified[i].has_on(arrSegment.source()) && linesModified[i].has_on(arrSegment.target())){
+                        intersection = YES;
+                        //                                    debugSegments.push_back(arrSegment);
+                    }
+                }
+            }
+            
+            
+            if(!intersection){
+                //                            cout<<"!Intersection "<<u++<<endl;
+                eit->face()->data().hole = YES;
+                eit->twin()->face()->data().hole = YES;
+                
+                debugSegments.push_back(arrSegment);
+                deleteHandles.push_back(eit);
+            } /*else {
+               
+               ofVec3f pos = handleToVec3(eit->target());
+               setHandlePos(pos*ofVec3f(1,1,0), eit->target());
+               
+               pos = handleToVec3(eit->source());
+               setHandlePos(pos*ofVec3f(1,1,0), eit->source());
+               
+               }
+               */
+        }
+        
+        
+        
+    }];
+    
+    
+    
+    [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+        if(eit->target()->degree() <= 1 || eit->source()->degree() <= 1){
+            deleteHandles.push_back(eit);
+        }
+    }];
+    
+    for(int i=0;i<deleteHandles.size();i++){
+        [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
+    }
+    
+    
+    
+    //                ofVec2f p = point2ToVec2(pointsBuffer[0]) + offset*0.5;
+    //                Point_2 p2 = Point_2(p.x, p.y);
+    //                CGAL::Object obj = [[engine arrangement] cgalObjectAtPoint:p2];
+    //                
+    //                Arrangement_2::Face_const_handle      faceConst;
+    //                
+    //                if (CGAL::assign (faceConst, obj)) {
+    //                    cout<<"Face"<<endl;
+    //                    Arrangement_2::Face_handle face = [[engine arrangement] arrData]->non_const_handle(faceConst);
+    //                    face->data().hole = YES;
+    //                }
+    //                
+    [[engine arrangement] updateHoles];
+    
+}
+
+
+-(void)update:(NSDictionary *)drawingInformation{
+    if(PropB(@"lockTriangle")){
+        [Prop(@"lockTriangle") setBoolValue:NO];
+        
+        pointsBuffer.clear();
+        
+        ofVec2f p1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
+        ofVec2f p2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
+        
+        pointsBuffer.push_back(vec2ToPoint2(p1));
+        pointsBuffer.push_back(vec2ToPoint2(p2));        
+        
+        if(pointsBuffer.size() > 1){        
+            debugSegments.clear();
+            debugPolygon.clear();
+            
+            //Lines generation
+            vector<Segment_2> lines;
+            for(int i=1;i<pointsBuffer.size();i++){              
+                lines.push_back(Segment_2(pointsBuffer[i-1], pointsBuffer[i]));
+            }
+            
+            //Insert the lines in arrangement 
+            for(int i=0;i<lines.size();i++){
+                CGAL::insert(*[[engine arrangement] arrData],  lines[i]);
+            }
+            
+            __block vector<Halfedge_handle> deleteHandles;
+            [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                eit->data().crumbleOptimalLength = -1;
+                eit->data().crumbleOptimalAngle = -1;
+                eit->source()->data().hullOptimalAngle = -1;
+                eit->target()->data().hullOptimalAngle = -1;
+                
+                
+                ofVec2f p1 = handleToVec2(eit->source());
+                ofVec2f p2 = handleToVec2(eit->target());
+                ofVec2f p3 = p2+(p1-p2)*0.5;
+                Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
+                
+                
+                bool intersection = NO;
+                
+                for(int i=0;i<lines.size();i++){                        
+                    if(CGAL::do_intersect(arrSegment, lines[i])){
+                        if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
+                            intersection = YES;
+                        }
+                    }
+                }
+                
+                
+                if(intersection){
+                    eit->source()->data().physicsLock = YES;
+                    eit->target()->data().physicsLock = YES;
+                    debugSegments.push_back(arrSegment);
+                } 
+                
+                
+                
+                
+            }];     
+        }      
+    }
+    
+    if(PropB(@"nelsonSplit")){
+        if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
+            [Prop(@"nelsonSplit") setBoolValue:NO];
+            
+            vector<Point_2> points;
+            points.push_back(Point_2(0.735887, 0.493007));
+            points.push_back(Point_2(0.6875, 0.503497));
+            points.push_back(Point_2(0.610887, 0.48951));
+            points.push_back(Point_2(0.516129, 0.465035));
+            points.push_back(Point_2(0.485887, 0.479021));
+            points.push_back(Point_2(0.366935, 0.437063));
+            points.push_back(Point_2(0.360887, 0.506993));
+            points.push_back(Point_2(0.370968, 0.594406));
+            points.push_back(Point_2(0.393145, 0.65035));
+            ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0]+ofVec2f(0,0.05);
+            points.push_back(vec2ToPoint2(tracker));
+            
+            [self split:points];
+        }
+    }
+}
+
+
 - (void) controlKeyPressed:(int)_key modifier:(int)modifier{
     NSLog(@"Key %i",_key);
     
@@ -155,159 +451,7 @@
         //If 3 or more points, we can form a polygon
         if(PropB(@"split")){
             if(pointsBuffer.size() > 1){        
-                //Lines generation
-                vector<Segment_2> lines;
-                for(int i=1;i<pointsBuffer.size();i++){
-                    lines.push_back(Segment_2(pointsBuffer[i-1], pointsBuffer[i]));
-                }
-                
-                //Insert the lines in arrangement 
-                for(int i=0;i<lines.size();i++){
-                    CGAL::insert(*[[engine arrangement] arrData],  lines[i]);
-                }
-                
-                //Offset to the right
-                vector<Segment_2> linesModified;
-                ofVec2f offset = ofVec2f(0.01,0);
-                for(int i=1;i<pointsBuffer.size();i++){
-                    Point_2 p1 = Point_2(pointsBuffer[i-1].x()+offset.x, pointsBuffer[i-1].y()+offset.y);
-                    Point_2 p2 = Point_2(pointsBuffer[i].x()+offset.x, pointsBuffer[i].y()+offset.y);
-                    
-                    if(i == pointsBuffer.size()-1){
-                        linesModified.push_back(Segment_2(p1,pointsBuffer[i]));                        
-                    } else {
-                        linesModified.push_back(Segment_2(p1,p2));
-                    }
-                }
-                
-                //Insert offset
-                for(int i=0;i<linesModified.size();i++){                    
-                    CGAL::insert(*[[engine arrangement] arrData],  linesModified[i]);
-                }
-                
-                
-                vector<ofPoint> polygon;
-                for(int i=0;i<pointsBuffer.size();i++){
-                    polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x()),CGAL::to_double(pointsBuffer[i].y()),0));
-                }
-                for(int i=pointsBuffer.size()-2;i>=0;i--){
-                    polygon.push_back(ofPoint(CGAL::to_double(pointsBuffer[i].x())+offset.x, CGAL::to_double(pointsBuffer[i].y())+offset.y,0));
-                }
-                
-                /*      debugSegments.clear();
-                 for(int i=1;i<polygon.size();i++){
-                 debugSegments.push_back(Segment_2(Point_2(polygon[i-1].x, polygon[i-1].y), Point_2(polygon[i].x, polygon[i].y)));
-                 }
-                 */
-                
-                // ofInsidePoly(<#float x#>, <#float y#>, <#const vector<ofPoint> &poly#>)
-                
-                //Now find what we need to delete
-                //Find intersections
-                /*      __block int u=0;
-                 debugSegments.clear();
-                 [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                 for(int i=0;i<lines.size();i++){
-                 Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
-                 
-                 if(CGAL::do_intersect(arrSegment, lines[i])){
-                 if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
-                 cout<<"Intersection "<<u++<<endl;
-                 debugSegments.push_back(arrSegment);
-                 }
-                 }
-                 }
-                 }];*/
-                
-                __block int u=0;
-                debugSegments.clear();
-                __block vector<Halfedge_handle> deleteHandles;
-                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                    eit->data().crumbleOptimalLength = -1;
-                    eit->data().crumbleOptimalAngle = -1;
-                    eit->source()->data().hullOptimalAngle = -1;
-                    eit->target()->data().hullOptimalAngle = -1;
-                    
-                    
-                    ofVec2f p1 = handleToVec2(eit->source());
-                    ofVec2f p2 = handleToVec2(eit->target());
-                    ofVec2f p3 = p2+(p1-p2)*0.5;
-                    Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
-                    
-                    // if(ofInsidePoly(p1.x, p1.y, polygon) || ofInsidePoly(p2.x, p2.y, polygon) || ofInsidePoly(p3.x, p3.y, polygon))){
-                    if(ofInsidePoly(p3.x, p3.y, polygon)){
-                        bool intersection = NO;
-                        
-                        for(int i=0;i<lines.size();i++){                        
-                            if(CGAL::do_intersect(arrSegment, lines[i])){
-                                if(lines[i].has_on(arrSegment.source()) && lines[i].has_on(arrSegment.target())){
-                                    intersection = YES;
-                                    //                                    debugSegments.push_back(arrSegment);
-                                }
-                            }
-                        }
-                        for(int i=0;i<linesModified.size();i++){                        
-                            if(CGAL::do_intersect(arrSegment, linesModified[i])){
-                                if(linesModified[i].has_on(arrSegment.source()) && linesModified[i].has_on(arrSegment.target())){
-                                    intersection = YES;
-                                    //                                    debugSegments.push_back(arrSegment);
-                                }
-                            }
-                        }
-                        
-                        
-                        if(!intersection){
-                            cout<<"!Intersection "<<u++<<endl;
-                            debugSegments.push_back(arrSegment);
-                            deleteHandles.push_back(eit);
-                        }
-                    }
-                    
-                    
-                    
-                }];
-                
-           
-                
-                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                    if(eit->target()->degree() <= 1 || eit->source()->degree() <= 1){
-                        deleteHandles.push_back(eit);
-                    }
-                }];
-                
-                for(int i=0;i<deleteHandles.size();i++){
-                    [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
-                }
-                
-                /*
-                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
-                
-                for(int i=0;i<boundaryHandles.size();i++){
-                    for(int u=1;u<boundaryHandles[i].size();u++){
-                        Halfedge_handle h1 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u-1]);
-                        Halfedge_handle h2 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
-                        h1->target()->data().hullOptimalAngle = -1;
-                        h2->target()->data().hullOptimalAngle = -1;
-                    }
-                }*/
-
-               /* 
-                
-                Arrangement_2 * newArr = new Arrangement_2();
-                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                    bool doDelete = NO;
-                    for(int i=0;i<deleteHandles.size();i++){
-                        if(deleteHandles[i] == eit)
-                            doDelete = YES;
-                    }
-                    if(!doDelete){
-                        Segment_2 arrSegment = Segment_2(eit->source()->point(), eit->target()->point());
-                        CGAL::insert(*newArr,  arrSegment);
-                    }
-                }];
-                
-                [[engine arrangement] setArrData:newArr];*/
-                
+                [self split:pointsBuffer];
             }                
         } else {
             if(pointsBuffer.size() > 2){        
