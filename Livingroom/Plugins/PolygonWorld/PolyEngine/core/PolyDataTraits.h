@@ -44,6 +44,7 @@ struct LRVertex_data {
     
     //SpringsAnimator
     ofVec3f springF             = ofVec3f(0,0,0);
+    ofVec3f springFNoItt        = ofVec3f(0,0,0);
     ofVec3f springV             = ofVec3f(0,0,0);
     ofVec3f accumF              = ofVec3f(0,0,0);
     
