@@ -160,6 +160,7 @@ static float edgeLength(Arrangement_2::Halfedge_const_handle hit){
     return dir.length();    
 }
 
+
 /*static ofVec2f calculateEdgeNormal (Halfedge_handle hit){
     ofVec2f v1 = handleToVec2(hit->source());
     ofVec2f v2 = handleToVec2(hit->target());    

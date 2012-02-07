@@ -17,7 +17,6 @@
 
 -(id)init{
     if(self = [super init]){
-        [[self addPropF:@"state"] setMaxValue:3];
         [[self addPropF:@"iterations"] setMinValue:1];
         [[self addPropF:@"forceIterations"] setMinValue:1];
         [[self addPropF:@"forceIterationsRatio"] setMinValue:0];
@@ -37,12 +36,8 @@
         [self addPropF:@"angleStiffnesForce"];
         
         //State 3:
-        [self addPropF:@"anchorThreshold"];
-        
         [self addPropF:@"deleteStrength"];
-        
-        [self addPropF:@"hullStiffness"];
-        
+        [self addPropF:@"hullStiffness"];       
         [self addPropF:@"burn"];
         
         blockPhysics = [NSMutableDictionary dictionary];
@@ -133,32 +128,35 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 #pragma mark Common
 
 -(void)update:(NSDictionary *)drawingInformation{
-    BOOL updateDebug = NO;
-    
+    BOOL updateDebug = NO;    
     if(ofGetElapsedTimeMillis() > lastDebugUpdate + 100){
         updateDebug = YES;
         lastDebugUpdate = ofGetElapsedTimeMillis();
     }
     
+    //Clear physics
     [blockTiming removeAllObjects];
-    if(PropI(@"state") >= 1){
-        
-        //Optimal length
+    
+    //
+    //Reset data
+    //
+    {   
+        //Set optimal length
         [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
             if(eit->data().crumbleOptimalLength == -1){
                 updateInitialLength(eit);
             }
         }];
         
-        //Optimal angle
+        //Set optimal angle
         [[engine arrangement] enumerateFaceEdges:^(Arrangement_2::Ccb_halfedge_circulator hc, Arrangement_2::Face_iterator fit) {
             if(hc->data().crumbleOptimalAngle == -1){                            
                 updateInitialAngle(hc);
             }
         }];
         
-        vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
-        
+        //Set hull optimal angle
+        vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];    
         for(int i=0;i<boundaryHandles.size();i++){
             for(int u=1;u<boundaryHandles[i].size();u++){
                 Halfedge_handle h1 = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u-1]);
@@ -171,18 +169,25 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             }
         }
         
-        
-        
-        //Random z value (so its never 0)
+        //Set random z value (so its never 0)
         //Reset accumF
+        __block int i=0;
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
             if(vit->data().pos.z == 0){
-                vit->data().pos.z = ofRandom(-0.001,0.001);
+                vit->data().pos.z = sin(i*141.2151)*0.001;
                 vit->data().bornZ = vit->data().pos.z;
             }
             vit->data().accumF = ofVec3f();
+            i++;
         }];
-        
+    } //End reset data
+    
+    
+    
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%% PHYSICS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {
         
         //
         //Calculate the vertex to vertex spring force
@@ -266,7 +271,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         //Calculate angular stiffness force
         //
         float angleStiffnesForce = PropF(@"angleStiffnesForce");
-        if(PropI(@"state") >= 2 && angleStiffnesForce > 0){
+        if(angleStiffnesForce > 0){
             [self addPhysicsBlock:@"AngularStiffness" block:^(PolyArrangement *arrangement) {
                 
                 
@@ -422,130 +427,98 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 }];
             }];
         }
+    } //End physics
+    
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    for(int i=0;i<PropI(@"iterations"); i++){
+        //Reset forces
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+            vit->data().springF = ofVec3f(0,0,0);
+        }];
         
-        for(int i=0;i<PropI(@"iterations"); i++){
-            //Reset forces
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                vit->data().springF = ofVec3f(0,0,0);
-            }];
+        
+        //Run physics
+        [blockPhysics enumerateKeysAndObjectsUsingBlock:^(id blockkey, id obj, BOOL *stop) {
+            clock_t start = clock();
             
+            //Physics block pointer
+            void (^pointerToBlock)(PolyArrangement * arr) = obj;    
+            pointerToBlock([engine arrangement]); //Run the block
             
+            //Calculate duration
+            double dur = 100000.0*((double)clock() - start ) / CLOCKS_PER_SEC;
             
-            [blockPhysics enumerateKeysAndObjectsUsingBlock:^(id blockkey, id obj, BOOL *stop) {
-                clock_t start = clock();
-                
-                
-                void (^pointerToBlock)(PolyArrangement * arr) = obj;    
-                pointerToBlock([engine arrangement]);
-                
-                double dur = 100000.0*((double)clock() - start ) / CLOCKS_PER_SEC;
-                
-                if(updateDebug){
-                    NSNumber * num = [blockTiming valueForKey:blockkey];
-                    if(num == nil){
-                        [blockTiming setValue:[NSNumber numberWithDouble:dur] forKey:blockkey];                                        
-                    } else {
-                        double buf = [num doubleValue];
-                        [blockTiming setValue:[NSNumber numberWithDouble:dur+buf] forKey:blockkey];                    
-                    }
+            if(updateDebug){
+                NSNumber * num = [blockTiming valueForKey:blockkey];
+                if(num == nil){
+                    [blockTiming setValue:[NSNumber numberWithDouble:dur] forKey:blockkey];                                        
+                } else {
+                    double buf = [num doubleValue];
+                    [blockTiming setValue:[NSNumber numberWithDouble:dur+buf] forKey:blockkey];                    
                 }
+            }
+        }];
+        
+        
+        
+        
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!! Force iterator !!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        
+        CachePropF(forceIterationsRatio);
+        CachePropI(forceIterations);
+        CachePropF(forceIterationsRatioZ);
+        
+        for(int i=0;i<forceIterations;i++){
+            [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                ofVec3f * source = &eit->source()->data().springF;
+                ofVec3f * target = &eit->target()->data().springF;
                 
-                //  NSLog(@"%@",[blockTiming valueForKey:blockkey]);
+                ofVec3f vSource = *source * (forceIterationsRatio);
+                ofVec3f vTarget = *target * (forceIterationsRatio);
                 
+                vSource.z *= forceIterationsRatioZ;
+                vTarget.z *= forceIterationsRatioZ;                    
+                
+                *source += vTarget;                    
+                *source -= vSource;
+                
+                *target += vSource;
+                *target -= vTarget;
             }];
-            
-            
-            
-            //Anchor
-            if(PropI(@"state") >= 3){
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                    if(vit->data().crumbleAnchor == true){
-                        if(vit->data().springF.length() > PropF(@"anchorThreshold")){
-                            vit->data().crumbleAnchor = false;
-                        } 
-                    }
-                }];
+        } 
+        
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!! Vertex position update !!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        CachePropF(minForce);
+        CachePropF(floorFriction);
+        
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+            if( vit->data().springF.length() > minForce){
+                vit->data().accumF += vit->data().springF;                    
+                vit->data().springV = vit->data().springF * 0.01 * (1.0-vit->data().physicsLock);
             }
             
-            /*
-             float f = PropF(@"hullStiffness");
-             if(f > 0){
-             vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [[engine arrangement] boundaryHandles];
-             
-             for(int i=0;i<boundaryHandles.size();i++){
-             for(int u=0;u<boundaryHandles[i].size();u++){
-             Halfedge_handle h = [[engine arrangement] arrData]->non_const_handle(boundaryHandles[i][u]);
-             
-             ofVec3f v1 =  h->source()->data().springF;
-             ofVec3f v2 =  h->target()->data().springF;
-             
-             h->source()->data().springF -= v1*(f);
-             h->target()->data().springF -= v2*(f);
-             
-             h->source()->data().springF += v2 * f;
-             h->target()->data().springF += v1 * f;
-             }
-             }
-             }
-             */
+            //Friction
+            vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
             
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // !!!! Vertex position update !!!!
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            int state = PropI(@"state");
-            float minForce = PropF(@"minForce");
-            float floorFriction = PropF(@"floorFriction");
-            
-            CachePropF(forceIterationsRatio);
-            CachePropI(forceIterations);
-            CachePropF(forceIterationsRatioZ);
-
-            for(int i=0;i<forceIterations;i++){
-                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                    ofVec3f * source = &eit->source()->data().springF;
-                    ofVec3f * target = &eit->target()->data().springF;
-                    
-                    ofVec3f vSource = *source * (forceIterationsRatio);
-                    ofVec3f vTarget = *target * (forceIterationsRatio);
-                    
-                    vSource.z *= forceIterationsRatioZ;
-                    vTarget.z *= forceIterationsRatioZ;                    
-                    //                    eit->source()->data().springF *= forceIterationsRatio;
-                    //                  eit->target()->data().springF *= forceIterationsRatio;
-                    
-                    *source += vTarget;                    
-                    *source -= vSource;
-                    
-                    *target += vSource;
-                    *target -= vTarget;
-                }];
-            } 
-            
-            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                vit->data().springV *= 0;//PropF(@"springDamping");
-                
-                
-                
-//                if(state < 3 || !vit->data().crumbleAnchor){
-                    if( vit->data().springF.length() > minForce){
-                        vit->data().accumF +=  vit->data().springF;
-
-                        vit->data().springV += vit->data().springF * 0.01 * (1.0-vit->data().physicsLock);
-                    }
-//                }
-                
-                //Friction
-              //  vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
-                
-                setHandlePos(vit->data().springV + vit->data().pos, vit);
-            }];
-            
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            
-        }
+            //Update position
+            setHandlePos(vit->data().springV + vit->data().pos, vit);
+        }];
+        
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
     }
+    
     
     [blockPhysics removeAllObjects];
     
@@ -577,10 +550,11 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     
 }
 
+
+
+
+
 -(void)controlDraw:(NSDictionary *)drawingInformation{
-    
-    
-    
     //Visualize
     
     
@@ -608,134 +582,12 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             float optimalAngle = h1->target()->data().hullOptimalAngle;
             
             int minus = (angle*optimalAngle < 0) ? -1 : 1;                        
-            float diff = minus*(fabs(angle)-fabs(optimalAngle));
             
             of2DArrow( handleToVec2(h1->target()) ,  handleToVec2(h1->target()) + 0.1*dir , 0.01);
             
         }
     }
-    
-    
-    
-    
-    /* //Visualize angualar stress
-     if(PropI(@"state") >= 2 && PropF(@"angleStiffnesForce") > 0){
-     
-     ofSetColor(255,0,255);
-     
-     fit = [[engine arrangement] arrData]->faces_begin();        
-     for ( ; fit !=[[engine arrangement] arrData]->faces_end(); ++fit) {        
-     if(!fit->is_fictitious()){
-     if(fit->number_of_outer_ccbs() == 1){
-     Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
-     Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
-     do { 
-     ofVec2f dir;
-     float angle = edgeAngleToNext(hc, &dir);
-     float optimalAngle = hc->data().crumbleOptimalAngle;
-     
-     int minus = (angle*optimalAngle < 0) ? -1 : 1;
-     float diff = minus*(fabs(angle)-fabs(optimalAngle));
-     
-     dir *= diff*0.1;
-     
-     ofVec2f target =  pointToVec(hc->target()->point());                        
-     of2DArrow(target , target + dir*0.1 , 0.01);
-     } while (++hc != ccb_start); 
-     }            
-     }
-     }
-     }
-     
-     //Visualize anchor
-     if(PropI(@"state") >= 3){        
-     glPointSize(8);
-     glBegin(GL_POINTS);
-     
-     vit = [[engine arrangement] arrData]->vertices_begin();        
-     for ( ; vit !=[[engine arrangement] arrData]->vertices_end(); ++vit) {
-     if(vit->data().crumbleAnchor){
-     float diff =  1.0 - vit->data().springF.length()/PropF(@"anchorThreshold");
-     ofSetColor(255,255.0*diff,255.0*diff);
-     glVertexHandle(vit);
-     }
-     }
-     glEnd();   
-     
-     }
-     */
-    /*
-     eit = [[engine arrangement] arrData]->edges_begin();        
-     for ( ; eit !=[[engine arrangement] arrData]->edges_end(); ++eit) {
-     ofVec2f dir;
-     float angle = edgeAngleToNext(eit, &dir);
-     ofVec2f target =  pointToVec(eit->target()->point());
-     
-     ofSetColor(255,0,255);
-     
-     
-     of2DArrow(target , target + dir*0.1 , 0.01);
-     
-     
-     
-     }*/
-    
-    
+        
 }
-
-
-/**
- -(void)addCrackAmount:float amount toVertex: Arrangement_2::Vertex v{
- 
- // add crack
- 
- vit->data().crackAmount+=0.1;
- 
- // if crack is > 1, distribute to the nearest halfedge with most crack
- 
- if(vit->data().crackAmount > 1.0){
- 
- Arrangement_2::Vertex vToPress;
- float highestPressure = 0.0;
- 
- Arrangement_2::Halfedge_around_vertex_circulator eit = vit->vertex_begin();
- 
- for ( ; eit !=vit->vertex_begin(); ++eit) {
- 
- 
- float pressure = eit->vertex()->data().crackAmount;
- if(pressure > highestPressure){
- vToPress = eit->vertex();
- }
- }
- 
- // if none of the vertices were a'crackin' we pick the 'middle' one
- 
- if(highestPressure == 0){
- 
- int numberVertices = vit.vertex_degree ()
- 
- eit = vit->vertex_begin();
- 
- for ( ; eit !=vit->vertex_begin(); ++eit) {
- float pressure = eit->data().crackAmount;
- if(pressure > highestPressure){
- vToPress = eit;
- }
- }
- 
- }
- 
- Halfedge_around_vertex_circulator
- 
- vit->vertex_begin () 
- 
- 
- }
- 
- 
- }
- 
- **/
 
 @end
