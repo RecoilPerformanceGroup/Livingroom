@@ -168,6 +168,9 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
     return output;
 }
 
+- (int) numberHoles {
+    return holes.size();   
+}
 
 -(BOOL) vecInsideHole:(ofVec3f)p {
     for(int i=0 ; i<holes.size(); i++){
@@ -178,8 +181,9 @@ CGAL::Cartesian_converter<CGAL::Convex_hull_traits_2<Kernel>, Kernel > converter
             }
         }
         
-        return false;
     }
+    return false;
+
 }
 
 -(BOOL) vecInsideBoundary:(ofVec3f)p {

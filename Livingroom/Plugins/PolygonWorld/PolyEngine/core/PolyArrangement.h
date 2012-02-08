@@ -31,6 +31,7 @@
 -(Arrangement_2::Halfedge_const_handle) nearestBoundaryHalfedge:(ofVec2f)p;
 -(Arrangement_2::Halfedge_const_handle) nearestHoleHalfedge:(ofVec2f)p;
 -(void) updateHoles;
+- (int) numberHoles;
 
 
 -(void) saveArrangement:(int)num;

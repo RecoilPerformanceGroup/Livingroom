@@ -80,13 +80,16 @@
     }
     
     CachePropF(crumbleForce);
+    float mouseR = PropF(@"mouseRadius");
+    float mouseF = PropF(@"mouseForce")*0.05;
+    CachePropF(centroid);
+    
+    
     if(crumbleForce > 0 && v.size() > 0){
         //Tracker force
         [GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
             {
-                float mouseR = PropF(@"mouseRadius");
-                float mouseF = PropF(@"mouseForce")*0.05;
-                float centroid = PropF(@"centroid");
+
                 
                 [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int t=0;t<v.size();t++){
@@ -122,6 +125,61 @@
         }];
         
     }
+    
+   
+    
+    CachePropF(crumbleForce2);
+    if(crumbleForce2 > 0 && v.size() > 0){
+        [GetPhysics() addPhysicsBlock:@"CrumbleForce2" block:^(PolyArrangement *arrangement) {
+            
+            for(int i=0;i<v.size();i++){
+                ofVec2f trackerCentroid = centroids[i];
+
+                for(int u=0;u<v[i].size();u++){
+                    ofVec2f trackerPoint = v[i][u];
+                    if(centroid > 0){
+                        ofVec2f _dir = trackerCentroid-trackerPoint;
+                        trackerPoint += _dir * centroid;
+                    }
+                    if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
+                        cout<<"Not inside hole"<<endl;
+                        //Inside boundary
+                        ofVec2f p = trackerPoint;
+                        
+                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:trackerPoint];
+                        Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
+                        Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
+                        
+                        ofVec2f p1 = handleToVec2(h1);
+                        ofVec2f p2 = handleToVec2(h2);
+                        
+                      //  cout<<"Nearest p1 "<<p1.x<<"  "<<p1.y<<endl;
+                        
+                        float dist1 = p1.distance(p);
+                        
+                        float dist2 = p2.distance(p);
+                        
+                        float factor2 = dist1 / (dist1 + dist2);
+                        float factor1 = dist2 / (dist1 + dist2);
+                        
+/*                        ofVec2f dir1 = (p-p1).normalized();
+                        ofVec2f dir2 = (p-p2).normalized();*/
+                        ofVec2f dir1 = -calculateEdgeNormal(handle).normalized();
+                        ofVec2f dir2 = dir1;
+                        
+                        float dist = distanceVecToHalfedge(p, handle);
+                        
+                        h1->data().springF += crumbleForce2*dir1*dist*factor1;      
+                        h2->data().springF += crumbleForce2*dir2*dist*factor2;      
+                    }
+                }
+                //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
+                //            
+            }
+        }];
+        
+    }
+    
     
     
     CachePropF(decrumbleForce);
@@ -163,52 +221,6 @@
         }];
         
     }
-    
-    CachePropF(crumbleForce2);
-    if(crumbleForce2 > 0 && v.size() > 0){
-        [GetPhysics() addPhysicsBlock:@"CrumbleForce2" block:^(PolyArrangement *arrangement) {
-            
-            for(int i=0;i<v.size();i++){
-                for(int u=0;u<v[i].size();u++){
-                    if(![[engine arrangement] vecInsideHole:v[i][u]]){
-                        cout<<"Not inside hole"<<endl;
-                        //Inside boundary
-                        ofVec2f p = v[i][u];
-                        
-                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:v[i][u]];
-                        
-                        Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
-                        Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
-                        
-                        ofVec2f p1 = handleToVec2(h1);
-                        ofVec2f p2 = handleToVec2(h2);
-                        
-                        cout<<"Nearest p1 "<<p1.x<<"  "<<p1.y<<endl;
-                        
-                        float dist1 = p1.distance(p);
-                        float dist2 = p2.distance(p);
-                        
-                        float factor2 = dist1 / (dist1 + dist2);
-                        float factor1 = dist2 / (dist1 + dist2);
-                        
-/*                        ofVec2f dir1 = (p-p1).normalized();
-                        ofVec2f dir2 = (p-p2).normalized();*/
-                        ofVec2f dir1 = -calculateEdgeNormal(handle).normalized();
-                        ofVec2f dir2 = dir1;
-                        
-                        float dist = distanceVecToHalfedge(p, handle);
-                        
-                        h1->data().springF += crumbleForce2*dir1*dist*factor1;      
-                        h2->data().springF += crumbleForce2*dir2*dist*factor2;      
-                    }
-                }
-                //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
-                //            
-            }
-        }];
-        
-    }
-    
   
 }
 
