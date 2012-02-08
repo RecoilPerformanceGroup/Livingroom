@@ -36,6 +36,7 @@ struct VectorSortY {
         [self addPropF:@"overflowThreshold"];
         [self addPropF:@"overflowSpeed"];
         [[self addPropF:@"impulse"] setMaxValue:128];
+        [[self addPropF:@"invimpulse"] setMaxValue:128];
         
         [self addPropF:@"onlyCracklines"];
         
@@ -63,7 +64,7 @@ struct VectorSortY {
         eit->twin()->data().crackAmount = 0;
         eit->data().crackAmount = 0;
     }];
-
+    
     
     
 }
@@ -92,235 +93,245 @@ struct VectorSortY {
     //avarage halfedges
     
     CachePropF(impulse);
+    CachePropF(invimpulse);
     
-    if(impulse > 0){
+    if(impulse > 0 || invimpulse > 0){
         SetPropF(@"impulse",0);
+        SetPropF(@"invimpulse",0);
         
         
         float active = PropF(@"active");
-        float pressure = PropF(@"pressure")*impulse/128.0;
+        float pressure = PropF(@"pressure")*(impulse-invimpulse)/128.0;
         float overflowTheshold = PropF(@"overflowThreshold");
         float overflowSpeed = PropF(@"overflowSpeed");    
-        
+                
         if(active > 0){
-            
-            //Cracklines
             vector<ofVec2f> v = [GetTracker() getTrackerCoordinatesCentroids];    
-
-            for(int t=0;t<v.size();t++){
-                for(int i=0;i<crackLines.size();i++){
-                    for(int u=1;u<crackLines[i].size();u++){
-                        ofVec2f A = crackLines[i][u-1];        
-                        ofVec2f B = crackLines[i][u];
-                        
-                        if(v[t].y > A.y && v[t].y < B.y){
-                            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                                ofVec2f p = handleToVec2(vit);
-                                if(p.distance(A) > 0.04 && p.distance(B) > 0.04){
-                                    if(p.y > A.y && p.y < B.y){
-                                        float dist = distanceVecToLine(p, A, B);
-                                        if(dist < ofRandom(0.0, 0.1*pressure/100.0)){
-                                            bool collision = NO;
-                                            for(int ii=0;ii<crackLines.size();ii++){
-                                                for(int uu=2;uu<crackLines[i].size();uu++){
-                                                    ofVec2f AA = crackLines[ii][uu-1];        
-                                                    ofVec2f BB = crackLines[ii][uu];
-                                                    ofVec2f r;
-                                                    if(lineSegmentIntersection(A, p, AA, BB, &r) || lineSegmentIntersection(B, p, AA, BB, &r)){
-                                                        collision = YES;
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                            if(!collision){
-                                                crackLines[i].push_back(p);
-                                                crackLinesVertices.push_back(vit);
-                                                *stop = YES;
-                                            }
-                                        }
-                                    }
-                                }
-                            }];
-                        }
-                    }
-                }
-            }
             
-            
-            for(int i=0;i<crackLines.size();i++){
-                sort(crackLines[i].begin(), crackLines[i].end(), VectorSortY());
-            }
-
-            
-            //----------
-            
-            
-            
-            [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                if(eit->twin()->data().crackAmount > overflowTheshold || eit->data().crackAmount > overflowTheshold){
-                    float avg = (eit->twin()->data().crackAmount +  eit->data().crackAmount) * 0.5;
-                    eit->twin()->data().crackAmount = eit->data().crackAmount = avg;
-                }
-            }];
-            
-            
-            //Tracker
-            if(PropB(@"onlyCracklines")){
-                for(int i=0;i<crackLinesVertices.size();i++){
-                    Arrangement_2::Vertex_handle vit = crackLinesVertices[i];
+            if(pressure < 0){
+                //Find point furthest away
+                __block float dist = -1;
+                __block Arrangement_2::Halfedge_handle h;
+                
+                [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
                     for(int t=0;t<v.size();t++){
-                        if(v[t].distance(handleToVec2(vit)) < 0.02){
-                            Arrangement_2::Halfedge_around_vertex_circulator first, curr;
-                            first = curr = vit->incident_halfedges();
-                            //do {
-                            curr->data().crackAmount += pressure;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr->data().crackAmount += pressure;
-                            //} while (++curr != first);
-                            
-                        }
-                    }
-                }
-            } else {
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                    for(int t=0;t<v.size();t++){
-                        if(v[t].distance(handleToVec2(vit)) < 0.02){
-                            Arrangement_2::Halfedge_around_vertex_circulator first, curr;
-                            first = curr = vit->incident_halfedges();
-                            //do {
-                            curr->data().crackAmount += pressure;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr++;
-                            curr->data().crackAmount += pressure;
-                            //} while (++curr != first);
-                            
+                        if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->source())) > dist)){
+                            dist = v[t].distance(handleToVec2(eit->source()));
+                            h = eit;
                         }
                     }
                 }];
+                            
+                if(dist != -1){
+                    h->data().crackAmount += pressure;
+                }
             }
             
-            
-            
-            [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
-                //        [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
-                float crackAmm = eit->data().crackAmount;
+            if(pressure > 0){
+                //Cracklines
                 
-                if(crackAmm > overflowTheshold){
-                    float press = crackAmm - overflowTheshold;
-                    
-                    //Spred det videre
-                    
-                    Arrangement_2::Vertex_handle h1 = eit->source();
-                    Arrangement_2::Vertex_handle h2 = eit->target();
-                    
-                    ofVec2f dir = handleToVec2(h2) - handleToVec2(h1);
-                    // dir.normalize();
-                    
-                    
-                    //Calculate crackCacheRatio
-                    float crackRatioTotal = 0;
-                    vector<Arrangement_2::Halfedge_around_vertex_circulator> ratios;
-                    int crackCount = 0;
-                    
-                    Arrangement_2::Halfedge_around_vertex_circulator first, curr;             
-                    first = curr = h2->incident_halfedges();
-                    do {
-                        if((Halfedge_handle) curr != eit){
-                            // Note that the current halfedge is directed from u to h1:
-                            Arrangement_2::Vertex_handle u = curr->source(); 
-                            ofVec2f odir = handleToVec2(u) - handleToVec2(h2);
-                            //odir.normalize();         
-                            float ratio = fabs((odir).angle(dir));
-                            ratio = 1.0/ratio;
+                for(int t=0;t<v.size();t++){
+                    for(int i=0;i<crackLines.size();i++){
+                        for(int u=1;u<crackLines[i].size();u++){
+                            ofVec2f A = crackLines[i][u-1];        
+                            ofVec2f B = crackLines[i][u];
                             
-                            curr->data().crackCacheRatio = ratio;
-                            crackRatioTotal += ratio;
-                            
-                            if(press > ofRandom(3.3,30) && h2->data().crackEdgeCount < 3){
-                                h2->data().crackEdgeCount ++;
-                            }
-                            
-                            //Determine if this edge is interesting at all
-                            if(curr->face()->is_unbounded() || curr->twin()->face()->is_unbounded()){
-                                //Edge is not OK
-                            } else if(ratio < 1.0/50 && press < 3.0){
-                                //Angle not OK
-                            } else if(ratio < 1.0/90 && press < 5.0){
-                                //Angle not OK
-                            } else if(ratio < 1.0/170){
-                                //Angle not OK
-                            } else { 
-                                ratios.push_back(curr);
+                            if(v[t].y > A.y && v[t].y < B.y){
+                                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                                    ofVec2f p = handleToVec2(vit);
+                                    if(p.distance(A) > 0.04 && p.distance(B) > 0.04){
+                                        if(p.y > A.y && p.y < B.y){
+                                            float dist = distanceVecToLine(p, A, B);
+                                            if(dist < ofRandom(0.0, 0.1*pressure/100.0)){
+                                                bool collision = NO;
+                                                for(int ii=0;ii<crackLines.size();ii++){
+                                                    for(int uu=2;uu<crackLines[i].size();uu++){
+                                                        ofVec2f AA = crackLines[ii][uu-1];        
+                                                        ofVec2f BB = crackLines[ii][uu];
+                                                        ofVec2f r;
+                                                        if(lineSegmentIntersection(A, p, AA, BB, &r) || lineSegmentIntersection(B, p, AA, BB, &r)){
+                                                            collision = YES;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                if(!collision){
+                                                    crackLines[i].push_back(p);
+                                                    crackLinesVertices.push_back(vit);
+                                                    *stop = YES;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }];
                             }
                         }
-                        
-                        if(curr->data().crackAmount > 0){
-                            crackCount ++;
-                        }
-                        
-                    } while (++curr != first);
-                    
-                    //Sort ratios               
-                    sort(ratios.begin(), ratios.end(), VectorSortP());
-                    
-                    
-                    //Crack while crackcount is to low
-                    while (ratios.size() > 0) {                            
-                        if(ratios[ratios.size()-1]->data().crackAmount < crackAmm){
-                            //Hvis den allerede er revnet lidt, eller der ikke er cracked nok
-                            if(ratios[ratios.size()-1]->data().crackAmount > 0 
-                               || crackCount < h2->data().crackEdgeCount){
-                                
-                                if(ratios[ratios.size()-1]->data().crackAmount == 0){
-                                    crackCount ++;
-                                }
-                                
-                                float amm = overflowSpeed*press * ratios[ratios.size()-1]->data().crackCacheRatio / crackRatioTotal;
-                                ratios[ratios.size()-1]->data().crackAmount += amm;
-                                eit->data().crackAmount -= amm;
-                                
-                            }
-                            
-                        }
-                        ratios.pop_back();                            
-                        
-                    } ;
-                    
-                    
-                    //                //Flow
-                    //                first = curr = h2->incident_halfedges();
-                    //                do {
-                    //                    if((Halfedge_handle) curr != eit){
-                    //                        if(curr->data().crackAmount < crackAmm){
-                    //                            curr->data().crackAmount +=  overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
-                    //                            eit->data().crackAmount -= overflowSpeed*press * curr->data().crackCacheRatio / crackRatioTotal;
-                    //                        }
-                    //                    }
-                    //                } while (++curr != first);
-                    //                
-                    
-                    /*
-                     
-                     eit->source()->data().crackAmount += (crackAmm - overflowTheshold)*0.5;        
-                     eit->target()->data().crackAmount += (crackAmm - overflowTheshold)*0.5;    
-                     
-                     ofVec2f dir = handleToVec2(eit->source()) - handleToVec2(eit->target());
-                     dir.normalize();
-                     dir *= (crackAmm - overflowTheshold);
-                     
-                     eit->source()->data().crackDir += dir;
-                     eit->target()->data().crackDir -= dir;*/
+                    }
                 }
                 
-            }];
-            
+                
+                for(int i=0;i<crackLines.size();i++){
+                    sort(crackLines[i].begin(), crackLines[i].end(), VectorSortY());
+                }
+                
+                
+                //----------
+                
+                
+                
+                [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
+                    // if(eit->twin()->data().crackAmount > overflowTheshold || eit->data().crackAmount > overflowTheshold){
+                    float avg = (eit->twin()->data().crackAmount +  eit->data().crackAmount) * 0.5;
+                    eit->twin()->data().crackAmount = eit->data().crackAmount = avg;
+                    //  }
+                }];
+                
+                
+                //Tracker
+                if(PropB(@"onlyCracklines")){
+                    for(int i=0;i<crackLinesVertices.size();i++){
+                        Arrangement_2::Vertex_handle vit = crackLinesVertices[i];
+                        for(int t=0;t<v.size();t++){
+                            if(v[t].distance(handleToVec2(vit)) < 0.02){
+                                Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                                first = curr = vit->incident_halfedges();
+                                //do {
+                                curr->data().crackAmount += pressure;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr->data().crackAmount += pressure;
+                                //} while (++curr != first);
+                                
+                            }
+                        }
+                    }
+                } else {
+                    [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                        for(int t=0;t<v.size();t++){
+                            if(v[t].distance(handleToVec2(vit)) < 0.02){
+                                Arrangement_2::Halfedge_around_vertex_circulator first, curr;
+                                first = curr = vit->incident_halfedges();
+                                //do {
+                                curr->data().crackAmount += pressure;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr++;
+                                curr->data().crackAmount += pressure;
+                                
+                            }
+                        }
+                    }];
+                }
+                
+                
+                
+                [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
+                    if(eit->data().crackAmount < 0){
+                        //    eit->data().crackAmount = 0;
+                    }
+                    
+                    if(eit->data().crackAmount != 0){
+                        cout<<eit->data().crackAmount <<endl;
+                    }
+                    
+                    
+                }];
+                
+                
+                [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
+                    float crackAmm = eit->data().crackAmount;
+                    
+                    if(crackAmm > overflowTheshold){
+                        float press = crackAmm - overflowTheshold;
+                        
+                        //Spred det videre
+                        
+                        Arrangement_2::Vertex_handle h1 = eit->source();
+                        Arrangement_2::Vertex_handle h2 = eit->target();
+                        
+                        ofVec2f dir = handleToVec2(h2) - handleToVec2(h1);
+                        // dir.normalize();
+                        
+                        
+                        //Calculate crackCacheRatio
+                        float crackRatioTotal = 0;
+                        vector<Arrangement_2::Halfedge_around_vertex_circulator> ratios;
+                        int crackCount = 0;
+                        
+                        Arrangement_2::Halfedge_around_vertex_circulator first, curr;             
+                        first = curr = h2->incident_halfedges();
+                        do {
+                            if((Halfedge_handle) curr != eit){
+                                // Note that the current halfedge is directed from u to h1:
+                                Arrangement_2::Vertex_handle u = curr->source(); 
+                                ofVec2f odir = handleToVec2(u) - handleToVec2(h2);
+                                //odir.normalize();         
+                                float ratio = fabs((odir).angle(dir));
+                                ratio = 1.0/ratio;
+                                
+                                curr->data().crackCacheRatio = ratio;
+                                crackRatioTotal += ratio;
+                                
+                                if(press > ofRandom(3.3,30) && h2->data().crackEdgeCount < 3){
+                                    h2->data().crackEdgeCount ++;
+                                }
+                                
+                                //Determine if this edge is interesting at all
+                                if(curr->face()->is_unbounded() || curr->twin()->face()->is_unbounded()){
+                                    //Edge is not OK
+                                } else if(ratio < 1.0/50 && press < 3.0){
+                                    //Angle not OK
+                                } else if(ratio < 1.0/90 && press < 5.0){
+                                    //Angle not OK
+                                } else if(ratio < 1.0/170){
+                                    //Angle not OK
+                                } else { 
+                                    ratios.push_back(curr);
+                                }
+                            }
+                            
+                            if(curr->data().crackAmount > 0){
+                                crackCount ++;
+                            }
+                            
+                        } while (++curr != first);
+                        
+                        //Sort ratios               
+                        sort(ratios.begin(), ratios.end(), VectorSortP());
+                        
+                        
+                        //Crack while crackcount is to low
+                        while (ratios.size() > 0) {                            
+                            if(ratios[ratios.size()-1]->data().crackAmount < crackAmm){
+                                //Hvis den allerede er revnet lidt, eller der ikke er cracked nok
+                                if(ratios[ratios.size()-1]->data().crackAmount > 0 
+                                   || crackCount < h2->data().crackEdgeCount){
+                                    
+                                    if(ratios[ratios.size()-1]->data().crackAmount == 0){
+                                        crackCount ++;
+                                    }
+                                    
+                                    float amm = overflowSpeed*press * ratios[ratios.size()-1]->data().crackCacheRatio / crackRatioTotal;
+                                    ratios[ratios.size()-1]->data().crackAmount += amm;
+                                    eit->data().crackAmount -= amm;
+                                    
+                                }
+                                
+                            }
+                            ratios.pop_back();                            
+                            
+                        } ;
+                        
+                    }
+                    
+                }];
+                
+            }
             
             //Calculate vertices
             [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
@@ -330,15 +341,17 @@ struct VectorSortY {
                 Arrangement_2::Halfedge_around_vertex_circulator first, curr;
                 first = curr = vit->incident_halfedges();
                 do{
+                    vit->data().crackAmount += curr->data().crackAmount;
+                    
                     if(curr->data().crackAmount > 0){
-                        vit->data().crackAmount += curr->data().crackAmount;
                         vit->data().crackEdgeCount ++;
                     }
                 } while(++curr != first);
+                
+                if( vit->data().crackAmount < 0)
+                    vit->data().crackAmount = 0;
             }];
             
-            
-                       
         }
         
         
