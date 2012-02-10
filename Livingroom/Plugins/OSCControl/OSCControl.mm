@@ -2,6 +2,7 @@
 #import "Tracker.h"
 #import <ofxCocoaPlugins/Keystoner.h>
 #import "Mask.h"
+#import <ofxCocoaPlugins/Midi.h>
 
 @implementation OSCControl
 
@@ -203,6 +204,8 @@
 
     [self addButton:@"Triangle white" labelSize:16 bounds:NSMakeRect(x, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleWhite"]];
     [self addButton:@"Triangle black" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleBlack"]];
+
+    [self addButton:@"GO" labelSize:18 bounds:NSMakeRect(x, 0.65, w, h) bindedTo:[[GetPlugin(Midi) properties] objectForKey:@"qlabGo"]];
 
     
     [self addMultiXY:@"trackerxy" bounds:NSMakeRect(0.0, 0.0, 0.75, 1.0) isMomentary:true maxTouches:3];

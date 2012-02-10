@@ -13,7 +13,7 @@
 
 
 @implementation PolyAnimatorCrumble
-
+@synthesize crumbleSum;
 
 -(id)init{
     if(self = [super init]){
@@ -33,8 +33,9 @@
     return self;
 }
 
-#pragma mark CGAL Helpers 
-
+-(void) addCrumbleSum:(float)sum{
+    crumbleSum += sum;
+}
 
 
 
@@ -45,16 +46,10 @@
     vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
     vector< ofVec2f > centroids = [GetTracker() getTrackerCoordinatesCentroids];
 
-    if(v.size() > 0 && PropB(@"cutHole")){
+  /*  if(v.size() > 0 && PropB(@"cutHole")){
         SetPropF(@"cutHole", 0);
         
-        /*        CGAL::Object obj = [[engine arrangement] cgalObjectAtPoint:Point_2(v[0].x, v[0].y)];
-         
-         Arrangement_2::Face_const_handle      face;
-         
-         if (CGAL::assign (face, obj)) {*/
-        
-        Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0][0]];
+                Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0][0]];
         {
             if(!face->is_fictitious() && !face->is_unbounded()){
                 cout<<"Cut"<<endl;
@@ -63,7 +58,7 @@
             }
         }
         
-    }
+    }*/
     
     
     //Remove lonely edges
@@ -84,13 +79,13 @@
     float mouseF = PropF(@"mouseForce")*0.05;
     CachePropF(centroid);
     
-    
+        
     if(crumbleForce > 0 && v.size() > 0){
         //Tracker force
         [GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
-            {
+            __block float _crumbleSum = 0;
 
-                
+            {
                 [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int t=0;t<v.size();t++){
                         ofVec2f trackerCentroid = centroids[t];
@@ -114,6 +109,7 @@
                                 ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
                                 vit->data().springF += vdir*mouseF*l*2.0;      
                                 
+                                _crumbleSum += (vdir*mouseF*l*2.0).length();
                                 //Force in z=0
                                 float zDiff = vit->data().pos.z;
                                 vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
@@ -122,6 +118,9 @@
                     }
                 }];
             }
+          //  cout<<_crumbleSum<<endl;
+            [self addCrumbleSum:_crumbleSum];
+//            crumbleSum += _crumbleSum;
         }];
         
     }
@@ -142,7 +141,7 @@
                         trackerPoint += _dir * centroid;
                     }
                     if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
-                        cout<<"Not inside hole"<<endl;
+                      //  cout<<"Not inside hole"<<endl;
                         //Inside boundary
                         ofVec2f p = trackerPoint;
                         
@@ -170,7 +169,11 @@
                         float dist = distanceVecToHalfedge(p, handle);
                         
                         h1->data().springF += crumbleForce2*dir1*dist*factor1;      
-                        h2->data().springF += crumbleForce2*dir2*dist*factor2;      
+                        h2->data().springF += crumbleForce2*dir2*dist*factor2;  
+                        
+                    //    crumbleSum += (crumbleForce2*dir1*dist*factor1).length();
+                    //    crumbleSum += (crumbleForce2*dir2*dist*factor2).length();
+
                     }
                 }
                 //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
@@ -179,6 +182,8 @@
         }];
         
     }
+    
+   // cout<<crumbleSum<<endl;
     
     
     
@@ -222,6 +227,8 @@
         
     }
   
+    crumbleSum = 0;
+
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{

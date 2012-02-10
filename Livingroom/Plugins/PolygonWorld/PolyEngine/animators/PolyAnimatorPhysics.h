@@ -15,8 +15,17 @@
     NSString * debugText;
     
     long long lastDebugUpdate;
+    
+    float movementActivity;
+    float movementPan;
+    bool noteOnSend;
+    
+    float movementActivitySmooth;
+    float movementPanSmooth;
 }
 @property (readwrite, copy) NSString * debugText;
+@property (readwrite) float movementActivity;
+@property (readwrite) float movementPan;
 -(void) addPhysicsBlock:(NSString *)name block:(void(^)(PolyArrangement * arrangement))block;
                          
 

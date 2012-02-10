@@ -10,10 +10,11 @@
 #import "PolyAnimatorPhysics.h"
 #import <ofxCocoaPlugins/CustomGraphics.h>
 #include <CGAL/centroid.h>
-
+#import <ofxCocoaPlugins/Midi.h>
+#import "PolyInputTracker.h"
 
 @implementation PolyAnimatorPhysics 
-@synthesize debugText;
+@synthesize debugText, movementActivity, movementPan;
 
 -(id)init{
     if(self = [super init]){
@@ -433,7 +434,9 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+    __block int vertCount = 0;
+    movementActivity = 0;
+    movementPan = 0;
     for(int i=0;i<PropI(@"iterations"); i++){
         //Reset forces
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
@@ -528,6 +531,12 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 
                 //Update position
                 setHandlePos(vit->data().springV + vit->data().pos, vit);
+                
+                //Activity
+                self.movementActivity = self.movementActivity+vit->data().springV.length();
+                self.movementPan = self.movementPan + vit->data().pos.x;
+                vertCount++;
+                
             } 
             
         }];
@@ -537,6 +546,37 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
     }
+    
+    if(vertCount > 0){
+//        movementPan = movementPan/(float)vertCount;
+        if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
+            movementPan = [GetTracker() getTrackerCoordinatesCentroids][0].x;
+        } else {
+            movementPan = 0.5;
+        }
+        movementActivity = 1000*movementActivity/(float)vertCount;
+        
+        movementActivitySmooth = movementActivitySmooth*0.95 + movementActivity*0.05;
+        movementPanSmooth = movementPanSmooth*0.95 + movementPan*0.05;
+
+        [GetPlugin(Midi) sendValue:movementActivity*127 forCC:4 onChannel:16];
+        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
+    }
+ //   cout<<movementActivity<<"    "<<movementPan<<"   "<<vertCount<<endl;
+
+    
+    if(vertCount > 0 && !noteOnSend){
+        [GetPlugin(Midi) sendValue:127 forNote:48 onChannel:16];
+        noteOnSend = YES;
+        
+    } else if(noteOnSend && vertCount == 0){
+        noteOnSend = NO;
+        [GetPlugin(Midi) sendNoteOff:48 onChannel:16];
+        [GetPlugin(Midi) sendValue:movementActivity*127 forCC:4 onChannel:16];
+        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
+
+    }
+     
     
     
     [blockPhysics removeAllObjects];

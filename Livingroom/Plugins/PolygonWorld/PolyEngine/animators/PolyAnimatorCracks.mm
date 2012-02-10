@@ -47,8 +47,8 @@ struct VectorSortY {
 }
 
 -(void)setup{
-    [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
-    [[[GetPlugin(Midi) midiData] objectAtIndex:1] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
 }
 
 -(void)reset{

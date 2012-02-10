@@ -9,7 +9,8 @@
 #import "PolyAnimator.h"
 
 @interface PolyAnimatorCrumble : PolyAnimator{
-
+    float crumbleSum;
 }
-
+@property (readwrite) float crumbleSum;
+-(void) addCrumbleSum:(float)sum;
 @end

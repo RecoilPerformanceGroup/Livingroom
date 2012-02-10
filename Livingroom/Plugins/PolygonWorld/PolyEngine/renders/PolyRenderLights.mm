@@ -29,6 +29,7 @@
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
        
         [self addPropF:@"backside"];
+        [self addPropF:@"fog"];
 
         [Prop(@"pointLightTemp") setMidiSmoothing:0.1];
         [Prop(@"dirLightTemp") setMidiSmoothing:0.1];
@@ -56,6 +57,22 @@
     ofVec3f light2 = ofVec3f(PropF(@"pointLightX"), PropF(@"pointLightY"), PropF(@"pointLightZ"));
     ofVec3f light2Color = colorTemp(PropI(@"pointLightTemp"), PropF(@"pointLightIntensity"));
     
+    if(PropF(@"fog") > 0){
+        GLuint filter;                      // Which Filter To Use
+        GLuint fogMode[]= { GL_EXP, GL_EXP2, GL_LINEAR };   // Storage For Three Types Of Fog
+        GLuint fogfilter= 0;                    // Which Fog To Use
+        GLfloat fogColor[4]= {0.0f, 0.0f, 0.0f, 1.0f};      // Fog Color
+        
+        glFogi(GL_FOG_MODE, fogMode[fogfilter]);        // Fog Mode
+        glFogfv(GL_FOG_COLOR, fogColor);            // Set Fog Color
+        glFogf(GL_FOG_DENSITY, PropF(@"fog"));              // How Dense Will The Fog Be
+        glHint(GL_FOG_HINT, GL_DONT_CARE);          // Fog Hint Value
+        glFogf(GL_FOG_START, 0);             // Fog Start Depth
+        glFogf(GL_FOG_END, 1);               // Fog End Depth
+        glEnable(GL_FOG);                   // Enables GL_FOG
+
+
+    }
     
     float zScale = PropF(@"zScale");
     ApplyPerspective();{
@@ -139,6 +156,8 @@
         glDisable(GL_DEPTH_TEST);
         
     } PopPerspective();
+    
+    glDisable(GL_FOG);             
 }
 
 @end
