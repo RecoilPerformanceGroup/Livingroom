@@ -140,12 +140,14 @@
                         ofVec2f _dir = trackerCentroid-trackerPoint;
                         trackerPoint += _dir * centroid;
                     }
-                    if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
-                        //  cout<<"Not inside hole"<<endl;
+                    
+                 //   if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
+                    if([[engine arrangement] vecInsideBoundary:trackerPoint]){                        //  cout<<"Not inside hole"<<endl;
                         //Inside boundary
                         ofVec2f p = trackerPoint;
                         
-                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:trackerPoint];
+//                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:trackerPoint];
+                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:trackerPoint];
                         Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
                         Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
                         

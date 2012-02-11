@@ -71,7 +71,7 @@
 
 - (void)addWidget:(NSDictionary*)json{
     string s = [self dictToJson:json];
-    cout<<s<<endl;
+   // cout<<s<<endl;
     
     ofxOscMessage m;
     m.setAddress( "/control/addWidget" );    
@@ -128,6 +128,24 @@
     [self setColor:[NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]] background:@"rgb(0,0,0)" foreground:@"rgb(80,100,80)" stroke:@"rgb(255,255,255)"];
 }
 
+- (void) addFader:(NSString*)label bounds:(NSRect)bounds bindedTo:(PluginProperty*)property{
+    NSAssert(property, @"No property");
+    [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
+                     [NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]], @"name",
+                     @"Slider",@"type",
+                     [NSString stringWithFormat:@"/%@/%@",[property pluginName], [property name]], @"address",
+                     @"true", @"isVertical",
+                     [NSNumber numberWithFloat:bounds.origin.x], @"x",
+                     [NSNumber numberWithFloat:bounds.origin.y], @"y",
+                     [NSNumber numberWithFloat:bounds.size.width], @"width",
+                     [NSNumber numberWithFloat:bounds.size.height], @"height",
+                //     label, @"label",
+                     nil]];
+    [property addObserver:self forKeyPath:@"value" options:nil context:@"property"];
+    
+    [self setColor:[NSString stringWithFormat:@"%@_%@",[property pluginName], [property name]] background:@"rgb(0,0,0)" foreground:@"rgb(80,100,80)" stroke:@"rgb(255,255,255)"];
+}
+
 - (void) addMultiXY:(NSString*)name bounds:(NSRect)bounds isMomentary:(BOOL)isMomentary maxTouches:(int)maxTouches{
     [self addWidget:[NSDictionary dictionaryWithObjectsAndKeys:
                      name, @"name",
@@ -158,7 +176,7 @@
             ofxOscMessage msg;
             msg.setAddress([[NSString stringWithFormat:@"/%@/%@",[object pluginName], [object name]] cStringUsingEncoding:NSUTF8StringEncoding]);
        //     msg.setAddress("/menuButton");
-            msg.addIntArg([object floatValue]);
+            msg.addFloatArg([object floatValue]);
             
             sender->sendMessage(msg);
         }
@@ -198,6 +216,10 @@
     
     [self addButton:@"Tracker debug" labelSize:16 bounds:NSMakeRect(x, 0.0, w, h) bindedTo:[[GetPlugin(Tracker) properties] objectForKey:@"drawDebug"]];
     [self addButton:@"Keystone debug" labelSize:16 bounds:NSMakeRect(x, 0.1, w, h) bindedTo:[[GetPlugin(Keystoner) properties] objectForKey:@"Enabled"]];
+    
+    [self addFader:@"Pub" bounds:NSMakeRect(x, 0.2, w/3.0, h*2) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"publys"]];
+    [self addFader:@"Tracking" bounds:NSMakeRect(x+w/3.0, 0.2, w/3.0, h*2) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"trackinglys"]];
+   // [self addFader:@"Pub" bounds:NSMakeRect(x, 0.2, w/3.0, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"publys"]];
 
     [self addButton:@"Left blind" labelSize:16 bounds:NSMakeRect(x, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"leftBlind"]];
     [self addButton:@"Right blind" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"rightBlind"]];

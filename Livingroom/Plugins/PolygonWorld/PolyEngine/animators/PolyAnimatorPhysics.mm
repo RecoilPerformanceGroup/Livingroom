@@ -42,6 +42,9 @@
         [self addPropF:@"hullStiffness"];       
         [self addPropF:@"burn"];
         
+        [self addPropF:@"edgeForce"];
+
+        
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
         NSTextField * textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 300, 300)];
@@ -215,6 +218,35 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 }];
             }];
         }
+        
+        
+        //
+        //Calculate the vertex to vertex spring force
+        //
+        CachePropF(edgeForce);
+        if(edgeForce > 0){
+            [self addPhysicsBlock:@"EdgeForce" block:^(PolyArrangement *arrangement) {
+                
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL *stop) {
+                    ofVec3f p = handleToVec3(vit);
+                    if(p.x < 0){
+                        vit->data().springFNoItt += ofVec3f(edgeForce*(0-p.x),0,0);
+                    }
+                    if(p.y < 0){
+                        vit->data().springFNoItt += ofVec3f(0,edgeForce*(0-p.y),0);
+                    }
+                    if(p.x > 1){
+                        vit->data().springFNoItt -= ofVec3f(edgeForce*(p.x-1),0,0);
+                    }
+                    if(p.y > 1){
+                        vit->data().springFNoItt -= ofVec3f(0,edgeForce*(p.y-1),0);
+                    }
+                }];
+            }];
+        }
+        
+        
+        
         
         
         

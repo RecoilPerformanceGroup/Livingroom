@@ -1,5 +1,5 @@
 #import "Mask.h"
-
+#import <ofxCocoaPlugins/OpenDMX.h>
 @implementation Mask
 
 - (id)init{
@@ -16,6 +16,9 @@
     
     [self addPropF:@"triangleWhite"];
     [self addPropF:@"triangleBlack"];
+
+    [self addPropF:@"publys"];
+    [self addPropF:@"trackinglys"];
 
 }
 
@@ -94,7 +97,13 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
-    
+    OpenDMX * dmx = GetPlugin(OpenDMX);
+    [dmx setValue:PropF(@"publys")*255.0 forChannel:5];
+    [dmx setValue:PropF(@"publys")*255.0 forChannel:13];
+
+    [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:157];
+    [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:165];
+    [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:173];
 }
 
 //

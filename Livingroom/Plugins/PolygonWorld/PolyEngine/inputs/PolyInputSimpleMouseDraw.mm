@@ -189,7 +189,7 @@ static Point_2 vec2ToPoint2(ofVec2f v){
         lines.push_back(Segment_2(points[i-1], points[i]));
     }
     
-    
+    vector<Polygon_2> hulls = [[engine arrangement] hulls];
     
     //Offset to the right
     vector<Segment_2> linesModified;                
@@ -309,16 +309,46 @@ static Point_2 vec2ToPoint2(ofVec2f v){
                 
                 debugSegments.push_back(arrSegment);
                 deleteHandles.push_back(eit);
-            } /*else {
-               
-               ofVec3f pos = handleToVec3(eit->target());
-               setHandlePos(pos*ofVec3f(1,1,0), eit->target());
-               
-               pos = handleToVec3(eit->source());
-               setHandlePos(pos*ofVec3f(1,1,0), eit->source());
-               
-               }
-               */
+            } else {  
+                bool cont = true;
+                switch(CGAL::bounded_side_2(hulls[0].vertices_begin(), hulls[0].vertices_end(),Point_2(p1.x,p1.y), Kernel())) {
+                    case CGAL::ON_BOUNDED_SIDE :
+                        //    cout << " is inside the polygon.\n";
+                        break;
+                    case CGAL::ON_BOUNDARY:
+                        //   cout << " is on the polygon boundary.\n";
+                        break;
+                    case CGAL::ON_UNBOUNDED_SIDE:
+                        cout << " is outside the polygon.\n";
+                        deleteHandles.push_back(eit);
+                        cont = false;
+                        break;
+                }
+                if(cont){
+                    switch(CGAL::bounded_side_2(hulls[0].vertices_begin(), hulls[0].vertices_end(),Point_2(p2.x,p2.y), Kernel())) {
+                        case CGAL::ON_BOUNDED_SIDE :
+                            //    cout << " is inside the polygon.\n";
+                            break;
+                        case CGAL::ON_BOUNDARY:
+                            //   cout << " is on the polygon boundary.\n";
+                            break;
+                        case CGAL::ON_UNBOUNDED_SIDE:
+                            cout << " is outside the polygon.\n";
+                            deleteHandles.push_back(eit);
+                            break;
+                    }
+                }
+            }
+            /*else {
+             
+             ofVec3f pos = handleToVec3(eit->target());
+             setHandlePos(pos*ofVec3f(1,1,0), eit->target());
+             
+             pos = handleToVec3(eit->source());
+             setHandlePos(pos*ofVec3f(1,1,0), eit->source());
+             
+             }
+             */
         }
         
         
@@ -425,6 +455,8 @@ static Point_2 vec2ToPoint2(ofVec2f v){
         if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
             [Prop(@"nelsonSplit") setBoolValue:NO];
             
+            ofVec2f secondLast = ofVec2f(0.393145, 0.65035);
+            
             vector<Point_2> points;
             points.push_back(Point_2(0.735887, 0.493007));
             points.push_back(Point_2(0.6875, 0.503497));
@@ -434,9 +466,11 @@ static Point_2 vec2ToPoint2(ofVec2f v){
             points.push_back(Point_2(0.366935, 0.437063));
             points.push_back(Point_2(0.360887, 0.506993));
             points.push_back(Point_2(0.370968, 0.594406));
-            points.push_back(Point_2(0.393145, 0.65035));
-            ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0]+ofVec2f(0,0.05);
-            points.push_back(vec2ToPoint2(tracker));
+            points.push_back(Point_2(secondLast.x, secondLast.y));
+
+            ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0];
+            ofVec2f __dir = tracker - secondLast;
+            points.push_back(vec2ToPoint2(secondLast + __dir*2));
             
             [self split:points];
         }
