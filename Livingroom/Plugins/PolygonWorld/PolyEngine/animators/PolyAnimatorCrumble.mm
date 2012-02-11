@@ -25,9 +25,9 @@
         [self addPropF:@"decrumbleForce"];
         
         [self addPropF:@"cutHole"];
-
+        
         [self addPropF:@"centroid"];
-
+        
     }
     
     return self;
@@ -45,20 +45,20 @@
     
     vector< vector<ofVec2f> > v = [GetTracker() getTrackerCoordinates];
     vector< ofVec2f > centroids = [GetTracker() getTrackerCoordinatesCentroids];
-
-  /*  if(v.size() > 0 && PropB(@"cutHole")){
-        SetPropF(@"cutHole", 0);
-        
-                Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0][0]];
-        {
-            if(!face->is_fictitious() && !face->is_unbounded()){
-                cout<<"Cut"<<endl;
-                Arrangement_2::Face_handle faceCast = [[engine arrangement] arrData]->non_const_handle(face);
-                faceCast->data().hole = true;
-            }
-        }
-        
-    }*/
+    
+    /*  if(v.size() > 0 && PropB(@"cutHole")){
+     SetPropF(@"cutHole", 0);
+     
+     Arrangement_2::Face_const_handle      face = [[engine arrangement] faceAtPoint:v[0][0]];
+     {
+     if(!face->is_fictitious() && !face->is_unbounded()){
+     cout<<"Cut"<<endl;
+     Arrangement_2::Face_handle faceCast = [[engine arrangement] arrData]->non_const_handle(face);
+     faceCast->data().hole = true;
+     }
+     }
+     
+     }*/
     
     
     //Remove lonely edges
@@ -79,12 +79,12 @@
     float mouseF = PropF(@"mouseForce")*0.05;
     CachePropF(centroid);
     
-        
+    
     if(crumbleForce > 0 && v.size() > 0){
         //Tracker force
         [GetPhysics() addPhysicsBlock:@"CrumbleForce" block:^(PolyArrangement *arrangement) {
             __block float _crumbleSum = 0;
-
+            
             {
                 [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int t=0;t<v.size();t++){
@@ -118,14 +118,14 @@
                     }
                 }];
             }
-          //  cout<<_crumbleSum<<endl;
+            //  cout<<_crumbleSum<<endl;
             [self addCrumbleSum:_crumbleSum];
-//            crumbleSum += _crumbleSum;
+            //            crumbleSum += _crumbleSum;
         }];
         
     }
     
-   
+    
     
     CachePropF(crumbleForce2);
     if(crumbleForce2 > 0 && v.size() > 0){
@@ -133,7 +133,7 @@
             
             for(int i=0;i<v.size();i++){
                 ofVec2f trackerCentroid = centroids[i];
-
+                
                 for(int u=0;u<v[i].size();u++){
                     ofVec2f trackerPoint = v[i][u];
                     if(centroid > 0){
@@ -141,7 +141,7 @@
                         trackerPoint += _dir * centroid;
                     }
                     if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
-                      //  cout<<"Not inside hole"<<endl;
+                        //  cout<<"Not inside hole"<<endl;
                         //Inside boundary
                         ofVec2f p = trackerPoint;
                         
@@ -152,7 +152,7 @@
                         ofVec2f p1 = handleToVec2(h1);
                         ofVec2f p2 = handleToVec2(h2);
                         
-                      //  cout<<"Nearest p1 "<<p1.x<<"  "<<p1.y<<endl;
+                        //  cout<<"Nearest p1 "<<p1.x<<"  "<<p1.y<<endl;
                         
                         float dist1 = p1.distance(p);
                         
@@ -161,8 +161,8 @@
                         float factor2 = dist1 / (dist1 + dist2);
                         float factor1 = dist2 / (dist1 + dist2);
                         
-/*                        ofVec2f dir1 = (p-p1).normalized();
-                        ofVec2f dir2 = (p-p2).normalized();*/
+                        /*                        ofVec2f dir1 = (p-p1).normalized();
+                         ofVec2f dir2 = (p-p2).normalized();*/
                         ofVec2f dir1 = -calculateEdgeNormal(handle).normalized();
                         ofVec2f dir2 = dir1;
                         
@@ -171,9 +171,9 @@
                         h1->data().springF += crumbleForce2*dir1*dist*factor1;      
                         h2->data().springF += crumbleForce2*dir2*dist*factor2;  
                         
-                    //    crumbleSum += (crumbleForce2*dir1*dist*factor1).length();
-                    //    crumbleSum += (crumbleForce2*dir2*dist*factor2).length();
-
+                        //    crumbleSum += (crumbleForce2*dir1*dist*factor1).length();
+                        //    crumbleSum += (crumbleForce2*dir2*dist*factor2).length();
+                        
                     }
                 }
                 //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
@@ -183,7 +183,7 @@
         
     }
     
-   // cout<<crumbleSum<<endl;
+    // cout<<crumbleSum<<endl;
     
     
     
@@ -191,44 +191,16 @@
     if(decrumbleForce > 0 && v.size() > 0){
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
             
-            for(int i=0;i<v.size();i++){
-                for(int u=0;u<v[i].size();u++){
-                    if(![[engine arrangement] vecInsideBoundary:v[i][u]]){
-                        //Outside boundary
-                        ofVec2f p = v[i][u];
-                        
-                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:v[i][u]];
-                        
-                        Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
-                        Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
-                        
-                        ofVec2f p1 = handleToVec2(h1);
-                        ofVec2f p2 = handleToVec2(h2);
-                        
-                        float dist1 = p1.distance(p);
-                        float dist2 = p2.distance(p);
-                        
-                        float factor2 = dist1 / (dist1 + dist2);
-                        float factor1 = dist2 / (dist1 + dist2);
-                        
-                        ofVec2f dir1 = (p-p1).normalized();
-                        ofVec2f dir2 = (p-p2).normalized();
-                        
-                        float dist = distanceVecToHalfedge(p, handle);
-                        
-                        h1->data().springF += decrumbleForce*dir1*dist*factor1;      
-                        h2->data().springF += decrumbleForce*dir2*dist*factor2;      
-                    }
-                }
-                //        Arrangement_2::Face_const_handle face = [[engine arrangement] faceAtPoint:Point_2(v[i].x,v[i].y)];
-                //            
+            if(centroids.size() >= 2){
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    
+                }];
             }
         }];
-        
     }
-  
+    
     crumbleSum = 0;
-
+    
 }
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{
