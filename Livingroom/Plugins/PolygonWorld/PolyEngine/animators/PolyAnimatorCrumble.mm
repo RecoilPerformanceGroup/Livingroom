@@ -23,6 +23,8 @@
         [self addPropF:@"crumbleForce"];
         [self addPropF:@"crumbleForce2"];
         [self addPropF:@"decrumbleForce"];
+        [self addPropF:@"decrumbleForceRadius"];
+        
         
         [self addPropF:@"cutHole"];
         
@@ -141,12 +143,12 @@
                         trackerPoint += _dir * centroid;
                     }
                     
-                 //   if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
+                    //   if(![[engine arrangement] vecInsideHole:trackerPoint] && [[engine arrangement] numberHoles] > 0){
                     if([[engine arrangement] vecInsideBoundary:trackerPoint]){                        //  cout<<"Not inside hole"<<endl;
                         //Inside boundary
                         ofVec2f p = trackerPoint;
                         
-//                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:trackerPoint];
+                        //                        Arrangement_2::Halfedge_const_handle handle = [arrangement nearestHoleHalfedge:trackerPoint];
                         Arrangement_2::Halfedge_const_handle handle = [arrangement nearestBoundaryHalfedge:trackerPoint];
                         Arrangement_2::Vertex_handle h1 =  [arrangement arrData]->non_const_handle(handle->source());
                         Arrangement_2::Vertex_handle h2 =  [arrangement arrData]->non_const_handle(handle->target());
@@ -190,13 +192,29 @@
     
     
     CachePropF(decrumbleForce);
+    CachePropF(decrumbleForceRadius);
+
     if(decrumbleForce > 0 && v.size() > 0){
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
             
             if(centroids.size() >= 2){
-                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                    
-                }];
+                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
+                
+                for(int i=0;i<boundaryHandles.size();i++){
+                    for(int u=0;u<boundaryHandles[i].size();u++){
+                        Arrangement_2::Halfedge_handle handle = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
+                        
+                        ofVec2f p = handleToVec2(handle->source());
+
+                        float dist = centroids[1].distance(p);
+                        if(dist < decrumbleForceRadius){
+                            ofVec2f origP = point2ToVec2(handle->source()->point());
+                            ofVec2f dir = origP - p;
+                            handle->source()->data().springF += decrumbleForce * dir * (decrumbleForceRadius-dist);
+                        }
+                        
+                    }
+                }
             }
         }];
     }
