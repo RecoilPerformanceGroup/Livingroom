@@ -72,7 +72,7 @@ struct VectorSortY {
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([(NSString*)context isEqualToString:@"midi"]){
-        cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
+       // cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
         SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);
     }
     //  if([(NSString*)context isEqualToString:@"midioff"]){
@@ -104,26 +104,34 @@ struct VectorSortY {
         float pressure = PropF(@"pressure")*(impulse-invimpulse)/128.0;
         float overflowTheshold = PropF(@"overflowThreshold");
         float overflowSpeed = PropF(@"overflowSpeed");    
-                
+        
         if(active > 0){
             vector<ofVec2f> v = [GetTracker() getTrackerCoordinatesCentroids];    
             
             if(pressure < 0){
                 //Find point furthest away
-                __block float dist = -1;
-                __block Arrangement_2::Halfedge_handle h;
-                
-                [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
-                    for(int t=0;t<v.size();t++){
-                        if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->source())) > dist)){
-                            dist = v[t].distance(handleToVec2(eit->source()));
-                            h = eit;
+                for(int i=0;i<-pressure*0.1;i++){
+                    __block float dist = -1;
+                    __block Arrangement_2::Halfedge_handle h;
+                    
+                    [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
+                        for(int t=0;t<v.size();t++){
+                            if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->source())) > dist)){
+                                dist = v[t].distance(handleToVec2(eit->source()));
+                                h = eit;
+                            }
+                            if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->target())) > dist)){
+                                dist = v[t].distance(handleToVec2(eit->target()));
+                                h = eit;
+                            }
                         }
+                    }];
+                    
+                    if(dist != -1){
+                        h->data().crackAmount = 0;
+                        h->twin()->data().crackAmount = 0;
+
                     }
-                }];
-                            
-                if(dist != -1){
-                    h->data().crackAmount += pressure;
                 }
             }
             
