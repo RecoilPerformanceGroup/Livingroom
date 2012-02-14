@@ -224,7 +224,7 @@
     [self addButton:@"Left blind" labelSize:16 bounds:NSMakeRect(x, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"leftBlind"]];
     [self addButton:@"Right blind" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.4, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"rightBlind"]];
 
-    [self addButton:@"Triangle white" labelSize:16 bounds:NSMakeRect(x, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleWhite"]];
+    [self addButton:@"Triangle white" labelSize:16 bounds:NSMakeRect(x, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleWhiteRight"]];
     [self addButton:@"Triangle black" labelSize:16 bounds:NSMakeRect(x+w*0.5, 0.5, w*0.5, h) bindedTo:[[GetPlugin(Mask) properties] objectForKey:@"triangleBlack"]];
 
     [self addButton:@"GO" labelSize:18 bounds:NSMakeRect(x, 0.65, w, h) bindedTo:[[GetPlugin(Midi) properties] objectForKey:@"qlabGo"]];

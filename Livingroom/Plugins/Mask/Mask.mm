@@ -14,12 +14,18 @@
     [self addPropF:@"leftBlind"];
     [self addPropF:@"rightBlind"];
     
-    [self addPropF:@"triangleWhite"];
-    [self addPropF:@"triangleBlack"];
+    [self addPropF:@"triangleWhiteRight"];
+    [self addPropF:@"triangleWhiteLeft"];
+    
+    [self addPropF:@"triangleWhiteR"];
+    [self addPropF:@"triangleWhiteG"];
+    [self addPropF:@"triangleWhiteB"];
 
+    [self addPropF:@"triangleBlack"];
+    
     [self addPropF:@"publys"];
     [self addPropF:@"trackinglys"];
-
+    
 }
 
 //
@@ -41,12 +47,12 @@
     
     
     
-        ofVec2f proj = [triangleRight convertToProjection:ofVec2f(0,1)];
-        proj *= ofVec2f(1,1);
-        triangleFloorCoordinate[0] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
-        
-        proj = [triangleRight convertToProjection:ofVec2f([[triangleRight aspect] floatValue],1)];
-        triangleFloorCoordinate[1] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
+    ofVec2f proj = [triangleRight convertToProjection:ofVec2f(0,1)];
+    proj *= ofVec2f(1,1);
+    triangleFloorCoordinate[0] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
+    
+    proj = [triangleRight convertToProjection:ofVec2f([[triangleRight aspect] floatValue],1)];
+    triangleFloorCoordinate[1] = [[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] convertFromProjection:proj];
 }
 
 
@@ -100,7 +106,7 @@
     OpenDMX * dmx = GetPlugin(OpenDMX);
     [dmx setValue:PropF(@"publys")*255.0 forChannel:5];
     [dmx setValue:PropF(@"publys")*255.0 forChannel:13];
-
+    
     [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:157];
     [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:165];
     [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:173];
@@ -123,8 +129,12 @@
         float aspect = Aspect(@"Triangle",0);
         ofSetColor(0,0,0,255.0*PropF(@"triangleBlack"));
         ofTriangle(aspect, 0, aspect, 1, 0, 1);
-
-        ofSetColor(255,255,255,255.0*PropF(@"triangleWhite"));
+        
+        if(appliedProjector == 0){
+            ofSetColor(PropF(@"triangleWhiteR")*255.0,PropF(@"triangleWhiteG")*255.0,PropF(@"triangleWhiteB")*255.0,255.0*PropF(@"triangleWhiteRight"));
+        } else {
+            ofSetColor(PropF(@"triangleWhiteR")*255.0,PropF(@"triangleWhiteG")*255.0,PropF(@"triangleWhiteB")*255.0,255.0*PropF(@"triangleWhiteLeft"));
+        }
         ofTriangle(aspect, 0, aspect, 1, 0, 1);
     } PopSurface();
     
@@ -134,13 +144,13 @@
         ofCircle(triangleFloorCoordinate[0].x, triangleFloorCoordinate[0].y, 0.01);
         ofCircle(triangleFloorCoordinate[1].x, triangleFloorCoordinate[1].y, 0.01);
         PopSurface();
-     
+        
         ofSetColor(255,0,0);
-
+        
         ApplySurface(@"Triangle");
         ofLine(0,1 , Aspect(@"Triangle", 0)*2,-1);
         PopSurface();
-
+        
     }
     
 }
