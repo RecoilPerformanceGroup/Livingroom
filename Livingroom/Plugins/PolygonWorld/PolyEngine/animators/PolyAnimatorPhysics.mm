@@ -43,7 +43,8 @@
         [self addPropF:@"burn"];
         
         [self addPropF:@"edgeForce"];
-
+        [self addPropF:@"midiActivityStrength"];
+        
         
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
@@ -511,7 +512,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         CachePropI(forceIterations);
         CachePropF(forceIterationsRatioZ);
         CachePropF(forceIterationsRatioDir);
-
+        
         for(int i=0;i<forceIterations;i++){
             [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
                 ofVec3f * source = &eit->source()->data().springF;
@@ -524,7 +525,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 ofVec3f vSource = *source * (forceIterationsRatio)*dist;
                 ofVec3f vTarget = *target * (forceIterationsRatio)*dist;
                 
-
+                
                 if(forceIterationsRatioDir > 0){
                     ofVec3f dir = handleToVec3(eit->target()) - handleToVec3(eit->source());
                     vSource = vSource * dir * forceIterationsRatioDir  + vSource * (1-forceIterationsRatioDir);
@@ -579,40 +580,42 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
     }
     
-    if(vertCount > 0){
-//        movementPan = movementPan/(float)vertCount;
-        if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
-            movementPan = [GetTracker() getTrackerCoordinatesCentroids][0].x;
-        } else {
-         //   movementPan = 0.5;
+    if(PropF(@"midiActivityStrength") > 0){
+        if(vertCount > 0){
+            //        movementPan = movementPan/(float)vertCount;
+            if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
+                movementPan = [GetTracker() getTrackerCoordinatesCentroids][0].x;
+            } else {
+                //   movementPan = 0.5;
+            }
+            movementActivity = 1000*movementActivity/(float)vertCount;
+            
+            movementActivitySmooth +=  movementActivity*0.1;
+            movementPanSmooth = movementPanSmooth*0.9 + movementPan*0.1;
+            
+            
+            
+            
         }
-        movementActivity = 1000*movementActivity/(float)vertCount;
-        
-        movementActivitySmooth +=  movementActivity*0.1;
-        movementPanSmooth = movementPanSmooth*0.9 + movementPan*0.1;
-
-       
-        
-
+        if(movementActivitySmooth > 0){
+            [GetPlugin(Midi) sendValue:PropF(@"midiActivityStrength")*movementActivitySmooth*127 forCC:4 onChannel:16];
+            [GetPlugin(Midi) sendValue:movementPanSmooth*127 forCC:5 onChannel:16];
+            movementActivitySmooth -= 0.2 ;
+            //     cout<<movementActivitySmooth<<"    "<<movementPan<<"   "<<endl;
+        }
+        if(movementActivitySmooth > 0 && !noteOnSend){
+            [GetPlugin(Midi) sendValue:127 forNote:48 onChannel:16];
+            noteOnSend = YES;
+            
+        } else if(noteOnSend && movementActivitySmooth == 0){
+            noteOnSend = NO;
+            [GetPlugin(Midi) sendNoteOff:48 onChannel:16];
+            [GetPlugin(Midi) sendValue:0 forCC:4 onChannel:16];
+            [GetPlugin(Midi) sendValue:0 forCC:5 onChannel:16];
+            
+        }
     }
-    if(movementActivitySmooth > 0){
-        [GetPlugin(Midi) sendValue:movementActivitySmooth*127 forCC:4 onChannel:16];
-        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
-        movementActivitySmooth -= 0.2 ;
-   //     cout<<movementActivitySmooth<<"    "<<movementPan<<"   "<<endl;
-    }
-    if(movementActivitySmooth > 0 && !noteOnSend){
-        [GetPlugin(Midi) sendValue:127 forNote:48 onChannel:16];
-        noteOnSend = YES;
-
-    } else if(noteOnSend && movementActivitySmooth == 0){
-        noteOnSend = NO;
-        [GetPlugin(Midi) sendNoteOff:48 onChannel:16];
-        [GetPlugin(Midi) sendValue:0 forCC:4 onChannel:16];
-        [GetPlugin(Midi) sendValue:0 forCC:5 onChannel:16];
-
-    }
-     
+    
     
     
     [blockPhysics removeAllObjects];
@@ -676,7 +679,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             float angle = angleBetweenEdges(h1, h2, &dir);
             float optimalAngle = h1->target()->data().hullOptimalAngle;
             
-            int minus = (angle*optimalAngle < 0) ? -1 : 1;                        
+            //int minus = (angle*optimalAngle < 0) ? -1 : 1;                        
             
             of2DArrow( handleToVec2(h1->target()) ,  handleToVec2(h1->target()) + 0.1*dir , 0.01);
             

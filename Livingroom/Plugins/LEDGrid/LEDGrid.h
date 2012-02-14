@@ -6,9 +6,10 @@ struct Lamp {
     float color[4];
     int channel;
     ofVec2f pos;
+    int maxDim;
 };
 
-#define NUM_LAMPS 50
+#define NUM_LAMPS 58
 #define GRID 300
 @interface LEDGrid : ofPlugin {
     Lamp lamps[NUM_LAMPS];

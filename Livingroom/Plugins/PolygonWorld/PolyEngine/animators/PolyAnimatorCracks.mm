@@ -42,6 +42,8 @@ struct VectorSortY {
         
         [self addPropF:@"reverse"];
         
+        [self addPropF:@"reverseDistance"];
+
     }
     
     return self;
@@ -74,7 +76,7 @@ struct VectorSortY {
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([(NSString*)context isEqualToString:@"midi"]){
        // cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
-        if(PropF(@"reverse")){
+        if(!PropF(@"reverse")){
             SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);        
         } else {
             SetPropF(@"invimpulse", [[object valueForKey:@"noteon48"] intValue]);
@@ -109,9 +111,9 @@ struct VectorSortY {
         float pressure = PropF(@"pressure")*(impulse-invimpulse)/128.0;
         float overflowTheshold = PropF(@"overflowThreshold");
         float overflowSpeed = PropF(@"overflowSpeed");    
-        
+        CachePropF(reverseDistance);
         if(active > 0){
-            vector<ofVec2f> v = [GetTracker() getTrackerCoordinatesCentroids];    
+            vector<ofVec2f> v = [GetTracker() getTrackerCoordinatesFeets];    
             
             if(pressure < 0){
                 //Find point furthest away
@@ -121,12 +123,10 @@ struct VectorSortY {
                     
                     [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
                         for(int t=0;t<v.size();t++){
-                            if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->source())) > dist)){
-                                dist = v[t].distance(handleToVec2(eit->source()));
+                            if(eit->data().crackAmount > 0 && ( v[t].distance(handleToVec2(eit->source())) > reverseDistance)){
                                 h = eit;
                             }
-                            if(eit->data().crackAmount > 0 && ( dist == -1 || v[t].distance(handleToVec2(eit->target())) > dist)){
-                                dist = v[t].distance(handleToVec2(eit->target()));
+                            if(eit->data().crackAmount > 0 && ( v[t].distance(handleToVec2(eit->target())) > reverseDistance)){
                                 h = eit;
                             }
                         }
@@ -135,14 +135,12 @@ struct VectorSortY {
                     if(dist != -1){
                         h->data().crackAmount = 0;
                         h->twin()->data().crackAmount = 0;
-
                     }
                 }
             }
             
             if(pressure > 0){
                 //Cracklines
-                
                 for(int t=0;t<v.size();t++){
                     for(int i=0;i<crackLines.size();i++){
                         for(int u=1;u<crackLines[i].size();u++){

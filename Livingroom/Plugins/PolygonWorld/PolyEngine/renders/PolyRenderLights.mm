@@ -9,6 +9,7 @@
         [self addPropF:@"zScale"];
         
         //[[self addPropF:@"drawMode"] setMaxValue:2];
+        [[self addPropF:@"minLight"] setMidiSmoothing:0.1];;
         
         [[self addPropF:@"dirLightX"] setMidiSmoothing:0.1];;
         [[self addPropF:@"dirLightY"] setMidiSmoothing:0.1];;
@@ -75,6 +76,7 @@
     }
     
     float zScale = PropF(@"zScale");
+    CachePropF(minLight);
     ApplyPerspective();{
         ofSetColor(0,255,0);
         //Depth test
@@ -116,6 +118,14 @@
                         color += intensity*light2Color*fabs(90-angle)/90.0;
                       
 //                        color += intensity*light2Color*(n*light2Dir).length();
+                    }
+                }
+                
+                //Min light
+                { 
+                    if(color.length() < minLight){
+                        color.normalize();
+                        color *= minLight;
                     }
                 }
                 glColor4f(color.x,color.y,color.z,1);

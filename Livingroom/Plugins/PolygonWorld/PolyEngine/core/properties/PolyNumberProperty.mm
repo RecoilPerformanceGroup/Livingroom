@@ -27,7 +27,7 @@
 }
 
 -(id) initWithCoder:(NSCoder *)coder{
-	[super initWithCoder:coder];
+	self = [super initWithCoder:coder];
 	
 	sceneTokens = [coder decodeObjectForKey:@"sceneTokens"];
 	

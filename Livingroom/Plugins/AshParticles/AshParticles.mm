@@ -254,10 +254,10 @@
     
     float globalDampingForce = PropF(@"globalDampingForce");
     float trackerRepulsionForce = PropF(@"trackerRepulsionForce");
-    float trackerRepulsionForceRadius = PropF(@"trackerRepulsionForceRadius");    
+   /* float trackerRepulsionForceRadius = PropF(@"trackerRepulsionForceRadius");    
     CachePropF(trackerMagneticForce);
     CachePropF(trackerMagneticForceRadius);    
-    CachePropF(trackerMagneticForceRadiusBig);    
+    CachePropF(trackerMagneticForceRadiusBig);    */
     CachePropF(alpha);
     CachePropF(windForce);    
     CachePropF(windForceRadius);    

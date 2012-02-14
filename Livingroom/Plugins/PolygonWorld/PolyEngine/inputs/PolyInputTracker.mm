@@ -30,6 +30,18 @@
     return v;
 }
 
+- (vector<ofVec2f>) getTrackerCoordinatesFeets{
+    vector< ofVec2f > v;
+    if(mousePressed){
+        v.push_back( mouse);
+    } else {
+        vector<ofVec2f> osc = [GetPlugin(Tracker) trackerFeetVector];
+        return osc;
+    }
+    
+    return v;
+}
+
 
 - (void) controlMousePressed:(float) x y:(float)y button:(int)button{
     mousePressed = YES;

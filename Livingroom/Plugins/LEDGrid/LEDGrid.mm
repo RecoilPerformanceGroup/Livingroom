@@ -9,6 +9,8 @@
     [self addPropF:@"fade"];
     [self addPropF:@"tracker"];
     
+    [[self addPropF:@"blur"] setMaxValue:20];
+    [self addPropB:@"sendWhite"];
 }
 
 //
@@ -18,18 +20,21 @@
 
 -(void)setup{
     int i=0;
-    for(int x=0;x<8;x++){
-        for(int y=0;y<7;y++){
+    for(int y=0;y<8;y++){
+        for(int x=0;x<8;x++){
             bool add = YES;
-            if(y == 0 && x == 7) add = NO;
-            if(y == 1 && x >= 3) add = NO;
+            if(y == 6 && x >= 2) add = NO;
             if(add){
-                lamps[i].pos = ofVec2f(x/8.0, y/7.0);
+                lamps[i].pos = ofVec2f(x/8.0, 1-(y+1)/8.0);
                 lamps[i].color[0] = 1;
-                lamps[i].color[1] = 0;
-                lamps[i].color[2] = 0;
+                lamps[i].color[1] = 1;
+                lamps[i].color[2] = 1;
                 lamps[i].color[3] = 0;
                 lamps[i].channel = i*4;
+                if(y == 7)
+                    lamps[i].maxDim = 190;
+                else
+                    lamps[i].maxDim = 255;
                 i++;
             }
         }
@@ -76,7 +81,15 @@
 	cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 0, 255, CV_THRESH_TOZERO);
     cvImage.flagImageChanged();
     
+    if(PropF(@"blur"))
+        cvImage.blur(PropF(@"blur"));
+    
+    
+    //----------------------------------------------------
+    
+    
     OpenDMX * dmx = GetPlugin(OpenDMX);
+    CachePropB(sendWhite);
     for(int i=0;i<NUM_LAMPS;i++){
         mask.set(0);
         int nPoints = 4;
@@ -94,12 +107,12 @@
         
         lamps[i].color[3] = cvMean(cvImage.getCvImage(),mask.getCvImage());
         
-        
-        [dmx setValue:lamps[i].color[0]*255.0 forChannel:1+lamps[i].channel+0];
-        [dmx setValue:lamps[i].color[1]*255.0 forChannel:1+lamps[i].channel+1];
-        [dmx setValue:lamps[i].color[2]*255.0 forChannel:1+lamps[i].channel+2];
-
-        [dmx setValue:lamps[i].color[3]*255.0 forChannel:1+lamps[i].channel+3];
+        if(sendWhite){
+            [dmx setValue:lamps[i].color[0]*255.0 forChannel:1+lamps[i].channel+0];
+            [dmx setValue:lamps[i].color[1]*255.0 forChannel:1+lamps[i].channel+1];
+            [dmx setValue:lamps[i].color[2]*255.0 forChannel:1+lamps[i].channel+2];
+        }
+        [dmx setValue:lamps[i].color[3]*lamps[i].maxDim forChannel:1+lamps[i].channel+3];
         
     }
     

@@ -21,6 +21,7 @@
         
         [self addPropF:@"cloudIntensity"];
         [self addPropF:@"cloudSize"];
+        [self addPropF:@"originalLinesAlpha"];
 
         
     }
@@ -170,8 +171,9 @@
     }      
     glEnd();
     
-    
-    
+    CachePropF(originalLinesAlpha);
+
+    ofEnableAlphaBlending();
     vector< vector<ofVec2f> > crackLines = [(PolyAnimatorCracks*)GetModule(@"Cracks") crackLines]; 
     for(int i=0;i<crackLines.size();i++){
         if(crackLines[i].size() == 2 && crackLines[i][0].x != 0.0){
@@ -187,7 +189,7 @@
         }
         
         
-        ofSetColor(0,0,0);
+        ofSetColor(0,0,0,originalLinesAlpha*255);
         //        glLineWidth(<#GLfloat width#>)
         glBegin(GL_LINE_STRIP);
         for(int u=0;u<crackLines[i].size();u++){

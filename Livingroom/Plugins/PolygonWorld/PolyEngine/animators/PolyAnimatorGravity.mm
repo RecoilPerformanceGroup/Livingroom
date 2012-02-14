@@ -41,7 +41,7 @@
     //
     vector<ofVec2f> centroids;
     if(PropF(@"tracker")){
-         centroids = [GetPlugin(Tracker) trackerCentroidVector];
+         centroids = [GetPlugin(Tracker) trackerFeetVector];
     } else {
         centroids.push_back(ofVec2f(0.5,0.5));
     }

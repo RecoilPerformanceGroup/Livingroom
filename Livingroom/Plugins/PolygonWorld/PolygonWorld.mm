@@ -549,7 +549,7 @@
 	NSArray *workspaces = [qLab workspaces];
 	QLabWorkspace * workspace = [workspaces objectAtIndex:0];
 	
-	NSMutableArray * objects = [NSMutableArray arrayWithArray:[[plugin properties] allValues]];
+	//NSMutableArray * objects = [NSMutableArray arrayWithArray:[[plugin properties] allValues]];
     NSArray * cues = [workspace cues];
 	for(QLabCue * cue in cues){
 		NSString *beginsTest = [cue qName];
@@ -564,7 +564,7 @@
                     
                     
                     NSString *searchString = [NSString stringWithFormat:@"[%@: %@]", [module key], [proptery name]];		
-                    int length = [beginsTest length];
+                   // int length = [beginsTest length];
                     NSRange prefixRange = [beginsTest rangeOfString:searchString options:(0)];
                     
                     if(prefixRange.length > 0){

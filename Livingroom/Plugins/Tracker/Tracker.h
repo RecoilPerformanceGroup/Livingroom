@@ -13,6 +13,9 @@
 -(vector<ofVec2f>) trackerBlob:(int)n;
 -(vector< vector<ofVec2f> >) trackerBlobVector;
 
+-(ofVec2f) trackerFeet:(int)n;
+-(vector<ofVec2f>) trackerFeetVector;
+
 -(ofxCvGrayscaleImage) trackerImageWithResolution:(int)res;
 
 @end

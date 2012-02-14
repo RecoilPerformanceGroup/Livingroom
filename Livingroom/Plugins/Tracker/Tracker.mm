@@ -87,9 +87,13 @@
             glPolygonMode(GL_FRONT_AND_BACK , GL_FILL);
             
             ofVec2f centroid = [self trackerCentroid:i];
-            
+            ofVec2f feet = [self trackerFeet:i];
+
             ofSetColor(255,255,255);
             ofCircle(centroid.x, centroid.y, 0.003);
+        
+            ofSetColor(255,255,0);
+            ofCircle(feet.x, feet.y, 0.003);
             
             
             
@@ -299,6 +303,65 @@
     }
     return v;
 }
+
+
+-(ofVec2f) trackerFeet:(int)n{
+    // OSC Control blobs
+    {
+        vector<ofVec2f> trackerBlob = [self trackerBlob:n];
+        ofVec2f * low = nil;
+        for(int u=0;u< trackerBlob.size();u++){
+			if(!low || trackerBlob[u].y > low->y){
+				if(low){
+					low->x = trackerBlob[u].x;
+					low->y = trackerBlob[u].y;
+				} else {
+					low = new ofVec2f(trackerBlob[u]);
+				}
+			}
+		}
+        if(low == nil)
+            return ofVec2f();
+        return *low;
+
+        vector<ofVec2f> blobs = [GetPlugin(OSCControl) getTrackerCoordinates];
+        n -= blobs.size();
+    }
+    
+    // Control mouse 
+    {
+        if(controlMouse.x != -1){
+            if(n == 0){
+                return controlMouse;
+            }
+            n --;            
+        }
+        
+    }
+    
+    // Camera tracker
+    {
+        int num = [[GetPlugin(BlobTracker2d) getInstance:0] numPBlobs];
+        if(num > n){
+            return *[[GetPlugin(BlobTracker2d) getInstance:0] getPBlob:n]->feet;
+        }
+        n -= num;
+    }
+    
+    return ofVec2f();
+}
+
+-(vector<ofVec2f>) trackerFeetVector{
+    int n = [self numberTrackers];
+    vector<ofVec2f> v;
+    for(int i=0; i<n;i++){
+        v.push_back([self trackerFeet:i]);
+    }
+    return v;
+}
+
+
+
 
 -(ofxCvGrayscaleImage)trackerImageWithResolution:(int)res{
     ofxCvGrayscaleImage ret;
