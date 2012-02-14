@@ -8,14 +8,8 @@
 
 #import "PolyRender.h"
 #define NUM_GRADIENTS 200
+#import "LEDGrid.h"
 
-struct gradientVals {
-    float x;
-    float y;
-    float size;
-    float intensity;
-    float val;
-};
 
 @interface PolyRenderCrackLines : PolyRender {
     ofImage * gradient;
@@ -23,5 +17,7 @@ struct gradientVals {
     gradientVals gradients[NUM_GRADIENTS];
     
 }
+
+-(gradientVals*) gradients;
 
 @end

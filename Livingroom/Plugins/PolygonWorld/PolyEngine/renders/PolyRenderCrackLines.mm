@@ -13,6 +13,10 @@
 
 @implementation PolyRenderCrackLines
 
+-(gradientVals*)gradients{
+    return gradients;
+}
+
 - (id)init {
     self = [super init];
     if (self) {
@@ -52,6 +56,8 @@
         NSLog(@"gradients image not found in cracks!!");
     }
     
+    
+    [GetPlugin(LEDGrid) setGradients:gradients num:NUM_GRADIENTS];
     
     
 }

@@ -54,6 +54,11 @@
                             glColor3f(r,0.2,b);
                         }
                         
+                     /*   if(hc->source()->data().physicsLock > 0){
+                            glColor3f(1,1-hc->source()->data().physicsLock,1-hc->source()->data().physicsLock¨);
+
+                        }
+                       */ 
                         glVertexHandle(hc->source());
                         //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
                         ++hc; 

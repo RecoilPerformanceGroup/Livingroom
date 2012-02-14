@@ -11,6 +11,14 @@
     
     [[self addPropF:@"blur"] setMaxValue:20];
     [self addPropB:@"sendWhite"];
+    
+    [[self addPropF:@"rectDrawX"] setMidiSmoothing:0.9];
+    [[self addPropF:@"rectDrawY"] setMidiSmoothing:0.9];
+    [[self addPropF:@"rectDrawA"] setMidiSmoothing:0.9];
+    [[self addPropF:@"rectDrawSize"] setMidiSmoothing:0.9];
+    
+    [self addPropF:@"clouds"];
+    numGradients = 0;
 }
 
 //
@@ -48,6 +56,8 @@
     
     mask.allocate(GRID,GRID);    
     
+    cloudImage.allocate(GRID,GRID);
+    
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"chess" ofType:@"jpg"];
     chessImage = new ofImage();
@@ -61,6 +71,11 @@
 //
 //----------------
 //
+
+-(void) setGradients:(gradientVals*)_gradients num:(int)num{
+    gradients = _gradients;
+    numGradients = num;
+}
 
 
 -(void)update:(NSDictionary *)drawingInformation{
@@ -76,6 +91,58 @@
     cvImage += trackerFloat;
     
     
+    
+    
+    
+    //Rect
+    {
+        if(PropF(@"rectDrawA") > 0){
+            CachePropF(rectDrawX);
+            CachePropF(rectDrawY);
+            CachePropF(rectDrawA);
+            CachePropF(rectDrawSize);
+            int nPoints = 4;
+            CvPoint _cp[4] = {
+                {rectDrawX*GRID-rectDrawSize*GRID*0.5,rectDrawY*GRID-rectDrawSize*GRID*0.5}, 
+                {rectDrawX*GRID+rectDrawSize*GRID*0.5,rectDrawY*GRID-rectDrawSize*GRID*0.5},
+                {rectDrawX*GRID+rectDrawSize*GRID*0.5,rectDrawY*GRID+rectDrawSize*GRID*0.5},
+                {rectDrawX*GRID-rectDrawSize*GRID*0.5,rectDrawY*GRID+rectDrawSize*GRID*0.5}};		
+            
+            CvPoint* cp = _cp; 
+            cvFillPoly(cvImage.getCvImage(), &cp, &nPoints, 1, cvScalar(1,rectDrawA));
+            
+        }
+    }
+    
+    
+    //Clouds
+    {
+        CachePropF(clouds);
+        if(clouds > 0){
+            cloudImage.set(0);
+            for(int i=0;i<numGradients;i++){
+                gradientVals gradient = gradients[i];
+                
+                if(gradient.val > 0){
+                    
+                  //  
+                    
+                    int nPoints = 4;
+                    CvPoint _cp[4] = {
+                        {gradient.x*GRID-0.8*gradient.size*GRID*0.5,gradient.y*GRID-0.8*gradient.size*GRID*0.5}, 
+                        {gradient.x*GRID+0.8*gradient.size*GRID*0.5,gradient.y*GRID-0.8*gradient.size*GRID*0.5},
+                        {gradient.x*GRID+0.8*gradient.size*GRID*0.5,gradient.y*GRID+0.8*gradient.size*GRID*0.5},
+                        {gradient.x*GRID-0.8*gradient.size*GRID*0.5,gradient.y*GRID+0.8*gradient.size*GRID*0.5}};		
+                    
+                    CvPoint* cp = _cp; 
+                    cvFillPoly(cloudImage.getCvImage(), &cp, &nPoints, 1, cvScalar(gradient.val));
+                }
+            }
+            cloudImage *= clouds;
+            cvImage -= cloudImage;
+
+        }
+    }
     
     cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 1, 255, CV_THRESH_TRUNC);
 	cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 0, 255, CV_THRESH_TOZERO);
@@ -138,6 +205,7 @@
 //
 //----------------
 //
+
 
 -(void)controlDraw:(NSDictionary *)drawingInformation{    
     float w = ofGetWidth() - 40;

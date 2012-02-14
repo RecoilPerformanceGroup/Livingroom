@@ -9,6 +9,14 @@ struct Lamp {
     int maxDim;
 };
 
+struct gradientVals {
+    float x;
+    float y;
+    float size;
+    float intensity;
+    float val;
+};
+
 #define NUM_LAMPS 58
 #define GRID 300
 @interface LEDGrid : ofPlugin {
@@ -20,7 +28,12 @@ struct Lamp {
     ofxCvFloatImage trackerFloat;
     ofxCvGrayscaleImage mask;
 
-
+    ofxCvFloatImage cloudImage;
+    
+    gradientVals * gradients;
+    int numGradients;
 }
+
+-(void) setGradients:(gradientVals*)_gradients num:(int)num;
 
 @end

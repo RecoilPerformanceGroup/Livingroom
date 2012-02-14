@@ -58,8 +58,9 @@
                     for(int i=0; i<centroids.size();i++){
                         ofVec2f centroid = centroids[i];
                         float _dist = centroid.distance( handleToVec2(vit) ) ;
-                        if(_dist < dist){
+                       if(_dist < dist){
                             float _f = f*(dist - _dist)/dist;
+                        //      float _f = f*(1/_dist);
                             vit->data().springF += ofVec3f(0,0,_f);                        
                         }
                     }

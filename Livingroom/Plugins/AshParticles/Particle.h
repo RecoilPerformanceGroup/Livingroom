@@ -19,6 +19,8 @@ public:
     
     bool kill;
     
+    float color;
+    
     Particle(){};
     
 	Particle(float _x, float _y,
@@ -31,6 +33,7 @@ public:
             dead = true;
             alive = false;
             kill = false;
+            color = ofRandom(0,0.1);
 	}
 	void updatePosition(float timeStep) {
 		// f = ma, m = 1, f = a, v = int(a)

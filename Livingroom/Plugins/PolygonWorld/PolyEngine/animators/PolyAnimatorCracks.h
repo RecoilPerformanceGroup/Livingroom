@@ -14,6 +14,9 @@
     ofVec2f mouse;
     vector< vector<ofVec2f> > crackLines;
     vector< Arrangement_2::Vertex_handle > crackLinesVertices;
+    
+    int impulse;
+    int invimpulse;
 }
 @property (readonly)     vector< vector<ofVec2f> > crackLines;
 @end

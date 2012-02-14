@@ -354,7 +354,7 @@
     //Float: 
     trackerFloat = tracker;
     
-    //tracker.blur(PropF(@"blackBlur"));
+    trackerFloat.blur(PropF(@"blackBlur"));
     blackImage += trackerFloat;
     blackImage -= spawner;
     spawner -= trackerFloat;
@@ -759,8 +759,8 @@
         Particle * particle =  &particles[u][0];
         for(int i = 0; i < NUM_PARTICLES; i++) {
             int j = NUM_PARTICLES*u+i;
-            if(color[j].x != alpha*particle->alpha){
-                color[j] = ofVec4f(alpha*particle->alpha,alpha*particle->alpha,alpha*particle->alpha,1.0);
+            if(color[j].x != alpha*particle->alpha+particle->color){
+                color[j] = ofVec4f(alpha*particle->alpha+particle->color,alpha*particle->alpha+particle->color,alpha*particle->alpha+particle->color,1.0);
                 
                 if(first == -1){
                     first = j;

@@ -57,7 +57,7 @@
         [self addModule:@"PolyRenderSimpleWireframe"];
         [self addModule:@"PolyRenderCrackLines"];
         [self addModule:@"PolyRenderLights"];
-
+        
         
         [self didChangeValueForKey:@"allModulesTree"];
         
@@ -69,10 +69,10 @@
     NSString * name = [module stringByReplacingOccurrencesOfString:@"PolyInput" withString:@""];
     name = [name stringByReplacingOccurrencesOfString:@"PolyAnimator" withString:@""];
     name = [name stringByReplacingOccurrencesOfString:@"PolyRender" withString:@""];
-
+    
     PolyModule * m = [[NSClassFromString(module) alloc] initWithEngine:self forKey:name];
     NSAssert1(m != nil, @"No class named %@",module);
-//    [m setKey:name];    
+    //    [m setKey:name];    
     [modules setObject:m forKey:name];    
     
     return m;
@@ -182,23 +182,26 @@
     }        
 }
 - (void) draw:(NSDictionary*)drawingInformation{
-   ApplySurface(@"Floor"); {
+    ApplySurface(@"Floor"); {
         
         for(PolyModule * module in [modules allValues]){
             if([module active]){
                 [module draw:drawingInformation];
             }
         }        
-   } PopSurface();
+    } PopSurface();
 }
 - (void) update:(NSDictionary*)drawingInformation{
     for(PolyModule * module in [modules allValues]){
-        for(PolyNumberProperty * prop in [[module properties] allValues]){
-           // [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            for(PolyNumberProperty * prop in [[module properties] allValues]){
+                // 
+                
                 [prop update];
-            //}];
-        }
+                //
+            }
+        }];
+
         if([module active]){
             if([[[module properties] valueForKey:@"reset"] boolValue]){
                 [[[module properties] valueForKey:@"reset"] setBoolValue:0];

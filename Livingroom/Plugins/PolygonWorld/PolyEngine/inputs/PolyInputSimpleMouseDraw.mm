@@ -387,11 +387,12 @@
         
         pointsBuffer.clear();
         
-        ofVec2f p1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
-        ofVec2f p2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
+        ofVec2f _p1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
+        ofVec2f _p2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
+        float lineLength = _p1.distance(_p2);
         
-        pointsBuffer.push_back(vec2ToPoint2(p1));
-        pointsBuffer.push_back(vec2ToPoint2(p2));        
+        pointsBuffer.push_back(vec2ToPoint2(_p1));
+        pointsBuffer.push_back(vec2ToPoint2(_p2));        
         
         if(pointsBuffer.size() > 1){        
             debugSegments.clear();
@@ -439,8 +440,38 @@
                     debugSegments.push_back(arrSegment);
                 } 
                 
+                float dist1 = distanceVecToLine(p1, _p1, _p2);
+                float dist2 = distanceVecToLine(p2, _p1, _p2);                
+                ofVec2f theP = p1;
                 
+                float dist = dist1;
+                if(dist2 < dist){
+                    dist = dist2;
+                    theP = p2;
+                }
                 
+                float maxDist = 0.15;
+                float minDist = 0.08;
+                
+                if(dist < maxDist ){
+                    float __dist1 = theP.distance(_p1);
+                    float __dist2 = theP.distance(_p2);
+                    
+                    if(__dist1 < lineLength + maxDist && __dist2 < lineLength + maxDist){
+                        if(dist < minDist){
+                            eit->source()->data().physicsLock = YES;
+                            eit->target()->data().physicsLock = YES;
+                        } else {
+                            float f = ((maxDist-minDist) - (dist-minDist))/maxDist;
+                            if(eit->source()->data().physicsLock == 0){
+                                eit->source()->data().physicsLock = f;
+                            }
+                            if(eit->target()->data().physicsLock == 0){
+                                eit->target()->data().physicsLock = f;
+                            }
+                        }
+                    }
+                }
                 
             }];     
         }      
@@ -450,11 +481,11 @@
         if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
             ofVec2f triangle1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
             ofVec2f triangle2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
-        
+            
             ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0];
             ofVec2f __dir = tracker - triangle1;
             ofVec2f norm = ofVec2f(-__dir.y,__dir.x);
-
+            
             [Prop(@"nelsonSplit") setBoolValue:NO];
             
             ofVec2f secondLast = ofVec2f(0.393145, 0.65035);

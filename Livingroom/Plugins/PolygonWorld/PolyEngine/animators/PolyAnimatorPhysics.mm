@@ -598,22 +598,28 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             
         }
         if(movementActivitySmooth > 0){
-            [GetPlugin(Midi) sendValue:PropF(@"midiActivityStrength")*movementActivitySmooth*127 forCC:4 onChannel:16];
-            [GetPlugin(Midi) sendValue:movementPanSmooth*127 forCC:5 onChannel:16];
-            movementActivitySmooth -= 0.2 ;
-            //     cout<<movementActivitySmooth<<"    "<<movementPan<<"   "<<endl;
+            [GetPlugin(Midi) sendValue:ofClamp(PropF(@"midiActivityStrength")*movementActivitySmooth*127,0,127) forCC:4 onChannel:16];
+            [GetPlugin(Midi) sendValue:ofClamp(movementPanSmooth*127,0,127) forCC:5 onChannel:16];
+          //  cout<<ofClamp(PropF(@"midiActivityStrength")*movementActivitySmooth*127,0,127)<<"    "<<movementPan<<"   "<<vertCount<<endl;
+
+
         }
         if(movementActivitySmooth > 0 && !noteOnSend){
             [GetPlugin(Midi) sendValue:127 forNote:48 onChannel:16];
             noteOnSend = YES;
-            
-        } else if(noteOnSend && movementActivitySmooth == 0){
+           // cout<<"Note on"<<endl;            
+        } else if(noteOnSend && movementActivitySmooth <= 0){
             noteOnSend = NO;
+          //  [GetPlugin(Midi) sendValue:0 forCC:4 onChannel:16];
+           // [GetPlugin(Midi) sendValue:0 forCC:5 onChannel:16];
             [GetPlugin(Midi) sendNoteOff:48 onChannel:16];
-            [GetPlugin(Midi) sendValue:0 forCC:4 onChannel:16];
-            [GetPlugin(Midi) sendValue:0 forCC:5 onChannel:16];
+            //cout<<"Note off"<<endl;
             
         }
+
+        movementActivitySmooth -= 0.4 ;
+        if(movementActivitySmooth<0)
+            movementActivitySmooth = 0;
     }
     
     
