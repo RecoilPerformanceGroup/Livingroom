@@ -11,11 +11,6 @@
 #import "Mask.h"
 #import "PolyInputTracker.h"
 
-static Point_2 vec2ToPoint2(ofVec2f v){
-    return Point_2(v.x, v.y);
-}
-
-
 @implementation PolyInputSimpleMouseDraw
 
 
@@ -453,25 +448,23 @@ static Point_2 vec2ToPoint2(ofVec2f v){
     
     if(PropB(@"nelsonSplit")){
         if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
+            ofVec2f triangle1 = [GetPlugin(Mask) triangleFloorCoordinate:0];
+            ofVec2f triangle2 = [GetPlugin(Mask) triangleFloorCoordinate:1];
+        
+            ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0];
+            ofVec2f __dir = tracker - triangle1;
+            ofVec2f norm = ofVec2f(-__dir.y,__dir.x);
+
             [Prop(@"nelsonSplit") setBoolValue:NO];
             
             ofVec2f secondLast = ofVec2f(0.393145, 0.65035);
             
             vector<Point_2> points;
-            points.push_back(Point_2(0.735887, 0.493007));
-            points.push_back(Point_2(0.6875, 0.503497));
-            points.push_back(Point_2(0.610887, 0.48951));
-            points.push_back(Point_2(0.516129, 0.465035));
-            points.push_back(Point_2(0.485887, 0.479021));
-            points.push_back(Point_2(0.366935, 0.437063));
-            points.push_back(Point_2(0.360887, 0.506993));
-            points.push_back(Point_2(0.370968, 0.594406));
-            points.push_back(Point_2(secondLast.x, secondLast.y));
-
-            ofVec2f tracker = [GetTracker() getTrackerCoordinatesCentroids][0];
-            ofVec2f __dir = tracker - secondLast;
-            points.push_back(vec2ToPoint2(secondLast + __dir*2));
-            
+            points.push_back( vec2ToPoint2(triangle2 + ofVec2f(0,0.1)));
+            points.push_back( vec2ToPoint2(triangle1));
+            points.push_back( vec2ToPoint2(triangle1+__dir*0.5+ofVec2f(0.05,0)));
+            points.push_back( vec2ToPoint2(triangle1+__dir));
+            points.push_back( vec2ToPoint2(triangle1+__dir*2+ofVec2f(-0.1,0)));            
             [self split:points];
         }
     }

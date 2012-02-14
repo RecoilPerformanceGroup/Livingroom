@@ -40,6 +40,7 @@ struct VectorSortY {
         
         [self addPropF:@"onlyCracklines"];
         
+        [self addPropF:@"reverse"];
         
     }
     
@@ -73,7 +74,11 @@ struct VectorSortY {
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([(NSString*)context isEqualToString:@"midi"]){
        // cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
-        SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);
+        if(PropF(@"reverse")){
+            SetPropF(@"impulse", [[object valueForKey:@"noteon48"] intValue]);        
+        } else {
+            SetPropF(@"invimpulse", [[object valueForKey:@"noteon48"] intValue]);
+        }
     }
     //  if([(NSString*)context isEqualToString:@"midioff"]){
     //        SetPropF(@"impulse", 0);

@@ -66,6 +66,10 @@ static Point_3 vec3ToPoint3(ofVec3f v){
     return Point_3(v.x, v.y, v.z);
 }
 
+static Point_2 vec2ToPoint2(ofVec2f v){
+    return Point_2(v.x, v.y);
+}
+
 static ofVec3f cgalVec3ToVec3(Vector_3 v){
     return ofVec3f(v.x(), v.y(), v.z());
 }

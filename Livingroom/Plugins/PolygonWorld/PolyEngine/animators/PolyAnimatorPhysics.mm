@@ -584,28 +584,32 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         if([GetTracker() getTrackerCoordinatesCentroids].size() > 0){
             movementPan = [GetTracker() getTrackerCoordinatesCentroids][0].x;
         } else {
-            movementPan = 0.5;
+         //   movementPan = 0.5;
         }
         movementActivity = 1000*movementActivity/(float)vertCount;
         
-        movementActivitySmooth = movementActivitySmooth*0.95 + movementActivity*0.05;
-        movementPanSmooth = movementPanSmooth*0.95 + movementPan*0.05;
+        movementActivitySmooth +=  movementActivity*0.1;
+        movementPanSmooth = movementPanSmooth*0.9 + movementPan*0.1;
 
-        [GetPlugin(Midi) sendValue:movementActivity*127 forCC:4 onChannel:16];
-        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
+       
+        
+
     }
- //   cout<<movementActivity<<"    "<<movementPan<<"   "<<vertCount<<endl;
-
-    
-    if(vertCount > 0 && !noteOnSend){
+    if(movementActivitySmooth > 0){
+        [GetPlugin(Midi) sendValue:movementActivitySmooth*127 forCC:4 onChannel:16];
+        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
+        movementActivitySmooth -= 0.2 ;
+   //     cout<<movementActivitySmooth<<"    "<<movementPan<<"   "<<endl;
+    }
+    if(movementActivitySmooth > 0 && !noteOnSend){
         [GetPlugin(Midi) sendValue:127 forNote:48 onChannel:16];
         noteOnSend = YES;
-        
-    } else if(noteOnSend && vertCount == 0){
+
+    } else if(noteOnSend && movementActivitySmooth == 0){
         noteOnSend = NO;
         [GetPlugin(Midi) sendNoteOff:48 onChannel:16];
-        [GetPlugin(Midi) sendValue:movementActivity*127 forCC:4 onChannel:16];
-        [GetPlugin(Midi) sendValue:movementPan*127 forCC:5 onChannel:16];
+        [GetPlugin(Midi) sendValue:0 forCC:4 onChannel:16];
+        [GetPlugin(Midi) sendValue:0 forCC:5 onChannel:16];
 
     }
      
