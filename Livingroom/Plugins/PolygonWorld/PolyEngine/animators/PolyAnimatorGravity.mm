@@ -22,6 +22,9 @@
 
         [self addPropF:@"tracker"];  
         
+        [self addPropF:@"offsetX"];  
+        [self addPropF:@"offsetY"];  
+        
         [[self addPropF:@"midiInput"] setMidiSmoothing:0.95];
         [Prop(@"midiInput") setMidiNumber:[NSNumber numberWithInt:8]];
         [Prop(@"midiInput") setForcedMidiNumber:YES];
@@ -56,7 +59,7 @@
             if(f > 0){
                 [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                     for(int i=0; i<centroids.size();i++){
-                        ofVec2f centroid = centroids[i];
+                        ofVec2f centroid = centroids[i] + ofVec2f(PropF(@"offsetX"), PropF(@"offsetY"));
                         float _dist = centroid.distance( handleToVec2(vit) ) ;
                        if(_dist < dist){
                             float _f = f*(dist - _dist)/dist;
