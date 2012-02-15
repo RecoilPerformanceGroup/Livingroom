@@ -36,6 +36,7 @@ struct LRVertex_data {
     
     //Physics General
     float physicsLock           = 0.0;
+    float fallingFloorLock      = 0.0;
     
     //CracksAnimator
     float crackAmount           = 0.0;

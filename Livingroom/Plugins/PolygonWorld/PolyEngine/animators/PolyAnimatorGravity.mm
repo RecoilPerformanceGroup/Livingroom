@@ -85,13 +85,13 @@
                     float fallDist = 1.0-fallingTime;
                     
                     if(fallingTime == 0){
-                        vit->data().physicsLock = 1.0;
+                        vit->data().fallingFloorLock = 1.0;
                     }
                     
                     //Distance to center
                     float centDist = ofVec2f(0.5,0.5).distance(handleToVec2(vit));
                     if(centDist > fallDist){
-                        vit->data().physicsLock = 0.0;
+                        vit->data().fallingFloorLock = 0.0;
                     } 
                 }];
         }];

@@ -45,7 +45,8 @@
         [self addPropF:@"edgeForce"];
         [self addPropF:@"midiActivityStrength"];
         
-        
+        [self addPropF:@"removeLocks"];
+
         blockPhysics = [NSMutableDictionary dictionary];
         blockTiming = [NSMutableDictionary dictionary];
         NSTextField * textField = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 300, 300)];
@@ -134,6 +135,14 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 #pragma mark Common
 
 -(void)update:(NSDictionary *)drawingInformation{
+    if(PropB(@"removeLocks")){
+        [Prop(@"removeLocks") setBoolValue:NO];
+        [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+            vit->data().physicsLock = NO;
+            vit->data().fallingFloorLock = NO;
+        }];
+    }
+    
     BOOL updateDebug = NO;    
     if(ofGetElapsedTimeMillis() > lastDebugUpdate + 100){
         updateDebug = YES;
@@ -557,7 +566,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             
             if( vit->data().springF.length() > minForce){
                 vit->data().accumF += vit->data().springF;                    
-                vit->data().springV = vit->data().springF * 0.01 * (1.0-vit->data().physicsLock);
+                vit->data().springV = vit->data().springF * 0.01 * (1.0-ofClamp(vit->data().physicsLock+vit->data().fallingFloorLock,0,1));
                 
                 //Friction
                 vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
