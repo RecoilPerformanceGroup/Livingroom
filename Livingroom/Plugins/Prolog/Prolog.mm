@@ -7,10 +7,15 @@
     self = [super init];
     if (self) {
         [[self addPropF:@"circleSize"] setMaxValue:2];
+        [Prop(@"circleSize") setMidiSmoothing:0.1];
+ 
         [[self addPropF:@"aspect"] setMaxValue:2];
         
-        
-        [Prop(@"circleSize") setMidiSmoothing:0.1];
+        [self addPropF:@"triangleLine"];
+        [self addPropF:@"triangleLineWidth"];
+        [self addPropF:@"triangleProjector"];
+
+        [Prop(@"triangleLine") setMidiSmoothing:0.99];
         
     }
     
@@ -74,6 +79,18 @@
     ofSetColor(255,255,255);
     
     ofEllipse(s.x*0.5, s.y, size*PropF(@"circleSize"), size*PropF(@"circleSize")*PropF(@"aspect"));
+    
+    CachePropF(triangleLine) 
+    if(triangleLine > 0){
+        ApplySurfaceForProjector(@"Triangle",PropI(@"triangleProjector"));{
+            glLineWidth(10.0*PropF(@"triangleLineWidth"));
+            ofSetColor(255,255,255);
+            glBegin(GL_LINE_STRIP);
+            glVertex2f(2,-1);
+            glVertex2f((2.0-triangleLine*2),(triangleLine*2)-1);
+            glEnd();
+        } PopSurfaceForProjector();
+    }
 }
 
 //
