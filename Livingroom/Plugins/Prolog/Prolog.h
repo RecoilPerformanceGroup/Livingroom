@@ -12,6 +12,8 @@
     float size;
     
     KeystoneSurface * surface;
+    
+    ofVec2f top,bottom;
 }
 
 @end

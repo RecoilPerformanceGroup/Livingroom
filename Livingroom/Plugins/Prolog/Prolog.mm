@@ -7,15 +7,18 @@
     self = [super init];
     if (self) {
         [[self addPropF:@"circleSize"] setMaxValue:2];
-        [Prop(@"circleSize") setMidiSmoothing:0.1];
- 
+        [Prop(@"circleSize") setMidiSmoothing:0.99];
+        
+        [[self addPropF:@"circleSizeMin"] setMidiSmoothing:0.99];
+        [[self addPropF:@"circleSizeMax"] setMidiSmoothing:0.99];
+
         [[self addPropF:@"aspect"] setMaxValue:2];
         
-        [self addPropF:@"triangleLine"];
+        [[self addPropF:@"triangleLine"]  setMidiSmoothing:0.99];
         [self addPropF:@"triangleLineWidth"];
         [self addPropF:@"triangleProjector"];
 
-        [Prop(@"triangleLine") setMidiSmoothing:0.99];
+        [self addPropB:@"debug"];
         
     }
     
@@ -28,7 +31,7 @@
 
 
 -(void)setup{
-    ofSetCircleResolution(100);
+    ofSetCircleResolution(200);
     
 }
 
@@ -43,27 +46,44 @@
         surface = Surface(@"Floor", 0);
     }
     
+    CachePropF(circleSizeMin);
+    CachePropF(circleSizeMax);
+    
     if([GetPlugin(Tracker) numberTrackers] > 0){
         ofVec2f centroid = [GetPlugin(Tracker) trackerCentroid:0];
         vector< ofVec2f > points = [GetPlugin(Tracker) trackerBlob:0];
         
         if(points.size() > 0){
-            float highest=-1, lowest=-1;
+            top=ofVec2f(-1,-1);
+            bottom=ofVec2f(-1,-1);
             
             for(int i=0;i<points.size();i++){
                 ofVec2f projp = [surface convertToProjection:points[i]];
-                if(highest == -1 || projp.y > highest){
-                    highest = projp.y;
+                if(top.y == -1 || projp.y > top.y){
+                    top = projp;
                 }
-                if(lowest == -1 || projp.y < lowest){
-                    lowest = projp.y;
+                if(bottom.y == -1 || projp.y < bottom.y){
+                    bottom = projp;
                 }
             }
             
-            ofVec2f v = [surface convertToProjection:centroid];
+            ofVec2f v = (top-bottom)*0.5+bottom;
+
+            
+            top.y *= 3.0/4.0;
+            bottom.y *= 3.0/4.0;
+            float _size = PropF(@"circleSize")*top.distance(bottom);
+            size = filterSize.filter(ofClamp(_size,circleSizeMin, circleSizeMax));
+            
+            if(_size > circleSizeMax){
+                float diff = _size - circleSizeMax; 
+                
+                v += (top-bottom).normalized()*diff*0.7;
+            }
+            
+            
             p.x = filterX.filter(v.x);
-            p.y = filterY.filter(lowest+(highest-lowest)/2.0);
-            size = filterSize.filter((highest-lowest));
+            p.y = filterY.filter(v.y);
         }
     }
 }
@@ -78,7 +98,13 @@
     ofFill();
     ofSetColor(255,255,255);
     
-    ofEllipse(s.x*0.5, s.y, size*PropF(@"circleSize"), size*PropF(@"circleSize")*PropF(@"aspect"));
+    ofEllipse(s.x*0.5, s.y, size*0.5, 4.0/3.0*size*PropF(@"aspect"));
+    
+    if(PropB(@"debug")){
+        ofSetColor(255,255,0);
+        ofCircle(top.x*0.5, top.y*4.0/3.0,0.01);
+        ofCircle(bottom.x*0.5, bottom.y*4.0/3.0,0.01);
+    }
     
     CachePropF(triangleLine) 
     if(triangleLine > 0){

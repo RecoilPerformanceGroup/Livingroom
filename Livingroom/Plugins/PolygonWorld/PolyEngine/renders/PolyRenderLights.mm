@@ -1,6 +1,7 @@
 #import "PolyRenderLights.h"
 #import "colorramp.h"
 //#import "CGALEnumerator.h"
+#import "Tracker.h"
 
 @implementation PolyRenderLights
 
@@ -28,10 +29,14 @@
         [self addPropF:@"pointLightZ"];
         [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
-       
+        
         [self addPropF:@"backside"];
         [self addPropF:@"fog"];
-
+        
+        [self addPropF:@"pointLightTracking"];
+        [self addPropF:@"pointLightOffsetX"];
+        [self addPropF:@"pointLightOffsetY"];
+        
         [Prop(@"pointLightTemp") setMidiSmoothing:0.1];
         [Prop(@"dirLightTemp") setMidiSmoothing:0.1];
     }
@@ -43,12 +48,23 @@
     
 }
 
+-(void)update:(NSDictionary *)drawingInformation{
+    if(PropB(@"pointLightTracking")){
+        vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerFeetVector];
+        
+        if(centroids.size() > 0){
+            [Prop(@"pointLightX") setFloatValue:centroids[0].x+ PropF(@"pointLightOffsetX")];
+            [Prop(@"pointLightY") setFloatValue:centroids[0].y+ PropF(@"pointLightOffsetY")];
+        }        
+    }
+}
+
 -(void)draw:(NSDictionary *)drawingInformation{
     ofEnableAlphaBlending();
     ofVec3f light1[2];
     light1[0] = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
     light1[1] = ofVec3f(PropF(@"dirLight2X"), PropF(@"dirLight2Y"), PropF(@"dirLight2Z")).normalized();
-
+    
     ofVec3f light1Color[2];
     light1Color[0] = colorTemp(PropI(@"dirLightTemp"), PropF(@"dirLightIntensity"));
     light1Color[1] = colorTemp(PropI(@"dirLight2Temp"), PropF(@"dirLight2Intensity"));
@@ -71,8 +87,8 @@
         glFogf(GL_FOG_START, 0);             // Fog Start Depth
         glFogf(GL_FOG_END, 1);               // Fog End Depth
         glEnable(GL_FOG);                   // Enables GL_FOG
-
-
+        
+        
     }
     
     float zScale = PropF(@"zScale");
@@ -99,8 +115,8 @@
                 {
                     float angle = light1[i].angle(n);
                     if(angle < 90 || PropB(@"backside")){
-//                        ofVec3f l1 = n*light1;
-//                        color += light1Color*l1.length();
+                        //                        ofVec3f l1 = n*light1;
+                        //                        color += light1Color*l1.length();
                         color += light1Color[i]*fabs(90-angle)/90.0;
                     }
                 }
@@ -112,12 +128,12 @@
                     if(angle < 90 || PropB(@"backside")){
                         
                         float dist = light2Dir.length();
-//                        light2Dir /= dist;
+                        //                        light2Dir /= dist;
                         
                         float intensity = 1.0/(4*PI*dist*dist);
                         color += intensity*light2Color*fabs(90-angle)/90.0;
-                      
-//                        color += intensity*light2Color*(n*light2Dir).length();
+                        
+                        //                        color += intensity*light2Color*(n*light2Dir).length();
                     }
                 }
                 
@@ -129,32 +145,32 @@
                     }
                 }
                 glColor4f(color.x,color.y,color.z,1);
-
+                
                 if(!fit->data().hole){
-                
-                
-                
-                if(!fit->is_fictitious()){
-                    if(fit->number_of_outer_ccbs() == 1){
-                        glBegin(GL_POLYGON);
-
-                        Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
-                        Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
-                        
-                        do { 
-                    //        ofVec2f v2 = point2ToVec2(hc->source()->point());
-
-                            ofVec3f p = handleToVec3(hc->source());                        
-                            glVertex3d(p.x , p.y, (p.z)*zScale);
-                            // cout<<p.z<<endl;
-                            //                            cout<<p.x<<"  "<<p.y<<endl;
-                            //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
-                            ++hc; 
-                        } while (hc != ccb_start); 
-                        glEnd();  
-
-                    }            
-                }
+                    
+                    
+                    
+                    if(!fit->is_fictitious()){
+                        if(fit->number_of_outer_ccbs() == 1){
+                            glBegin(GL_POLYGON);
+                            
+                            Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                            Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                            
+                            do { 
+                                //        ofVec2f v2 = point2ToVec2(hc->source()->point());
+                                
+                                ofVec3f p = handleToVec3(hc->source());                        
+                                glVertex3d(p.x , p.y, (p.z)*zScale);
+                                // cout<<p.z<<endl;
+                                //                            cout<<p.x<<"  "<<p.y<<endl;
+                                //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
+                                ++hc; 
+                            } while (hc != ccb_start); 
+                            glEnd();  
+                            
+                        }            
+                    }
                 }
                 
             }
