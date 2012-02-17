@@ -29,7 +29,8 @@ struct gradientVals {
     ofxCvGrayscaleImage mask;
 
     ofxCvFloatImage cloudImage;
-    
+    ofxCvFloatImage tmpImage;
+
     gradientVals * gradients;
     int numGradients;
 }

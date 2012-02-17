@@ -24,6 +24,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     ocp = [[ofxCocoaPlugins alloc] initWithAppDelegate:self];
+ //   [ocp setNumberOutputviews:0];
+    
     [ocp addHeader:@"Setup"];
     
     [ocp addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Triangle", nil]] midiChannel:1];

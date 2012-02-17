@@ -23,7 +23,7 @@
         [self addPropF:@"crumbleForce"];
         [self addPropF:@"crumbleForce2"];
         [self addPropF:@"decrumbleForce"];
-        [self addPropF:@"decrumbleForceRadius"];
+        [[self addPropF:@"decrumbleForceRadius"] setMidiSmoothing:0.96];
         
         
         [self addPropF:@"cutHole"];
@@ -194,16 +194,16 @@
     CachePropF(decrumbleForce);
     CachePropF(decrumbleForceRadius);
 
-    if(decrumbleForce > 0 && v.size() > 0){
+    if(decrumbleForce > 0){
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
-            
+            /*
             if(centroids.size() >= 2){
-                vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
+               vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
                 
                 for(int i=0;i<boundaryHandles.size();i++){
                     for(int u=0;u<boundaryHandles[i].size();u++){
                         Arrangement_2::Halfedge_handle handle = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
-                        
+                    
                         ofVec2f p = handleToVec2(handle->source());
 
                         float dist = centroids[1].distance(p);
@@ -215,7 +215,19 @@
                         
                     }
                 }
-            }
+            }*/
+            
+            [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                ofVec2f origP = point2ToVec2(vit->point());
+                ofVec2f p = handleToVec2(vit);
+                ofVec2f dir = origP - p;
+                
+                float dist = p.distance(ofVec2f(1,0));
+                if(dist < decrumbleForceRadius*2){
+                    vit->data().springF += decrumbleForce * dir*(decrumbleForceRadius*2-dist);
+                }
+            }];
+             
         }];
     }
     

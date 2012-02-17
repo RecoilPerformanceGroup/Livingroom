@@ -6,11 +6,13 @@
 
 -(void)initPlugin{
     [self addPropF:@"fillAdd"];    
+    [[self addPropF:@"fillSet"] setMidiSmoothing:0.7];    
     [self addPropF:@"fade"];
     [self addPropF:@"tracker"];
     
     [[self addPropF:@"blur"] setMaxValue:20];
     [self addPropB:@"sendWhite"];
+    [self addPropB:@"reset"];
     
     [[self addPropF:@"rectDrawX"] setMidiSmoothing:0.9];
     [[self addPropF:@"rectDrawY"] setMidiSmoothing:0.9];
@@ -18,6 +20,9 @@
     [[self addPropF:@"rectDrawSize"] setMidiSmoothing:0.9];
     
     [self addPropF:@"clouds"];
+    
+    [self addPropF:@"maskTop"];
+    
     numGradients = 0;
 }
 
@@ -40,7 +45,7 @@
                 lamps[i].color[3] = 0;
                 lamps[i].channel = i*4;
                 if(y == 7)
-                    lamps[i].maxDim = 190;
+                    lamps[i].maxDim = 100;
                 else
                     lamps[i].maxDim = 255;
                 i++;
@@ -57,6 +62,7 @@
     mask.allocate(GRID,GRID);    
     
     cloudImage.allocate(GRID,GRID);
+    tmpImage.allocate(GRID,GRID);
     
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"chess" ofType:@"jpg"];
@@ -79,6 +85,11 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
+    if(PropB(@"reset")){
+        [Prop(@"reset") setBoolValue:NO];
+        cvImage.set(0);
+    }
+    
     cvImage.resetROI();
     cvImage += PropF(@"fillAdd");
     cvImage -= PropF(@"fade");
@@ -101,6 +112,9 @@
             CachePropF(rectDrawY);
             CachePropF(rectDrawA);
             CachePropF(rectDrawSize);
+            
+            
+         //   tmpImage.set(0);
             int nPoints = 4;
             CvPoint _cp[4] = {
                 {rectDrawX*GRID-rectDrawSize*GRID*0.5,rectDrawY*GRID-rectDrawSize*GRID*0.5}, 
@@ -109,11 +123,19 @@
                 {rectDrawX*GRID-rectDrawSize*GRID*0.5,rectDrawY*GRID+rectDrawSize*GRID*0.5}};		
             
             CvPoint* cp = _cp; 
-            cvFillPoly(cvImage.getCvImage(), &cp, &nPoints, 1, cvScalar(1,rectDrawA));
+            cvFillPoly(cvImage.getCvImage(), &cp, &nPoints, 1, cvScalar(rectDrawA));
+            
+         //   cvImage += tmpImage;
             
         }
     }
     
+    
+
+    
+    if(PropF(@"fillSet")){
+        cvImage.set(PropF(@"fillSet"));
+    }
     
     //Clouds
     {
@@ -125,7 +147,7 @@
                 
                 if(gradient.val > 0){
                     
-                  //  
+                    //  
                     
                     int nPoints = 4;
                     CvPoint _cp[4] = {
@@ -140,7 +162,7 @@
             }
             cloudImage *= clouds;
             cvImage -= cloudImage;
-
+            
         }
     }
     
@@ -150,6 +172,25 @@
     
     if(PropF(@"blur"))
         cvImage.blur(PropF(@"blur"));
+   
+    
+    
+    //Mask top
+    {
+        CachePropF(maskTop);
+        
+        if(maskTop){
+            int nPoints = 4;
+            CvPoint _cp[4] = {
+                {0,0}, 
+                {GRID,0},
+                {GRID,maskTop*GRID},
+                {0,maskTop*GRID}};		
+            
+            CvPoint* cp = _cp; 
+            cvFillPoly(cvImage.getCvImage(), &cp, &nPoints, 1, cvScalar(0));
+        }
+    }
     
     
     //----------------------------------------------------

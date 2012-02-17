@@ -563,15 +563,64 @@
                 for(PolyNumberProperty * proptery in [[module properties] allValues]){
                     
                     
-                    NSString *searchString = [NSString stringWithFormat:@"[%@: %@]", [module key], [proptery name]];		
-                   // int length = [beginsTest length];
-                    NSRange prefixRange = [beginsTest rangeOfString:searchString options:(0)];
-                    
-                    if(prefixRange.length > 0){
-                        NSLog(@"Cue %@ found. Setting channel = %i and c number = %i",[cue qName], [[proptery midiChannel] intValue],[[proptery midiNumber] intValue]);
-                        [self setMidiChannel:[[proptery midiChannel] intValue] number:[[proptery midiNumber] intValue] forCue:cue];
-                        //[cue set
+                    {
+                        NSString *searchString = [NSString stringWithFormat:@"[%@: %@ (", [module key], [proptery name]];		
+                        // int length = [beginsTest length];
+                        NSRange prefixRange = [beginsTest rangeOfString:searchString options:(0)];
                         
+                        if(prefixRange.length > 0){
+                            
+                            NSString *searchString2 = [NSString stringWithFormat:@"(%@,%@)", [proptery midiChannel], [proptery midiNumber]];		
+                            
+                            NSRange prefixRange2 = [beginsTest rangeOfString:searchString2 options:(0)];
+                            
+                            if(prefixRange2.length != [searchString2 length]){
+                                
+                                
+                                [self setMidiChannel:[[proptery midiChannel] intValue] number:[[proptery midiNumber] intValue] forCue:cue];
+                                
+                                NSRange range = [beginsTest rangeOfString:@")] " options:0];
+                                NSRange replaceRange;
+                                replaceRange.location = 0;
+                                replaceRange.length = range.location;
+                                
+                                NSString * newStr = [NSString stringWithFormat:@"[%@: %@ (%@,%@", [module key], [proptery name], [proptery midiChannel], [proptery midiNumber]];
+                                
+                                NSMutableString * str = [NSMutableString stringWithString:beginsTest];
+                                
+                                [str replaceCharactersInRange:replaceRange withString:newStr];
+                                
+                                
+                                [cue setQName:str];
+
+                            }
+                            
+                        }
+                    }
+                    
+                    {
+                        NSString *searchString = [NSString stringWithFormat:@"[%@: %@]", [module key], [proptery name]];		
+                        // int length = [beginsTest length];
+                        NSRange prefixRange = [beginsTest rangeOfString:searchString options:(0)];
+                        
+                        if(prefixRange.length > 0){
+                            [self setMidiChannel:[[proptery midiChannel] intValue] number:[[proptery midiNumber] intValue] forCue:cue];
+                            
+                            
+                            
+                            NSString * newStr = [NSString stringWithFormat:@"[%@: %@ (%@,%@)]", [module key], [proptery name], [proptery midiChannel], [proptery midiNumber]];
+                            
+                            NSMutableString * str = [NSMutableString stringWithString:beginsTest];
+                            
+                            [str replaceCharactersInRange:prefixRange withString:newStr];
+                            
+                            
+                            [cue setQName:str];
+
+                            //[cue set
+                            
+                        }
+
                     }
                 }
             }

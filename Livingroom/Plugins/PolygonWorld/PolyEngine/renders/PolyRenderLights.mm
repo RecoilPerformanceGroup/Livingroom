@@ -27,17 +27,17 @@
         [self addPropF:@"pointLightX"];
         [self addPropF:@"pointLightY"];
         [self addPropF:@"pointLightZ"];
-        [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.9];
+        [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.8];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
         
         [self addPropF:@"backside"];
         [self addPropF:@"fog"];
         
         [self addPropF:@"pointLightTracking"];
-        [self addPropF:@"pointLightOffsetX"];
-        [self addPropF:@"pointLightOffsetY"];
+        [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.7];
+        [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.7];
         
-        [Prop(@"pointLightTemp") setMidiSmoothing:0.1];
+        [Prop(@"pointLightTemp") setMidiSmoothing:0.7];
         [Prop(@"dirLightTemp") setMidiSmoothing:0.1];
     }
     return self;

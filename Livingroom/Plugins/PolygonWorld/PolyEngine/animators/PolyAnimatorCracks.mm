@@ -56,18 +56,21 @@ struct VectorSortY {
 
 -(void)reset{
     crackLines.clear();
-    for(int i=0;i<5;i++){
+   /* for(int i=0;i<5;i++){
         vector< ofVec2f > v;
         v.push_back([GetPlugin(Mask) triangleFloorCoordinate:0]);
         v.push_back(ofVec2f(0.6+i*0.02, 0.8));
         crackLines.push_back(v);        
-    }
+    }*/
     
     [[engine arrangement] enumerateEdges:^(Arrangement_2::Edge_iterator eit) {
         eit->twin()->data().crackAmount = 0;
         eit->data().crackAmount = 0;
     }];
     
+    [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+        vit->data().crackAmount = 0;
+    }];
     
     
 }
@@ -241,7 +244,7 @@ struct VectorSortY {
                     }
                     
                     if(eit->data().crackAmount != 0){
-                        cout<<eit->data().crackAmount <<endl;
+                 //       cout<<eit->data().crackAmount <<endl;
                     }
                     
                     

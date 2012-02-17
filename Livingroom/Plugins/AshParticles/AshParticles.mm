@@ -534,11 +534,11 @@
                         if(particle != nil){
                             ofVec2f p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.2,0.2),ofRandom(-0.2,0.2));
                             int w=0;
-                            bool ok = NO;
-                            while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
+                            bool ok = YES;
+                           /* while(!ofInsidePoly(p.x, p.y, vector) && w++<20){
                                 p = trackersPoints[t][0]+ofVec2f(ofRandom(-0.1,0.1),ofRandom(-0.1,0.1));
                                 ok = YES;
-                            }
+                            }*/
                             if(ok){
                                 particle->x = p.x;
                                 particle->y = p.y;

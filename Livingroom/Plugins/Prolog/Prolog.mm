@@ -6,8 +6,8 @@
 - (id)init{
     self = [super init];
     if (self) {
-        [[self addPropF:@"circleSize"] setMaxValue:2];
-        [Prop(@"circleSize") setMidiSmoothing:0.99];
+        [[self addPropF:@"circleSize"] setMaxValue:0.5];
+        [Prop(@"circleSize") setMidiSmoothing:0.9];
         
       //  [[self addPropF:@"circleSizeMin"] setMidiSmoothing:0.99];
         //[[self addPropF:@"circleSizeMax"] setMidiSmoothing:0.99];
@@ -25,7 +25,8 @@
         [self addPropF:@"trackingOffsetX"];
         [self addPropF:@"trackingOffsetY"];
 
-        
+        [self addPropF:@"smoothing"];
+
         [self addPropB:@"debug"];
         
     }
@@ -59,7 +60,7 @@
     CachePropF(circleSize);
 
     ofVec2f trackingPoint;
-    ofVec2f fixPoint = [surface convertToProjection:ofVec2f(PropF(@"fixPositionX"), PropF(@"fixPositionY"))];
+    ofVec2f fixPoint = p ;//[surface convertToProjection:ofVec2f(PropF(@"fixPositionX"), PropF(@"fixPositionY"))];
     
     int numTrackers = [GetPlugin(Tracker) numberTrackers];
     if(numTrackers > 0){
@@ -96,8 +97,23 @@
 
         }
         
+//        if(top.y != -1 > 0){
+//            ofVec2f v = (top-bottom)*0.5+bottom;
+//            
+//            
+//            top.y *= 3.0/4.0;
+//            bottom.y *= 3.0/4.0;
+//            float dist = top.distance(bottom);
+//            
+//            if(dist > circleSize){
+//                float diff = dist - circleSize; 
+//                
+//                v -= (top-bottom).normalized()*diff*0.7;
+//            }
+//            trackingPoint = v + ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
+//        }
         if(top.y != -1 > 0){
-            ofVec2f v = (top-bottom)*0.5+bottom;
+            ofVec2f v = top;
             
             
             top.y *= 3.0/4.0;
@@ -107,9 +123,9 @@
             if(dist > circleSize){
                 float diff = dist - circleSize; 
                 
-                v -= (top-bottom).normalized()*diff*0.7;
+                v -= (top-bottom).normalized()*diff;
             }
-            trackingPoint = v + ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
+            trackingPoint = v - ofVec2f(0,0.5*circleSize) - ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
         }
     }
     
@@ -117,8 +133,9 @@
     
     ofVec2f _p = fixPoint*(1-PropF(@"tracking")) +trackingPoint * PropF(@"tracking");
     
-    p.x = filterX.filter(_p.x);
-    p.y = filterY.filter(_p.y);
+    p = p*PropF(@"smoothing") + _p*(1-PropF(@"smoothing"));
+    //p.x = filterX.filter(_p.x);
+    //p.y = filterY.filter(_p.y);
     
 }
 

@@ -26,7 +26,7 @@
         [self addPropF:@"cloudIntensity"];
         [self addPropF:@"cloudSize"];
         [self addPropF:@"originalLinesAlpha"];
-
+        
         
     }
     return self;
@@ -73,17 +73,47 @@
         CachePropF(cloudSize);
         CachePropF(cloudIntensity);
         
+        __block vector<Arrangement_2::Vertex_handle> handles;
+        
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
             if(vit->data().crackAmount > 0){
-                for(int i=0;i<NUM_GRADIENTS;i++){
-                    if(handleToVec2(vit).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size){
-                        gradients[i].val += 0.001;
-                        if(gradients[i].val > 1)
-                            gradients[i].val = 1;
-                    }
-                }
+                handles.push_back(vit);
             }
         }];
+        
+        
+        for(int i=0;i<NUM_GRADIENTS;i++){
+            bool grow = NO;
+            bool shrink = YES;
+            
+            if(gradients[i].val < 1){ 
+                for(int u=0;u<handles.size();u++){
+                    if(handleToVec2(handles[u]).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size){
+                        grow = YES;
+                        shrink = NO;
+                        break;
+                    }
+
+                }
+            } 
+            if(gradients[i].val > 0 && shrink && !grow) {
+                for(int u=0;u<handles.size();u++){
+                    if(handleToVec2(handles[u]).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size){
+                        shrink = NO;
+                        break;
+                    }
+                    
+                }
+            }
+            
+            if(grow)
+                gradients[i].val += 0.0015;
+            if(shrink)
+                gradients[i].val -= 0.05;
+            
+            gradients[i].val = ofClamp(gradients[i].val, 0,1);
+        }
+        
         
         gradient->bind();
         glBegin(GL_QUADS);
@@ -178,7 +208,7 @@
     glEnd();
     
     CachePropF(originalLinesAlpha);
-
+    
     ofEnableAlphaBlending();
     vector< vector<ofVec2f> > crackLines = [(PolyAnimatorCracks*)GetModule(@"Cracks") crackLines]; 
     for(int i=0;i<crackLines.size();i++){
