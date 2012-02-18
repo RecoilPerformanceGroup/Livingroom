@@ -29,6 +29,8 @@
         [Prop(@"midiInput") setMidiNumber:[NSNumber numberWithInt:8]];
         [Prop(@"midiInput") setForcedMidiNumber:YES];
 
+        [[self addPropF:@"midiInputLevel"] setMidiSmoothing:0.95];
+
     }
     return self;
 }
@@ -49,7 +51,7 @@
         centroids.push_back(ofVec2f(0.5,0.5));
     }
     
-    float f = PropF(@"trackerForce") + PropF(@"midiInput");
+    float f = PropF(@"trackerForce") + PropF(@"midiInput")*PropF(@"midiInputLevel");
 
     if(f > 0 && centroids.size() > 0){
         [GetPhysics() addPhysicsBlock:@"TrackerGravity" block:^(PolyArrangement *arrangement) {
