@@ -2,6 +2,7 @@
 #import <ofxCocoaPlugins/Plugin.h>
 #import <ofxCocoaPlugins/filter.h>
 #import <ofxCocoaPlugins/Keystoner.h>
+#import <ofxCocoaPlugins/QTKitMovieRenderer.h>
 
 @interface Prolog : ofPlugin {
     Filter filterX;
@@ -14,6 +15,8 @@
     KeystoneSurface * surface;
     
     ofVec2f top,bottom;
+    
+    QTKitMovieRenderer * moviePlayer;
 }
 
 @end

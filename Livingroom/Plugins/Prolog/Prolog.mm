@@ -1,5 +1,6 @@
 #import "Prolog.h"
 #import "Tracker.h"
+#import "Mask.h"
 
 @implementation Prolog
 
@@ -29,6 +30,11 @@
 
         [self addPropB:@"debug"];
         
+        [self addPropF:@"video"];
+        [self addPropF:@"videoScale"];
+        [[self addPropF:@"videoRotation"] setMinValue:-90 maxValue:90];
+
+        
     }
     
     return self;
@@ -42,6 +48,14 @@
 -(void)setup{
     ofSetCircleResolution(200);
     
+    moviePlayer = [[QTKitMovieRenderer alloc] init];
+    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prototype_1.mp4" allowTexture:YES allowPixels:NO];
+    
+    if(!loaded){
+        NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
+    }
+    
+    [moviePlayer setLoops:NO];
 }
 
 //
@@ -50,6 +64,9 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
+    const CVTimeStamp * time;
+    [[drawingInformation objectForKey:@"outputTime"] getValue:&time];	
+    [moviePlayer update:time];
     //    vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerCentroidVector];
     if(surface == nil){
         surface = Surface(@"Floor", 0);
@@ -167,6 +184,26 @@
             glVertex2f((2.0-triangleLine*2),(triangleLine*2)-1);
             glEnd();
         } PopSurfaceForProjector();
+    }
+    
+    CachePropF(video);
+    if(video){
+        ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
+        trianglePoint = [surface convertToProjection:trianglePoint];
+        
+        if(![moviePlayer rate]){
+            [moviePlayer setRate:1.0];
+            [moviePlayer setPosition:0];
+        }
+        
+        glPushMatrix();
+        glTranslated(trianglePoint.x*0.5,trianglePoint.y,0);
+        glRotated(PropF(@"videoRotation"),0,0,1);
+        [moviePlayer draw:NSMakeRect(0,0,PropF(@"videoScale")*0.5,PropF(@"videoScale")*4.0/3.)];
+        
+        glPopMatrix();
+    } else {
+        [moviePlayer setRate:0.0];
     }
 }
 
