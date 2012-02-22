@@ -135,6 +135,9 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
 #pragma mark Common
 
 -(void)update:(NSDictionary *)drawingInformation{
+    CachePropF(minForce);
+
+    
     if(PropB(@"removeLocks")){
         [Prop(@"removeLocks") setBoolValue:NO];
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
@@ -188,7 +191,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         //Reset accumF
         __block int i=0;
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-            if(vit->data().pos.z == 0){
+            if(vit->data().pos.z == 0 && vit->data().springF.length() > minForce){
                 vit->data().pos.z = sin(i*141.2151)*0.001;
                 vit->data().bornZ = vit->data().pos.z;
             }
@@ -557,7 +560,6 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         // !!!! Vertex position update !!!!
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
-        CachePropF(minForce);
         CachePropF(floorFriction);
         
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
@@ -577,10 +579,10 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 //Activity
                 self.movementActivity = self.movementActivity+vit->data().springV.length();
                 self.movementPan = self.movementPan + vit->data().pos.x;
-                vertCount++;
                 
             } 
-            
+            vertCount++;
+
         }];
         
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
