@@ -50,8 +50,8 @@ struct VectorSortY {
 }
 
 -(void)setup{
-    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
-    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteon60" options:0 context:@"midi"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteoff60" options:0 context:@"midioff"];
 }
 
 -(void)reset{
@@ -80,9 +80,9 @@ struct VectorSortY {
     if([(NSString*)context isEqualToString:@"midi"]){
         // cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
         if(!PropF(@"reverse")){
-            impulse = [[object valueForKey:@"noteon48"] intValue];
+            impulse = [[object valueForKey:@"noteon60"] intValue];
         } else {
-            invimpulse = [[object valueForKey:@"noteon48"] intValue];
+            invimpulse = [[object valueForKey:@"noteon60"] intValue];
         }
     }
     //  if([(NSString*)context isEqualToString:@"midioff"]){
@@ -94,11 +94,6 @@ struct VectorSortY {
         [self reset];
     }
     //Reset
-    /*[[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-     vit->data().crackDir = ofVec2f();
-     vit->data().crackAmount = 0;
-     }];
-     */        
     
     //avarage halfedges
     
@@ -292,6 +287,8 @@ struct VectorSortY {
                                 //Determine if this edge is interesting at all
                                 if(curr->face()->is_unbounded() || curr->twin()->face()->is_unbounded()){
                                     //Edge is not OK
+                                } else if(v.size() > 0 && handleToVec2(u).distance(v[0]) > 0.2){
+                                    
                                 } else if(ratio < 1.0/50 && press < 3.0){
                                     //Angle not OK
                                 } else if(ratio < 1.0/90 && press < 5.0){

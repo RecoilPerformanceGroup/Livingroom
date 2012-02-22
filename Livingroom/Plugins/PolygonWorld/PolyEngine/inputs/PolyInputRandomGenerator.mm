@@ -18,6 +18,7 @@
         [self addPropF:@"generate"];
         [self addPropF:@"deleteLength"];        
         [self addPropF:@"triangleFilter"];        
+        [self addPropF:@"sideOverflow"];        
     }
     return self;
 }
@@ -37,9 +38,9 @@
     /*
      CGAL::Random_points_in_square_2<Delaunay::Point,Creator> g(0.5);    
      CGAL::copy_n( g, PropI(@"numPoints"), std::back_inserter(dt));*/
-    
+    CachePropF(sideOverflow);
     for(int i=0;i<PropI(@"numPoints"); i++){
-        dt.push_back(Point_2(ofRandom(0,1), ofRandom(0,1)));
+        dt.push_back(Point_2(ofRandom(0-sideOverflow,1+sideOverflow), ofRandom(0-sideOverflow,1+sideOverflow)));
     }
     
     
