@@ -21,6 +21,8 @@
     [self addPropF:@"triangleWhiteG"];
     [self addPropF:@"triangleWhiteB"];
 
+    [self addPropF:@"stageMask"];
+
     [self addPropF:@"triangleBlack"];
     
     [self addPropF:@"publys"];
@@ -119,6 +121,21 @@
 -(void)draw:(NSDictionary *)drawingInformation{
     ofEnableAlphaBlending();
     ofFill();
+    
+    if(PropB(@"stageMask")){
+        ApplySurface(@"Floor");
+        ofFill();
+        ofSetColor(0,0,0,255);
+        ofRect(-1,-1,1,3);
+        ofRect(1,-1,1,3);
+        
+        ofRect(-1,-1,3,1);
+        ofRect(-1,1,3,1);
+        
+        PopSurface();
+        
+    }
+    
     ofSetColor(0,0,0,255.0*PropF(@"rightBlind"));
     ofRect(0,0,0.5,1);
     
@@ -152,6 +169,9 @@
         PopSurface();
         
     }
+    
+    
+
     
 }
 
