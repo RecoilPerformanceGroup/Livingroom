@@ -31,6 +31,8 @@
         [self addPropF:@"springStrength"];
         [self addPropF:@"spring2dStrength"];
         [self addPropF:@"ZzeroForce"];  
+        [self addPropF:@"ZOffsetZeroForce"];  
+        [self addPropF:@"ZOffsetReset"];  
         [self addPropF:@"FlatNormalForce"];
         [[self addPropF:@"FlatNormalForceAngle"] setMaxValue:180.0];
         
@@ -339,18 +341,36 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         
         
         //
-        //Calculate the vertex to vertex spring force
+        //Calculate the zero force
         //
         float f = PropF(@"ZzeroForce");
         if(f > 0){
             
             [self addPhysicsBlock:@"ZzeroForce" block:^(PolyArrangement *arrangement) {
                 
-                [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                    vit->data().springF += ofVec3f(0,0,f*(vit->data().bornZ-vit->data().pos.z));
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    vit->data().springF += ofVec3f(0,0,f*(0-vit->data().pos.z));
                 }];
             }];
         }
+
+        
+        if(PropB(@"ZOffsetReset")){
+            [Prop(@"ZOffsetReset") setBoolValue:NO];
+            [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                vit->data().bornZ = handleToVec3(vit).z;
+            }];
+        }
+        
+        CachePropF(ZOffsetZeroForce);
+        if(ZOffsetZeroForce > 0){
+            [self addPhysicsBlock:@"ZOffsetZeroForce" block:^(PolyArrangement *arrangement) {
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    vit->data().springF += ofVec3f(0,0,ZOffsetZeroForce*(vit->data().bornZ-vit->data().pos.z));
+                }];
+            }];
+        }
+
         
         
         //
