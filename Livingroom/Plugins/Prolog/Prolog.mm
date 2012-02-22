@@ -33,7 +33,8 @@
         [self addPropF:@"video"];
         [self addPropF:@"videoScale"];
         [[self addPropF:@"videoRotation"] setMinValue:-90 maxValue:90];
-
+        
+        [self addPropF:@"spotVideo"];
         
     }
     
@@ -78,6 +79,11 @@
 
     ofVec2f trackingPoint;
     ofVec2f fixPoint = p ;//[surface convertToProjection:ofVec2f(PropF(@"fixPositionX"), PropF(@"fixPositionY"))];
+    
+    ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
+    trianglePoint = [surface convertToProjection:trianglePoint];
+    
+//    ofVec2f videoPoint = ofVec2f(
     
     int numTrackers = [GetPlugin(Tracker) numberTrackers];
     if(numTrackers > 0){
