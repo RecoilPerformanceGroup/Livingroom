@@ -24,10 +24,12 @@
         [self addPropF:@"lineWidthMax"];
         
         [self addPropF:@"cloudIntensity"];
-        [self addPropF:@"cloudSize"];
+        [[self addPropF:@"cloudSize"] setMaxValue:1.2];
+        [self addPropF:@"cloudMask"];
+        [self addPropF:@"cloudStart"];
+        
+        
         [self addPropF:@"originalLinesAlpha"];
-        
-        
     }
     return self;
 }
@@ -65,6 +67,10 @@
 -(void)draw:(NSDictionary *)drawingInformation{
     //    ApplySurfaceForProjector(@"Floor",0);{
     
+    CachePropF(cloudMask);
+    CachePropF(cloudStart);
+    
+    
     ofEnableAlphaBlending();
     
     
@@ -81,20 +87,25 @@
             }
         }];
         
-        
+        ofVec2f triangle = [GetPlugin(Mask) triangleFloorCoordinate:0];
         for(int i=0;i<NUM_GRADIENTS;i++){
             bool grow = NO;
             bool shrink = YES;
             
             if(gradients[i].val < 1){ 
                 for(int u=0;u<handles.size();u++){
-                    if(handleToVec2(handles[u]).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size){
-                        grow = YES;
-                        shrink = NO;
-                        break;
+                    if(gradients[i].y > cloudMask &&  handleToVec2(handles[u]).distance(ofVec2f(gradients[i].x, gradients[i].y)) < gradients[i].size ){
+                           grow = YES;
+                           shrink = NO;
+                           break;
                     }
-
                 }
+                
+                if(gradients[i].y > cloudMask && 
+                   ofVec2f(gradients[i].x, gradients[i].y).distance(triangle) < cloudStart){
+                       grow = YES;
+                       shrink = NO;
+                } 
             } 
             if(gradients[i].val > 0 && shrink && !grow) {
                 for(int u=0;u<handles.size();u++){
@@ -104,6 +115,10 @@
                     }
                     
                 }
+                if(gradients[i].y > cloudMask && 
+                   ofVec2f(gradients[i].x, gradients[i].y).distance(triangle) < cloudStart){
+                    shrink = NO;
+                } 
             }
             
             if(grow)

@@ -7,7 +7,7 @@
 //
 
 #import "PolyRender.h"
-#define NUM_GRADIENTS 200
+#define NUM_GRADIENTS 100
 #import "LEDGrid.h"
 
 
