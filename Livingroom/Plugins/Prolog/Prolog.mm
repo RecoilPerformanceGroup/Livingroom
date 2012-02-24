@@ -23,8 +23,8 @@
         [self addPropF:@"fixPositionY"];
         [self addPropF:@"tracking"];
         
-        [self addPropF:@"trackingOffsetX"];
-        [self addPropF:@"trackingOffsetY"];
+        [[self addPropF:@"trackingOffsetX"]setMidiSmoothing:0.8];
+        [[self addPropF:@"trackingOffsetY"] setMidiSmoothing:0.8];
 
         [self addPropF:@"smoothing"];
 
@@ -152,7 +152,17 @@
         }
     }
     
-    size = filterSize.filter(circleSize);
+    if(circleSize == 0){
+        size = 0;
+        filterSize.setStartValue(0);
+    } else {
+        size = filterSize.filter(circleSize);
+    }
+    
+    
+    if(numTrackers == 0){
+        trackingPoint = p;
+    }
     
     ofVec2f _p = fixPoint*(1-PropF(@"tracking")) +trackingPoint * PropF(@"tracking");
     

@@ -20,6 +20,7 @@
 -(id)init{
     if(self = [super init]){
         arr = new Arrangement_2;
+        triangleArr = new Arrangement_2;
         obs = new PolyDataObserver(arr);
     }
     return self;
@@ -47,6 +48,22 @@
     }
 }
 
+- (Arrangement_2 *)triangleArrData
+{
+    @synchronized(self)
+    {
+        return triangleArr;
+    }
+}
+- (void)setTriangleArrData:(Arrangement_2 *)aArr
+{
+    @synchronized(self)
+    {
+        if(triangleArr)
+            delete triangleArr;
+        triangleArr = aArr;
+    }
+}
 
 -(void) updateHoles{
     holes.clear();

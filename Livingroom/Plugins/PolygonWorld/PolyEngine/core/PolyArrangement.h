@@ -12,11 +12,13 @@
 
 @interface PolyArrangement : NSObject{
     Arrangement_2 * arr;
+    Arrangement_2 * triangleArr;
     PolyDataObserver * obs;
     vector<Arrangement_2::Face_handle> holes;
 }
 
 @property (readwrite) Arrangement_2 * arrData;
+@property (readwrite) Arrangement_2 * triangleArrData;
 
 -(Point_2) n_point;
 

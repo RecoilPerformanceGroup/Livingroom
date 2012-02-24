@@ -30,10 +30,15 @@
         [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.8];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
         
+        [[self addPropF:@"triangleLight"]setMinValue:0 maxValue:1];
+        [[self addPropF:@"triangleMinLight"]setMinValue:0 maxValue:1];
+        [[self addPropF:@"triangleTemp"]setMinValue:0 maxValue:1];
+
+        
         [self addPropF:@"backside"];
         [self addPropF:@"fog"];
         
-        [self addPropF:@"pointLightTracking"];
+        [[self addPropF:@"pointLightTracking"] setMaxValue:0.02];
         [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.7];
         [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.7];
         
@@ -49,12 +54,16 @@
 }
 
 -(void)update:(NSDictionary *)drawingInformation{
+    CachePropF(pointLightTracking);
     if(PropB(@"pointLightTracking")){
         vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerFeetVector];
-        
+        ofVec2f p = ofVec2f(PropF(@"pointLightX"), PropF(@"pointLightY"));
         if(centroids.size() > 0){
-            [Prop(@"pointLightX") setFloatValue:centroids[0].x+ PropF(@"pointLightOffsetX")];
-            [Prop(@"pointLightY") setFloatValue:centroids[0].y+ PropF(@"pointLightOffsetY")];
+            ofVec2f t = ofVec2f(centroids[0].x+ PropF(@"pointLightOffsetX"), centroids[0].y+ PropF(@"pointLightOffsetY"));
+            p = p * (1-pointLightTracking) + t * pointLightTracking;
+
+            [Prop(@"pointLightX") setFloatValue:p.x];
+            [Prop(@"pointLightY") setFloatValue:p.y];
         }        
     }
 }
@@ -65,14 +74,17 @@
     light1[0] = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
     light1[1] = ofVec3f(PropF(@"dirLight2X"), PropF(@"dirLight2Y"), PropF(@"dirLight2Z")).normalized();
     
-    ofVec3f light1Color[2];
+    ofVec3f light1Color[3];
     light1Color[0] = colorTemp(PropI(@"dirLightTemp"), PropF(@"dirLightIntensity"));
     light1Color[1] = colorTemp(PropI(@"dirLight2Temp"), PropF(@"dirLight2Intensity"));
-    
-    
+
     
     ofVec3f light2 = ofVec3f(PropF(@"pointLightX"), PropF(@"pointLightY"), PropF(@"pointLightZ"));
     ofVec3f light2Color = colorTemp(PropI(@"pointLightTemp"), PropF(@"pointLightIntensity"));
+    
+    ofVec3f triangleLightVec = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
+    ofVec3f triangleTemp = colorTemp(PropI(@"triangleTemp"), PropF(@"triangleLight"));
+
     
     if(PropF(@"fog") > 0){
         GLuint filter;                      // Which Filter To Use
@@ -183,7 +195,84 @@
         
     } PopPerspective();
     
-    glDisable(GL_FOG);             
+    glDisable(GL_FOG);  
+    
+//    ApplySurface(@"Floor");
+//    ofFill();
+//    ofSetColor(0,0,0,255);
+//    ofRect(-1,-1,1,3);
+//    ofRect(1,-1,1,3);
+//    
+//    ofRect(-1,-1,3,1);
+//    ofRect(-1,1,3,1);
+//    
+//    PopSurface();
+/*
+    CachePropF(triangleLight);
+    CachePropF(triangleMinLight);
+    ApplySurface(@"Triangle");{
+        Arrangement_2::Face_iterator fit = [[engine arrangement] triangleArrData]->faces_begin();  
+        
+        for ( ; fit !=[[engine arrangement] triangleArrData]->faces_end(); ++fit) {
+            ofVec3f color;
+            
+            
+            ofVec3f n = -calculateFaceNormal(fit);
+            
+            if(n.length() > 0){
+                ofVec3f mid = calculateFaceMid(fit);
+                
+                //Dir light
+                for(int i=0;i<2;i++)
+                {
+                    float angle = triangleLightVec.angle(n);
+                    if(angle < 90 || PropB(@"backside")){
+                        //                        ofVec3f l1 = n*light1;
+                        //                        color += light1Color*l1.length();
+                        color += triangleTemp[i]*fabs(90-angle)/90.0;
+                    }
+                }
+                
+                //Min light
+                { 
+                    if(color.length() < triangleMinLight){
+                        color.normalize();
+                        color *= triangleMinLight;
+                    }
+                }
+                glColor4f(color.x,color.y,color.z,1);
+                
+                if(!fit->data().hole){
+                    if(!fit->is_fictitious()){
+                        if(fit->number_of_outer_ccbs() == 1){
+                            glBegin(GL_POLYGON);
+                            
+                            Arrangement_2::Ccb_halfedge_circulator ccb_start = fit->outer_ccb();
+                            Arrangement_2::Ccb_halfedge_circulator hc = ccb_start; 
+                            
+                            do { 
+                                //        ofVec2f v2 = point2ToVec2(hc->source()->point());
+                                
+                                ofVec3f p = handleToVec3(hc->source());
+                                if(p.z == 0){
+                                    setHandlePos(p + ofVec3f(0,0,ofRandom(-1,1)), hc->source());
+                                }
+                                glVertex3d(p.x , p.y, (p.z)*zScale);
+                                // cout<<p.z<<endl;
+                                //                            cout<<p.x<<"  "<<p.y<<endl;
+                                //  glVertex2d(CGAL::to_double(hc->source()->point().x()) , CGAL::to_double(hc->source()->point().y()));
+                                ++hc; 
+                            } while (hc != ccb_start); 
+                            glEnd();  
+                            
+                        }            
+                    }
+                }
+                
+            }
+        }
+    } PopSurface();*/
+    
 }
 
 @end

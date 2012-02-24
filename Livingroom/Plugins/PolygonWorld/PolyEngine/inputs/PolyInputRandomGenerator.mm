@@ -19,6 +19,8 @@
         [self addPropF:@"deleteLength"];        
         [self addPropF:@"triangleFilter"];        
         [self addPropF:@"sideOverflow"];        
+        
+        [self addPropF:@"triangle"];     
     }
     return self;
 }
@@ -35,6 +37,10 @@
     
     Delaunay dt;
     
+    Arrangement_2 * arr = [[engine arrangement] arrData]; 
+    if(PropF(@"triangle")){
+        arr = [[engine arrangement] triangleArrData];
+    }
     /*
      CGAL::Random_points_in_square_2<Delaunay::Point,Creator> g(0.5);    
      CGAL::copy_n( g, PropI(@"numPoints"), std::back_inserter(dt));*/
@@ -47,7 +53,7 @@
     Delaunay::Finite_faces_iterator vit = dt.finite_faces_begin();
     for( ; vit != dt.finite_faces_end(); ++vit){     
         for(int i=0;i<3;i++){
-            CGAL::insert(*[[engine arrangement] arrData],  dt.segment(vit, i));
+            CGAL::insert(*arr,  dt.segment(vit, i));
         }
     }
     //    dt.insert(convexPolygons[i].vertices_begin(), 
@@ -58,14 +64,15 @@
     //Trip around boundary and delete it
     
     CachePropF(deleteLength);
-    
-    for(int i=0;i<10;i++){
-        vector< vector<Arrangement_2::Halfedge_const_handle> > v = [[engine arrangement] boundaryHandles];
-        for(int i=0;i<v.size();i++){
-            for(int u=0;u<v[i].size();u++){
-                Halfedge_handle h= [[engine arrangement] arrData]->non_const_handle(v[i][u]);
-                if(edgeLength(h) > deleteLength)
-                    [[engine arrangement] arrData]->remove_edge(h);
+    if(!PropF(@"triangle")){
+        for(int i=0;i<10;i++){
+            vector< vector<Arrangement_2::Halfedge_const_handle> > v = [[engine arrangement] boundaryHandles];
+            for(int i=0;i<v.size();i++){
+                for(int u=0;u<v[i].size();u++){
+                    Halfedge_handle h= arr->non_const_handle(v[i][u]);
+                    if(edgeLength(h) > deleteLength)
+                        arr->remove_edge(h);
+                }
             }
         }
     }
@@ -92,11 +99,11 @@
                     deleteHandles.push_back( eit);
                 }
             }
-
+            
         }];
         
         for(int i=0;i<deleteHandles.size();i++){
-            [[engine arrangement] arrData]->remove_edge(deleteHandles[i]);
+            arr->remove_edge(deleteHandles[i]);
         }
     }
     
