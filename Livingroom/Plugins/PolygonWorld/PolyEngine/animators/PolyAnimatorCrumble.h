@@ -10,6 +10,8 @@
 
 @interface PolyAnimatorCrumble : PolyAnimator{
     float crumbleSum;
+    
+    float lastMidiInput;
 }
 @property (readwrite) float crumbleSum;
 -(void) addCrumbleSum:(float)sum;

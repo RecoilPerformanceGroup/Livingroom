@@ -9,6 +9,7 @@
 
 #import "PolyAnimatorCrumble.h"
 #import "PolyAnimatorPhysics.h"
+#import "PolyAnimatorGravity.h"
 #import <ofxCocoaPlugins/CustomGraphics.h>
 
 
@@ -24,6 +25,8 @@
         [self addPropF:@"crumbleForce2"];
         [self addPropF:@"decrumbleForce"];
         [[self addPropF:@"decrumbleForceRadius"] setMidiSmoothing:0.96];
+        
+        [self addPropF:@"crumbleCenter"];
         
         
         [self addPropF:@"cutHole"];
@@ -75,6 +78,56 @@
             }
         }];
     }
+    
+    
+    CachePropF(crumbleCenter);
+    if(crumbleCenter){
+        PolyAnimatorGravity* gravity = ((PolyAnimatorGravity*)GetModule(@"Gravity"));
+        float midiInput = [[[gravity properties] valueForKey:@"midiInput"] floatValue]/2.5;
+       // if(midiInput > lastMidiInput){
+            [GetPhysics() addPhysicsBlock:@"CrumbleCenterDecrumble" block:^(PolyArrangement *arrangement) {                           
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                    ofVec2f origP = point2ToVec2(vit->point());
+                    ofVec2f p = handleToVec2(vit);
+                    ofVec2f dir = origP - p;
+                    
+                    float dist = p.distance(ofVec2f(0.5,0.5));
+                    if(dist < midiInput){
+                        vit->data().springF += crumbleCenter * dir*(midiInput-dist);
+                    }
+                }];
+            }];
+      //  } else {
+            ofVec2f p = ofVec2f(0.5,0.5);
+            [GetPhysics() addPhysicsBlock:@"CrumbleCenterCrumble" block:^(PolyArrangement *arrangement) {           
+                {
+                    [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {                           
+                        ofVec2f vertex = handleToVec2(vit);
+                        if(p.distance(vertex) > midiInput){
+                            ofVec2f vdir = p - vertex;
+                            
+                            float l = vdir.length();
+                            
+                            vdir.normalize();
+                            vdir *= l - midiInput;
+                            ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
+                            vit->data().springF += vdir*l*2.0;      
+                            
+                            //Force in z=0
+                            float zDiff = vit->data().pos.z;
+                            vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
+                        }
+                        
+                    }];
+                }
+                //  cout<<_crumbleSum<<endl;
+                //            crumbleSum += _crumbleSum;
+            }];
+  //      }
+        lastMidiInput = midiInput;   
+    }
+    
+    
     
     CachePropF(crumbleForce);
     float mouseR = PropF(@"mouseRadius");
@@ -193,29 +246,29 @@
     
     CachePropF(decrumbleForce);
     CachePropF(decrumbleForceRadius);
-
+    
     if(decrumbleForce > 0){
         [GetPhysics() addPhysicsBlock:@"DecrumbleForce" block:^(PolyArrangement *arrangement) {
             /*
-            if(centroids.size() >= 2){
-               vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
-                
-                for(int i=0;i<boundaryHandles.size();i++){
-                    for(int u=0;u<boundaryHandles[i].size();u++){
-                        Arrangement_2::Halfedge_handle handle = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
-                    
-                        ofVec2f p = handleToVec2(handle->source());
-
-                        float dist = centroids[1].distance(p);
-                        if(dist < decrumbleForceRadius){
-                            ofVec2f origP = point2ToVec2(handle->source()->point());
-                            ofVec2f dir = origP - p;
-                            handle->source()->data().springF += decrumbleForce * dir * (decrumbleForceRadius-dist);
-                        }
-                        
-                    }
-                }
-            }*/
+             if(centroids.size() >= 2){
+             vector< vector<Arrangement_2::Halfedge_const_handle> > boundaryHandles = [arrangement boundaryHandles];
+             
+             for(int i=0;i<boundaryHandles.size();i++){
+             for(int u=0;u<boundaryHandles[i].size();u++){
+             Arrangement_2::Halfedge_handle handle = [arrangement arrData]->non_const_handle(boundaryHandles[i][u]);
+             
+             ofVec2f p = handleToVec2(handle->source());
+             
+             float dist = centroids[1].distance(p);
+             if(dist < decrumbleForceRadius){
+             ofVec2f origP = point2ToVec2(handle->source()->point());
+             ofVec2f dir = origP - p;
+             handle->source()->data().springF += decrumbleForce * dir * (decrumbleForceRadius-dist);
+             }
+             
+             }
+             }
+             }*/
             
             [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
                 ofVec2f origP = point2ToVec2(vit->point());
@@ -227,7 +280,7 @@
                     vit->data().springF += decrumbleForce * dir*(decrumbleForceRadius*2-dist);
                 }
             }];
-             
+            
         }];
     }
     
