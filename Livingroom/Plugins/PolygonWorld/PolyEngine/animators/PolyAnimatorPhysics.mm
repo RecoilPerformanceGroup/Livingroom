@@ -35,6 +35,7 @@
         [self addPropF:@"ZOffsetReset"];  
         [self addPropF:@"FlatNormalForce"];
         [[self addPropF:@"FlatNormalForceAngle"] setMaxValue:180.0];
+        [self addPropF:@"maxSpeed"];
         
         //State 2:
         [self addPropF:@"angleStiffnesForce"];
@@ -581,7 +582,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         CachePropF(floorFriction);
-        
+        CachePropF(maxSpeed);
         [[engine arrangement] enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
             
             vit->data().springF += vit->data().springFNoItt;
@@ -592,6 +593,10 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                 
                 //Friction
                 vit->data().springV *= ofVec3f(1.0-floorFriction,1.0-floorFriction,1.0);
+                
+                if(maxSpeed){
+                    vit->data().springV.limit(maxSpeed*0.1); 
+                }
                 
                 //Update position
                 setHandlePos(vit->data().springV + vit->data().pos, vit);
