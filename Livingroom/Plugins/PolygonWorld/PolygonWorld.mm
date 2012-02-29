@@ -126,6 +126,7 @@
         [self clearArrangement:self];
         [Prop(@"clearArrangement") setBoolValue:NO];
     }
+    
     [polyEngine update:drawingInformation];
 }
 

@@ -105,13 +105,13 @@
 
 
 -(void)update:(NSDictionary *)drawingInformation{
-    OpenDMX * dmx = GetPlugin(OpenDMX);
+    /*OpenDMX * dmx = GetPlugin(OpenDMX);
     [dmx setValue:PropF(@"publys")*255.0 forChannel:5];
     [dmx setValue:PropF(@"publys")*255.0 forChannel:13];
     
     [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:157];
     [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:165];
-    [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:173];
+    [dmx setValue:PropF(@"trackinglys")*255.0 forChannel:173];*/
 }
 
 //
@@ -136,11 +136,15 @@
         
     }
     
+    if(PropF(@"rightBlind")){
     ofSetColor(0,0,0,255.0*PropF(@"rightBlind"));
     ofRect(0,0,0.5,1);
+    }
     
+    if(PropF(@"leftBlind")){
     ofSetColor(0,0,0,255.0*PropF(@"leftBlind"));
     ofRect(0.5,0,0.5,1);
+    }
     
     ApplySurface(@"Triangle"){
         float aspect = Aspect(@"Triangle",0);

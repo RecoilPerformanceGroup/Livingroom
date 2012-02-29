@@ -39,8 +39,8 @@
         [self addPropF:@"fog"];
         
         [[self addPropF:@"pointLightTracking"] setMaxValue:0.02];
-        [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.7];
-        [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.7];
+        [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.9];
+        [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.9];
         
         [Prop(@"pointLightTemp") setMidiSmoothing:0.7];
         [Prop(@"dirLightTemp") setMidiSmoothing:0.1];

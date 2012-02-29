@@ -6,6 +6,7 @@
 
 -(void)initPlugin{
     [self addPropF:@"fillAdd"];    
+    [self addPropF:@"fillAddMax"];    
     [[self addPropF:@"fillSet"] setMidiSmoothing:0.7];    
     [self addPropF:@"fade"];
     [self addPropF:@"tracker"];
@@ -166,7 +167,7 @@
         }
     }
     
-    cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 1, 255, CV_THRESH_TRUNC);
+    cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), PropF(@"fillAddMax"), 255, CV_THRESH_TRUNC);
 	cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 0, 255, CV_THRESH_TOZERO);
     cvImage.flagImageChanged();
     

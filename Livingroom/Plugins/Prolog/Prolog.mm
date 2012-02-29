@@ -10,7 +10,7 @@
         [[self addPropF:@"circleSize"] setMaxValue:0.5];
         [Prop(@"circleSize") setMidiSmoothing:0.9];
         
-      //  [[self addPropF:@"circleSizeMin"] setMidiSmoothing:0.99];
+        //  [[self addPropF:@"circleSizeMin"] setMidiSmoothing:0.99];
         //[[self addPropF:@"circleSizeMax"] setMidiSmoothing:0.99];
         
         [[self addPropF:@"aspect"] setMaxValue:2];
@@ -25,9 +25,9 @@
         
         [[self addPropF:@"trackingOffsetX"]setMidiSmoothing:0.8];
         [[self addPropF:@"trackingOffsetY"] setMidiSmoothing:0.8];
-
+        
         [self addPropF:@"smoothing"];
-
+        
         [self addPropB:@"debug"];
         
         [self addPropF:@"video"];
@@ -45,12 +45,12 @@
 //----------------
 //
 
-
 -(void)setup{
+    [Prop(@"video") setFloatValue:0];
     ofSetCircleResolution(200);
     
     moviePlayer = [[QTKitMovieRenderer alloc] init];
-    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prototype_1.mp4" allowTexture:YES allowPixels:NO];
+    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mov" allowTexture:YES allowPixels:NO];
     
     if(!loaded){
         NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
@@ -67,32 +67,34 @@
 -(void)update:(NSDictionary *)drawingInformation{
     const CVTimeStamp * time;
     [[drawingInformation objectForKey:@"outputTime"] getValue:&time];	
-    [moviePlayer update:time];
+    
+    if(PropB(@"video"))
+        [moviePlayer update:time];
     //    vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerCentroidVector];
     if(surface == nil){
         surface = Surface(@"Floor", 0);
     }
     
-   // CachePropF(circleSizeMin);
-   // CachePropF(circleSizeMax);
+    // CachePropF(circleSizeMin);
+    // CachePropF(circleSizeMax);
     CachePropF(circleSize);
-
+    
     ofVec2f trackingPoint;
     ofVec2f fixPoint = p ;//[surface convertToProjection:ofVec2f(PropF(@"fixPositionX"), PropF(@"fixPositionY"))];
     
     ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
     trianglePoint = [surface convertToProjection:trianglePoint];
     
-//    ofVec2f videoPoint = ofVec2f(
+    //    ofVec2f videoPoint = ofVec2f(
     
     int numTrackers = [GetPlugin(Tracker) numberTrackers];
     if(numTrackers > 0){
         top=ofVec2f(-1,-1);
         bottom=ofVec2f(-1,-1);
-
+        
         for(int i=0;i<numTrackers;i++){
             vector< ofVec2f > points = [GetPlugin(Tracker) trackerBlob:i];
-           
+            
             if(points.size() > 0){                
                 for(int i=0;i<points.size();i++){
                     ofVec2f projp = [surface convertToProjection:points[i]];
@@ -117,24 +119,24 @@
                     
                 }
             }
-
+            
         }
         
-//        if(top.y != -1 > 0){
-//            ofVec2f v = (top-bottom)*0.5+bottom;
-//            
-//            
-//            top.y *= 3.0/4.0;
-//            bottom.y *= 3.0/4.0;
-//            float dist = top.distance(bottom);
-//            
-//            if(dist > circleSize){
-//                float diff = dist - circleSize; 
-//                
-//                v -= (top-bottom).normalized()*diff*0.7;
-//            }
-//            trackingPoint = v + ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
-//        }
+        //        if(top.y != -1 > 0){
+        //            ofVec2f v = (top-bottom)*0.5+bottom;
+        //            
+        //            
+        //            top.y *= 3.0/4.0;
+        //            bottom.y *= 3.0/4.0;
+        //            float dist = top.distance(bottom);
+        //            
+        //            if(dist > circleSize){
+        //                float diff = dist - circleSize; 
+        //                
+        //                v -= (top-bottom).normalized()*diff*0.7;
+        //            }
+        //            trackingPoint = v + ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
+        //        }
         if(top.y != -1 > 0){
             ofVec2f v = top;
             
@@ -151,6 +153,48 @@
             trackingPoint = v - ofVec2f(0,0.5*circleSize) - ofVec2f(PropF(@"trackingOffsetX"), PropF(@"trackingOffsetY"));;
         }
     }
+
+    
+    if(numTrackers == 0){
+        trackingPoint = p;
+    }
+    
+    
+    ofVec2f _p = fixPoint*(1-PropF(@"tracking")) +trackingPoint * PropF(@"tracking");
+    
+    CachePropF(spotVideo);
+    if(spotVideo && [moviePlayer movieSize].width > 0){
+        ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
+        trianglePoint = [surface convertToProjection:trianglePoint];
+//
+//        glTranslated(trianglePoint.x*0.5,trianglePoint.y,0);
+//        
+//        glScaled(0.5,4.0/3.,1);
+//        glRotated(PropF(@"videoRotation"),0,0,1);
+//
+//
+        float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
+
+        ofVec2f videoSpotCenter = ofVec2f(282-[moviePlayer movieSize].width*0.5,380) / ofVec2f([moviePlayer movieSize].width , [moviePlayer movieSize].height);
+        
+     //   circleSize = circleSize * (1-spotVideo) + spotVideo* (PropF(@"videoScale")*([moviePlayer movieSize].width - 24)/[moviePlayer movieSize].width);
+       circleSize = videoAspect*(PropF(@"videoScale")*([moviePlayer movieSize].width - 24 )/[moviePlayer movieSize].width);
+        
+       // cout<<circleSize<<endl;
+//        videoCenter.rotate(-PropF(@"videoRotation"), ofVec2f(0,0.5));
+  //      videoCenter = videoCenter + trianglePoint;
+        ofVec2f v1 = ofVec2f(videoSpotCenter.x*PropF(@"videoScale"),videoSpotCenter.y*PropF(@"videoScale")).rotate(PropF(@"videoRotation"));;
+        v1 *= ofVec2f(1,4.0/3.0);
+                                                                                                                   
+        ofVec2f videoCenter = trianglePoint + v1;
+//        videoCenter.rotate(PropF(@"videoRotation"), trianglePoint);
+
+        _p = _p * (1.0-spotVideo) + videoCenter * spotVideo;
+        
+    }
+    p = p*PropF(@"smoothing") + _p*(1-PropF(@"smoothing"));
+    
+    
     
     if(circleSize == 0){
         size = 0;
@@ -158,15 +202,6 @@
     } else {
         size = filterSize.filter(circleSize);
     }
-    
-    
-    if(numTrackers == 0){
-        trackingPoint = p;
-    }
-    
-    ofVec2f _p = fixPoint*(1-PropF(@"tracking")) +trackingPoint * PropF(@"tracking");
-    
-    p = p*PropF(@"smoothing") + _p*(1-PropF(@"smoothing"));
     //p.x = filterX.filter(_p.x);
     //p.y = filterY.filter(_p.y);
     
@@ -182,7 +217,7 @@
     ofFill();
     ofSetColor(255,255,255);
     
-    ofEllipse(s.x*0.5, s.y, size*0.5, 4.0/3.0*size*PropF(@"aspect"));
+    ofEllipse(s.x*0.5, s.y, size*0.5, 4.0/3.0);
     
     if(PropB(@"debug")){
         ofSetColor(255,255,0);
@@ -204,6 +239,8 @@
     
     CachePropF(video);
     if(video){
+        ofEnableAlphaBlending();
+        glColor4f(1.,1.,1.,video);
         ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
         trianglePoint = [surface convertToProjection:trianglePoint];
         
@@ -214,8 +251,12 @@
         
         glPushMatrix();
         glTranslated(trianglePoint.x*0.5,trianglePoint.y,0);
+        
+        glScaled(0.5,4.0/3.,1);
         glRotated(PropF(@"videoRotation"),0,0,1);
-        [moviePlayer draw:NSMakeRect(0,0,PropF(@"videoScale")*0.5,PropF(@"videoScale")*4.0/3.)];
+        float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
+        //   glTranslated(-[moviePlayer movieSize].width*PropF(@"videoScale")*0.5,0,0);        
+        [moviePlayer draw:NSMakeRect(-PropF(@"videoScale")*videoAspect*0.5,0,PropF(@"videoScale")*videoAspect,PropF(@"videoScale"))];
         
         glPopMatrix();
     } else {

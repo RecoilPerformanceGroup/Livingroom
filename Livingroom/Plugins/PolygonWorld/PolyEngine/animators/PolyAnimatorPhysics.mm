@@ -653,7 +653,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
             
         }
 
-        movementActivitySmooth -= 0.4 ;
+        movementActivitySmooth -= 0.01 ;
         if(movementActivitySmooth<0)
             movementActivitySmooth = 0;
     }

@@ -193,14 +193,14 @@
 }
 - (void) update:(NSDictionary*)drawingInformation{
     for(PolyModule * module in [modules allValues]){
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             for(PolyNumberProperty * prop in [[module properties] allValues]){
                 // 
                 
                 [prop update];
                 //
             }
-        }];
+  //      }];
 
         if([module active]){
             if([[[module properties] valueForKey:@"reset"] boolValue]){
