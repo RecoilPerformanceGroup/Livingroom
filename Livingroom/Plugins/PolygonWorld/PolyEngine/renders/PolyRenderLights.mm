@@ -24,11 +24,19 @@
         [[self addPropF:@"dirLight2Temp"] setMinValue:1000 maxValue:10000];
         [[self addPropF:@"dirLight2Intensity"] setMidiSmoothing:0.9];
         
-        [self addPropF:@"pointLightX"];
-        [self addPropF:@"pointLightY"];
-        [self addPropF:@"pointLightZ"];
+        [[self addPropF:@"pointLightX"] setMidiSmoothing:0.9];
+        [[self addPropF:@"pointLightY"] setMidiSmoothing:0.9];
+        [[self addPropF:@"pointLightZ"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.8];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
+        
+        [self addPropF:@"darkLeft"];
+        [self addPropF:@"darkTop"];
+        [self addPropF:@"darkRight"];
+        [self addPropF:@"darkBottom"];
+        [self addPropF:@"darkIntensity"];
+
+        
         
         [[self addPropF:@"triangleLight"]setMinValue:0 maxValue:1];
         [[self addPropF:@"triangleMinLight"]setMinValue:0 maxValue:1];
@@ -39,11 +47,12 @@
         [self addPropF:@"fog"];
         
         [[self addPropF:@"pointLightTracking"] setMaxValue:0.02];
+        [[self addPropF:@"pointLightFixed"] setMaxValue:1.0];
         [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.9];
         
         [Prop(@"pointLightTemp") setMidiSmoothing:0.7];
-        [Prop(@"dirLightTemp") setMidiSmoothing:0.1];
+        [Prop(@"dirLightTemp") setMidiSmoothing:0.7];
     }
     return self;
 }
@@ -54,18 +63,26 @@
 }
 
 -(void)update:(NSDictionary *)drawingInformation{
+    CachePropF(pointLightFixed);
+    
+    ofVec3f p = ofVec3f(PropF(@"pointLightX"), PropF(@"pointLightY"), PropF(@"pointLightZ"));
+    pointLight = p * (pointLightFixed) + pointLight * (1-pointLightFixed);
+    
     CachePropF(pointLightTracking);
     if(PropB(@"pointLightTracking")){
         vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerFeetVector];
-        ofVec2f p = ofVec2f(PropF(@"pointLightX"), PropF(@"pointLightY"));
         if(centroids.size() > 0){
-            ofVec2f t = ofVec2f(centroids[0].x+ PropF(@"pointLightOffsetX"), centroids[0].y+ PropF(@"pointLightOffsetY"));
-            p = p * (1-pointLightTracking) + t * pointLightTracking;
+            ofVec3f t = ofVec3f(centroids[0].x+ PropF(@"pointLightOffsetX"), centroids[0].y+ PropF(@"pointLightOffsetY"), p.z);
+           /* p = p * (1-pointLightTracking) + t * pointLightTracking;
 
             [Prop(@"pointLightX") setFloatValue:p.x];
             [Prop(@"pointLightY") setFloatValue:p.y];
+         */   
+            pointLight = pointLight * (1-pointLightTracking) + t * pointLightTracking;
         }        
     }
+    
+
 }
 
 -(void)draw:(NSDictionary *)drawingInformation{
@@ -79,7 +96,7 @@
     light1Color[1] = colorTemp(PropI(@"dirLight2Temp"), PropF(@"dirLight2Intensity"));
 
     
-    ofVec3f light2 = ofVec3f(PropF(@"pointLightX"), PropF(@"pointLightY"), PropF(@"pointLightZ"));
+    ofVec3f light2 = pointLight;
     ofVec3f light2Color = colorTemp(PropI(@"pointLightTemp"), PropF(@"pointLightIntensity"));
     
     ofVec3f triangleLightVec = ofVec3f(PropF(@"dirLightX"), PropF(@"dirLightY"), PropF(@"dirLightZ")).normalized();
@@ -105,6 +122,11 @@
     
     float zScale = PropF(@"zScale");
     CachePropF(minLight);
+    CachePropF(darkLeft);
+    CachePropF(darkRight);
+    CachePropF(darkTop);
+    CachePropF(darkBottom);
+    CachePropF(darkIntensity);
     ApplyPerspective();{
         ofSetColor(0,255,0);
         //Depth test
@@ -156,6 +178,23 @@
                         color *= minLight;
                     }
                 }
+                
+                float s = 0.18;
+                if(darkLeft && mid.x < s){
+                    color *=  darkLeft*(1-(s - mid.x)/s) + (1-darkLeft);
+                }
+                if(darkRight && mid.x > 1-s){
+                    color *= darkRight*(1-(s - (1-mid.x))/s)+ (1-darkRight);
+                }
+                if(darkTop && mid.y < darkTop){
+                    color *= darkIntensity*(1-(darkTop - mid.y)/darkTop)+ (1-darkIntensity);
+                }
+                
+                float b = 0.37;
+                if(darkBottom && mid.y > 1-b){
+                    color *= darkBottom*(1-(b - (1-mid.y))/b)+ (1-darkBottom);
+                }
+                
                 glColor4f(color.x,color.y,color.z,1);
                 
                 if(!fit->data().hole){

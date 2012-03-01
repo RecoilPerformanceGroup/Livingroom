@@ -248,7 +248,7 @@
         [Prop(@"selectedArrangement") setIntValue:[object intValue]];
         [self loadArrangement:self];
     }
-    if(object == Prop(@"saveArrangement")){
+    if([self setupCalled] &&  object == Prop(@"saveArrangement")){
         [Prop(@"selectedArrangement") setIntValue:[object intValue]];
         [self saveArrangement:self];
     }

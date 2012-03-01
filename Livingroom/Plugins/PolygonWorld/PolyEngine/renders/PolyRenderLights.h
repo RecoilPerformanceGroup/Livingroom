@@ -9,6 +9,7 @@
 #import "PolyRender.h"
 
 @interface PolyRenderLights : PolyRender{
+    ofVec3f pointLight;
 }
 
 @end

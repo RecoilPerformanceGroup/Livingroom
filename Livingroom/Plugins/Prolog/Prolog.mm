@@ -35,7 +35,10 @@
         [[self addPropF:@"videoRotation"] setMinValue:-90 maxValue:90];
         
         [self addPropF:@"spotVideo"];
-        
+
+        [self addPropF:@"colorR"];
+        [self addPropF:@"colorG"];
+        [self addPropF:@"colorB"];
     }
     
     return self;
@@ -215,15 +218,30 @@
     //    ofVec2f s = [surface convertToProjection:p];
     ofVec2f s = p;
     ofFill();
-    ofSetColor(255,255,255);
+    ofSetColor(255*PropF(@"colorR"),255*PropF(@"colorG"),255*PropF(@"colorB"));
     
-    ofEllipse(s.x*0.5, s.y, size*0.5, 4.0/3.0);
+    ofEllipse(s.x*0.5, s.y, size*0.5, size*4.0/3.0);
     
     if(PropB(@"debug")){
         ofSetColor(255,255,0);
         ofCircle(top.x*0.5, top.y*4.0/3.0,0.01);
         ofCircle(bottom.x*0.5, bottom.y*4.0/3.0,0.01);
     }
+    
+    
+    ApplySurface(@"Floor");
+
+    ofFill();
+    ofSetColor(0,0,0,255);
+    ofRect(-1,-1,1,3);
+    ofRect(1,-1,1,3);
+    
+    ofRect(-1,-1,3,1);
+    ofRect(-1,1,3,1);
+
+    PopSurface();
+
+    
     
     CachePropF(triangleLine) 
     if(triangleLine > 0){

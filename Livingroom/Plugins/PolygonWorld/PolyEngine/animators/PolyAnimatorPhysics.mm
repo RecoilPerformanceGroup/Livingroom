@@ -18,6 +18,9 @@
 
 -(id)init{
     if(self = [super init]){
+        [[self addPropF:@"springLengthModifier"] setMinValue:-0.06 maxValue:0.06];
+
+        
         [[self addPropF:@"iterations"] setMinValue:1];
         [[self addPropF:@"forceIterations"] setMinValue:1];
         [[self addPropF:@"forceIterationsRatio"] setMinValue:0];
@@ -214,6 +217,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
         //Calculate the vertex to vertex spring force
         //
         float springStrength = PropF(@"springStrength");
+        CachePropF(springLengthModifier);
         if(springStrength > 0){
             [self addPhysicsBlock:@"StringForce" block:^(PolyArrangement *arrangement) {
                 
@@ -221,7 +225,7 @@ static void updateInitialAngle(Arrangement_2::Ccb_halfedge_circulator eit){
                     ofVec3f dir;
                     
                     float length = edgeLength(eit, &dir);
-                    float optimalLength = eit->data().crumbleOptimalLength;
+                    float optimalLength = eit->data().crumbleOptimalLength * (1+springLengthModifier);
                     
                     dir.normalize();
                     

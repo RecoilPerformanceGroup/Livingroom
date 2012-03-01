@@ -23,7 +23,7 @@
         [self addPropF:@"lineWidth"];
         [self addPropF:@"lineWidthMax"];
         
-        [self addPropF:@"cloudIntensity"];
+        [[self addPropF:@"cloudIntensity"] setMidiSmoothing:0.9];
         [[self addPropF:@"cloudSize"] setMaxValue:1.2];
         [self addPropF:@"cloudMask"];
         [self addPropF:@"cloudStart"];

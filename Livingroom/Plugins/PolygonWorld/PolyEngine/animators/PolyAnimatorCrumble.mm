@@ -26,8 +26,13 @@
         [self addPropF:@"decrumbleForce"];
         [[self addPropF:@"decrumbleForceRadius"] setMidiSmoothing:0.96];
         
-        [self addPropF:@"crumbleCenter"];
-        
+        [self addPropF:@"crumbleEdgeDistance"];
+        [self addPropF:@"crumbleEdgeFalloff"];
+        [self addPropF:@"crumbleEdgeStrength"];
+
+        [self addPropF:@"decrumbleCenterStrength"];
+
+
         
         [self addPropF:@"cutHole"];
         
@@ -80,53 +85,85 @@
     }
     
     
-    CachePropF(crumbleCenter);
-    if(crumbleCenter){
+    CachePropF(decrumbleCenterStrength);
+    
+    if(decrumbleCenterStrength){
+        [GetPhysics() addPhysicsBlock:@"CrumbleCenterDecrumble" block:^(PolyArrangement *arrangement) {                           
+            [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                //ofVec2f origP = point2ToVec2(vit->point());
+                ofVec2f p = handleToVec2(vit);
+                ofVec2f dir = ofVec2f(0.5,0.5) - p;
+                
+                float dist = p.distance(ofVec2f(0.5,0.5));
+                vit->data().springF -= decrumbleCenterStrength * dir*(dist);
+            }];
+        }]; 
+    }
+    
+    CachePropF(crumbleEdgeDistance);
+    CachePropF(crumbleEdgeFalloff);
+    CachePropF(crumbleEdgeStrength);
+    if(crumbleEdgeStrength){
         PolyAnimatorGravity* gravity = ((PolyAnimatorGravity*)GetModule(@"Gravity"));
         float midiInput = [[[gravity properties] valueForKey:@"midiInput"] floatValue]/2.5;
        // if(midiInput > lastMidiInput){
-            [GetPhysics() addPhysicsBlock:@"CrumbleCenterDecrumble" block:^(PolyArrangement *arrangement) {                           
-                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
-                    ofVec2f origP = point2ToVec2(vit->point());
-                    ofVec2f p = handleToVec2(vit);
-                    ofVec2f dir = origP - p;
+
+        
+
+        //  } else {
+        [GetPhysics() addPhysicsBlock:@"CrumbleEdgeStrength" block:^(PolyArrangement *arrangement) {           
+            {
+                [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {                           
+                    ofVec2f vertex = handleToVec2(vit);
+                    float edgeDistance1 = fabs(vertex.x);
+                    float edgeDistance2 = fabs(1-vertex.x);
+                    float edgeDistance3 = fabs(vertex.y);
+                    float edgeDistance4 = fabs(1-vertex.y);
                     
-                    float dist = p.distance(ofVec2f(0.5,0.5));
-                    if(dist < midiInput){
-                        vit->data().springF += crumbleCenter * dir*(midiInput-dist);
-                    }
-                }];
-            }];
-      //  } else {
-            ofVec2f p = ofVec2f(0.5,0.5);
-            [GetPhysics() addPhysicsBlock:@"CrumbleCenterCrumble" block:^(PolyArrangement *arrangement) {           
-                {
-                    [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {                           
-                        ofVec2f vertex = handleToVec2(vit);
-                        if(p.distance(vertex) > midiInput){
-                            ofVec2f vdir = p - vertex;
-                            
-                            float l = vdir.length();
-                            
-                            vdir.normalize();
-                            vdir *= l - midiInput;
-                            ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
-                            vit->data().springF += vdir*l*2.0;      
-                            
-                            //Force in z=0
-                            float zDiff = vit->data().pos.z;
-                            vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
-                        }
+                    float edgeDistance = edgeDistance1;
+                    if(edgeDistance2 < edgeDistance)
+                        edgeDistance = edgeDistance2;
+                    if(edgeDistance3 < edgeDistance)
+                        edgeDistance = edgeDistance3;
+                    if(edgeDistance4 < edgeDistance)
+                        edgeDistance = edgeDistance4;
+                    
+                    if(edgeDistance < crumbleEdgeDistance){
+                        ofVec2f p = handleToVec2(vit);
+                        ofVec2f dir = ofVec2f(0.5,0.5) - p;
+
+                        float f = (edgeDistance - crumbleEdgeDistance);
                         
-                    }];
-                }
-                //  cout<<_crumbleSum<<endl;
-                //            crumbleSum += _crumbleSum;
-            }];
-  //      }
+                        dir.normalize();
+                        dir *= f;
+                        ofVec3f v3 = ofVec3f(dir.x, dir.y, 0);
+                        vit->data().springF -= crumbleEdgeStrength*v3;      
+
+                    }
+                    
+                   /* if(p.distance(vertex) > midiInput){
+                        ofVec2f vdir = p - vertex;
+                        
+                        float l = vdir.length();
+                        
+                        vdir.normalize();
+                        vdir *= l - midiInput;
+                        ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
+                        vit->data().springF += vdir*l*2.0;      
+                        
+                        //Force in z=0
+                        float zDiff = vit->data().pos.z;
+                        vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
+                    }*/
+                    
+                }];
+            }
+            //  cout<<_crumbleSum<<endl;
+            //            crumbleSum += _crumbleSum;
+        }];
+        //      }
         lastMidiInput = midiInput;   
     }
-    
     
     
     CachePropF(crumbleForce);
