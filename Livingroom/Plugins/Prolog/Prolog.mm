@@ -15,7 +15,7 @@
         
         [[self addPropF:@"aspect"] setMaxValue:2];
         
-        [[self addPropF:@"triangleLine"]  setMidiSmoothing:0.99];
+        [[self addPropF:@"triangleLine"]  setMidiSmoothing:0.8];
         [self addPropF:@"triangleLineWidth"];
         [self addPropF:@"triangleProjector"];
         
@@ -53,7 +53,7 @@
     ofSetCircleResolution(200);
     
     moviePlayer = [[QTKitMovieRenderer alloc] init];
-    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mov" allowTexture:YES allowPixels:NO];
+    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mp4" allowTexture:YES allowPixels:NO];
     
     if(!loaded){
         NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
@@ -183,9 +183,6 @@
      //   circleSize = circleSize * (1-spotVideo) + spotVideo* (PropF(@"videoScale")*([moviePlayer movieSize].width - 24)/[moviePlayer movieSize].width);
        circleSize = videoAspect*(PropF(@"videoScale")*([moviePlayer movieSize].width - 24 )/[moviePlayer movieSize].width);
         
-       // cout<<circleSize<<endl;
-//        videoCenter.rotate(-PropF(@"videoRotation"), ofVec2f(0,0.5));
-  //      videoCenter = videoCenter + trianglePoint;
         ofVec2f v1 = ofVec2f(videoSpotCenter.x*PropF(@"videoScale"),videoSpotCenter.y*PropF(@"videoScale")).rotate(PropF(@"videoRotation"));;
         v1 *= ofVec2f(1,4.0/3.0);
                                                                                                                    
@@ -247,7 +244,7 @@
     if(triangleLine > 0){
         ApplySurfaceForProjector(@"Triangle",PropI(@"triangleProjector"));{
             glLineWidth(10.0*PropF(@"triangleLineWidth"));
-            ofSetColor(255,255,255);
+            ofSetColor(92,92,92);
             glBegin(GL_LINE_STRIP);
             glVertex2f(2,-1);
             glVertex2f((2.0-triangleLine*2),(triangleLine*2)-1);
@@ -263,8 +260,10 @@
         trianglePoint = [surface convertToProjection:trianglePoint];
         
         if(![moviePlayer rate]){
+           // [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [moviePlayer setRate:1.0];
             [moviePlayer setPosition:0];
+         //   }];
         }
         
         glPushMatrix();
@@ -274,10 +273,11 @@
         glRotated(PropF(@"videoRotation"),0,0,1);
         float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
         //   glTranslated(-[moviePlayer movieSize].width*PropF(@"videoScale")*0.5,0,0);        
-        [moviePlayer draw:NSMakeRect(-PropF(@"videoScale")*videoAspect*0.5,0,PropF(@"videoScale")*videoAspect,PropF(@"videoScale"))];
+        [moviePlayer draw:NSMakeRect(-PropF(@"videoScale")*videoAspect*0.51,0,PropF(@"videoScale")*videoAspect,PropF(@"videoScale"))];
         
         glPopMatrix();
     } else {
+        [moviePlayer setPosition:0];
         [moviePlayer setRate:0.0];
     }
 }

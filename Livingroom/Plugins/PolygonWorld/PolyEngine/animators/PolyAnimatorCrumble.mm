@@ -85,6 +85,13 @@
     }
     
     
+    PolyAnimatorGravity* gravity = ((PolyAnimatorGravity*)GetModule(@"Gravity"));
+    float midiInput = [[[gravity properties] valueForKey:@"midiInput"] floatValue]*[[[gravity properties] valueForKey:@"midiInputLevel"] floatValue];
+
+    if(midiInput > 0){
+        [Prop(@"crumbleEdgeStrength") setFloatValue:0.6*midiInput/2.0];
+    }
+    
     CachePropF(decrumbleCenterStrength);
     
     if(decrumbleCenterStrength){
@@ -100,6 +107,23 @@
         }]; 
     }
     
+    CachePropF(crumbleEdgeStrength);
+    
+    if(crumbleEdgeStrength){
+        [GetPhysics() addPhysicsBlock:@"CrumbleCenterCrumble" block:^(PolyArrangement *arrangement) {                           
+            [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                //ofVec2f origP = point2ToVec2(vit->point());
+                ofVec2f p = handleToVec2(vit);
+                ofVec2f dir = ofVec2f(0.5,0.5) - p;
+                
+                float dist = p.distance(ofVec2f(0.5,0.5));
+                vit->data().springF += crumbleEdgeStrength * dir*(dist);
+            }];
+        }]; 
+    }
+
+    
+    /*
     CachePropF(crumbleEdgeDistance);
     CachePropF(crumbleEdgeFalloff);
     CachePropF(crumbleEdgeStrength);
@@ -140,21 +164,7 @@
                         vit->data().springF -= crumbleEdgeStrength*v3;      
 
                     }
-                    
-                   /* if(p.distance(vertex) > midiInput){
-                        ofVec2f vdir = p - vertex;
-                        
-                        float l = vdir.length();
-                        
-                        vdir.normalize();
-                        vdir *= l - midiInput;
-                        ofVec3f v3 = ofVec3f(vdir.x, vdir.y, 0);
-                        vit->data().springF += vdir*l*2.0;      
-                        
-                        //Force in z=0
-                        float zDiff = vit->data().pos.z;
-                        vit->data().springF += ofVec3f(0,0,-zDiff *0.9);
-                    }*/
+
                     
                 }];
             }
@@ -164,7 +174,7 @@
         //      }
         lastMidiInput = midiInput;   
     }
-    
+    */
     
     CachePropF(crumbleForce);
     float mouseR = PropF(@"mouseRadius");

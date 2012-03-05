@@ -115,15 +115,16 @@ struct VectorSortY {
                     __block Arrangement_2::Halfedge_handle h;
                     
                     [[engine arrangement] enumerateHalfedges:^(Arrangement_2::Halfedge_iterator eit) {
-                        for(int t=0;t<v.size();t++){
-                            if(eit->data().crackAmount > 0 && ( v[t].distance(handleToVec2(eit->source())) > reverseDistance)){
+//                        for(int t=0;t<v.size();t++){
+                        ofVec2f frontStageCenter = ofVec2f(0.5,1);
+                            if(eit->data().crackAmount > 0 && ( frontStageCenter.distance(handleToVec2(eit->source())) > reverseDistance)){
                                 h = eit;
                                 dist = 1;
                                 h->data().crackAmount = 0;
                                 h->twin()->data().crackAmount = 0;
 
                             }                      
-                        }
+                      //  }
                     }];
                     
                     if(dist != -1){

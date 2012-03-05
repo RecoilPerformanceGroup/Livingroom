@@ -9,7 +9,7 @@
 #import "PolyAnimator.h"
 
 @interface PolyAnimatorGravity : PolyAnimator{
-    
+    vector<ofVec3f> gravityTrackerPoints;
 }
 
 @end

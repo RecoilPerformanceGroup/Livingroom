@@ -51,7 +51,7 @@
         [[self addPropF:@"pointLightOffsetX"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightOffsetY"] setMidiSmoothing:0.9];
         
-        [Prop(@"pointLightTemp") setMidiSmoothing:0.7];
+        [Prop(@"pointLightTemp") setMidiSmoothing:0.9];
         [Prop(@"dirLightTemp") setMidiSmoothing:0.7];
     }
     return self;
@@ -72,7 +72,16 @@
     if(PropB(@"pointLightTracking")){
         vector<ofVec2f> centroids = [GetPlugin(Tracker) trackerFeetVector];
         if(centroids.size() > 0){
-            ofVec3f t = ofVec3f(centroids[0].x+ PropF(@"pointLightOffsetX"), centroids[0].y+ PropF(@"pointLightOffsetY"), p.z);
+            //Find best foot
+            ofVec2f best = ofVec2f(-1,-1);
+            for(int i=0;i<centroids.size();i++){
+                if(best.x == -1 || centroids[i].y > best.y){
+                    best = centroids[i];
+                }
+            }
+            
+            
+            ofVec3f t = ofVec3f(best.x+ PropF(@"pointLightOffsetX"), best.y+ PropF(@"pointLightOffsetY"), p.z);
            /* p = p * (1-pointLightTracking) + t * pointLightTracking;
 
             [Prop(@"pointLightX") setFloatValue:p.x];
