@@ -50,8 +50,8 @@ struct VectorSortY {
 }
 
 -(void)setup{
-    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteon60" options:0 context:@"midi"];
-    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteoff60" options:0 context:@"midioff"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteon48" options:0 context:@"midi"];
+    [[[GetPlugin(Midi) midiData] objectAtIndex:15] addObserver:self forKeyPath:@"noteoff48" options:0 context:@"midioff"];
 }
 
 -(void)reset{
@@ -80,9 +80,9 @@ struct VectorSortY {
     if([(NSString*)context isEqualToString:@"midi"]){
         // cout<<"Impiulse "<<[[object valueForKey:@"noteon48"] intValue]<<endl;
         if(!PropF(@"reverse")){
-            impulse = [[object valueForKey:@"noteon60"] intValue];
+            impulse = [[object valueForKey:@"noteon48"] intValue];
         } else {
-            invimpulse = [[object valueForKey:@"noteon60"] intValue];
+            invimpulse = [[object valueForKey:@"noteon48"] intValue];
         }
     }
     //  if([(NSString*)context isEqualToString:@"midioff"]){

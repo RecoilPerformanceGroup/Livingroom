@@ -36,15 +36,12 @@
 
 -(void) reset{
     for(int i=0;i<NUM_GRADIENTS;i++){
-        gradients[i].x = ofRandom(0.1,0.9); //X
-        gradients[i].y = ofRandom(0.1,0.9); //Y
+        gradients[i].x = ofRandom(0.07,0.93); //X
+        gradients[i].y = ofRandom(0.07,0.93); //Y
         gradients[i].size = ofRandom(0.1, 0.2); //Size 
         gradients[i].intensity = ofRandom(0.1,0.5); //Intensity range
         gradients[i].val = 0; //Intensity
     }
-    
-    
-    
     
 }
 -(void)setup{

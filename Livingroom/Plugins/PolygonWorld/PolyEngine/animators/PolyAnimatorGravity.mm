@@ -53,6 +53,14 @@
         centroids.push_back(ofVec2f(0.5,0.5));
     }
     
+    for(int i=0;i<gravityTrackerPoints.size();i++){
+        if(tracker){
+        gravityTrackerPoints[i].z *= 0;        
+        } else {
+        gravityTrackerPoints[i].z *= 0.9;
+        }
+    }
+    
     for(int i=0;i<centroids.size();i++){
         if(centroids[i].x > 0){
             if(gravityTrackerPoints.size() <= i){
@@ -64,11 +72,7 @@
         
     }
     
-    for(int i=0;i<gravityTrackerPoints.size();i++){
-        gravityTrackerPoints[i].z *= 0.9;
-        
-    }
-    
+
     float f = PropF(@"trackerForce") + PropF(@"midiInput")*PropF(@"midiInputLevel");
     
     if(tracker && f > 0 && centroids.size() > 0){

@@ -27,7 +27,7 @@
         [[self addPropF:@"pointLightX"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightY"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightZ"] setMidiSmoothing:0.9];
-        [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.8];
+        [[self addPropF:@"pointLightIntensity"] setMidiSmoothing:0.9];
         [[self addPropF:@"pointLightTemp"]setMinValue:1000 maxValue:10000];
         
         [self addPropF:@"darkLeft"];

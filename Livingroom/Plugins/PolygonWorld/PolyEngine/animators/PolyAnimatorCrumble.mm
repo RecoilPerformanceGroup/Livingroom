@@ -23,7 +23,7 @@
         
         [self addPropF:@"crumbleForce"];
         [self addPropF:@"crumbleForce2"];
-        [self addPropF:@"decrumbleForce"];
+        [[self addPropF:@"decrumbleForce"] setMidiSmoothing:0.9];
         [[self addPropF:@"decrumbleForceRadius"] setMidiSmoothing:0.96];
         
         [self addPropF:@"crumbleEdgeDistance"];
