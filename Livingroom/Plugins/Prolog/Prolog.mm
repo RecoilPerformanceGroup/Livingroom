@@ -55,7 +55,7 @@
     ofSetCircleResolution(200);
     
     moviePlayer = [[QTKitMovieRenderer alloc] init];
-    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mov" allowTexture:YES allowPixels:NO];
+    BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mp4" allowTexture:YES allowPixels:NO];
     
     if(!loaded){
         NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
@@ -186,15 +186,16 @@
         
         float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
  
-        circleSize = videoAspect*(PropF(@"videoScale")*(537 )/[moviePlayer movieSize].width);
+        circleSize = videoAspect*(PropF(@"videoScale"));
 
         
         
-        ofVec2f videoSpotCenter = (ofVec2f(286 ,321) - ofVec2f(635,122)) / ofVec2f([moviePlayer movieSize].width , [moviePlayer movieSize].height);
+      //  ofVec2f videoSpotCenter = (ofVec2f(286 ,321) - ofVec2f(635,122)) / ofVec2f([moviePlayer movieSize].width , [moviePlayer movieSize].height);
+        ofVec2f videoSpotCenter = ofVec2f(0,0);
         
      //   circleSize = circleSize * (1-spotVideo) + spotVideo* (PropF(@"videoScale")*([moviePlayer movieSize].width - 24)/[moviePlayer movieSize].width);
         
-        ofVec2f v1 = ofVec2f(videoSpotCenter.x*PropF(@"videoScale")*videoAspect,videoSpotCenter.y*PropF(@"videoScale")).rotate(PropF(@"videoRotation"));;
+        ofVec2f v1 = ofVec2f(videoSpotCenter.x*PropF(@"videoScale")*videoAspect+videoOffsetX,videoSpotCenter.y*PropF(@"videoScale")+videoOffsetY).rotate(PropF(@"videoRotation"));;
         v1 *= ofVec2f(1,4.0/3.0);
                                                                                                                    
         ofVec2f videoCenter = trianglePoint + v1;
@@ -251,7 +252,9 @@
 
     
     
-
+    CachePropF(videoOffsetX);
+    CachePropF(videoOffsetY);
+    
     
     CachePropF(video);
     if(video){
@@ -272,10 +275,10 @@
         glScaled(0.5,4.0/3.,1);         glRotated(PropF(@"videoRotation"),0,0,1);
         float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
         //   glTranslated(-[moviePlayer movieSize].width*PropF(@"videoScale")*0.5,0,0); 
-        glTranslated(-PropF(@"videoScale")*videoAspect*635.0/[moviePlayer movieSize].width,
-                     -PropF(@"videoScale")*122/[moviePlayer movieSize].height, 0);
+        glTranslated(-PropF(@"videoScale")*videoAspect*0.5,
+                     -PropF(@"videoScale")*0.5, 0);
         glColor4f(PropF(@"colorR"),PropF(@"colorG"),PropF(@"colorB"), video);
-        [moviePlayer draw:NSMakeRect(0,0,PropF(@"videoScale")*videoAspect,PropF(@"videoScale"))];
+        [moviePlayer draw:NSMakeRect(+videoOffsetX,+videoOffsetY,PropF(@"videoScale")*videoAspect,PropF(@"videoScale"))];
         
         glPopMatrix();
     } else {

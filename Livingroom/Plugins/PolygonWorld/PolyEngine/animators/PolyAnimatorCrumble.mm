@@ -33,6 +33,8 @@
         [self addPropF:@"decrumbleCenterStrength"];
 
 
+        [self addPropF:@"crumbleCheat"];
+
         
         [self addPropF:@"cutHole"];
         
@@ -288,7 +290,22 @@
     }
     
     // cout<<crumbleSum<<endl;
+    CachePropF(crumbleCheat);
     
+    if(crumbleCheat){
+        [GetPhysics() addPhysicsBlock:@"crumbleCheat" block:^(PolyArrangement *arrangement) {
+            [arrangement enumerateVertices:^(Arrangement_2::Vertex_iterator vit, BOOL * stop) {
+                ofVec2f origP = point2ToVec2(vit->point());
+                ofVec2f p = handleToVec2(vit);
+                ofVec2f dir = ofVec2f(0,1) - p;
+                
+                float dist = p.distance(ofVec2f(0,1));
+                if(dist < crumbleCheat*2 && p.y > 0.4){
+                    vit->data().springF -= 10*dir*(crumbleCheat*2-dist);
+                }
+            }];
+        }];
+    }
     
     
     CachePropF(decrumbleForce);

@@ -50,6 +50,7 @@
 		3D97F4CA14D2F50D00981D15 /* particles.vs in Resources */ = {isa = PBXBuildFile; fileRef = 3D97F4C614D2F49400981D15 /* particles.vs */; };
 		3D97F4DA14D2F9B300981D15 /* ofxShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D97F4D814D2F9B300981D15 /* ofxShader.cpp */; };
 		3D9A105414D6E2C50050C8E2 /* perlin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D9A105214D6E2C50050C8E2 /* perlin.cpp */; };
+		3D9C8399150916AF007C53E2 /* Skærmbillede 2012-03-08 kl. 17.30.18.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D9C8398150916AF007C53E2 /* Skærmbillede 2012-03-08 kl. 17.30.18.png */; };
 		3D9D181B14BDF03D00DD2093 /* 6943.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181A14BDF03D00DD2093 /* 6943.jpg */; };
 		3D9D181E14BDF11A00DD2093 /* ash50x50.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */; };
 		3D9D182014BDF53900DD2093 /* ash8x8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D181F14BDF53900DD2093 /* ash8x8.jpg */; };
@@ -161,6 +162,7 @@
 		3D97F4D914D2F9B300981D15 /* ofxShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxShader.h; sourceTree = "<group>"; };
 		3D9A105214D6E2C50050C8E2 /* perlin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = perlin.cpp; sourceTree = "<group>"; };
 		3D9A105314D6E2C50050C8E2 /* perlin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = perlin.h; sourceTree = "<group>"; };
+		3D9C8398150916AF007C53E2 /* Skærmbillede 2012-03-08 kl. 17.30.18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Skærmbillede 2012-03-08 kl. 17.30.18.png"; sourceTree = "<group>"; };
 		3D9D181A14BDF03D00DD2093 /* 6943.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6943.jpg; sourceTree = "<group>"; };
 		3D9D181D14BDF11A00DD2093 /* ash50x50.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash50x50.jpg; sourceTree = "<group>"; };
 		3D9D181F14BDF53900DD2093 /* ash8x8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ash8x8.jpg; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				3D386C8C145F012200665327 /* Project.xcconfig */,
+				3D9C8398150916AF007C53E2 /* Skærmbillede 2012-03-08 kl. 17.30.18.png */,
 				3D2FC2381462FE3E0028BC01 /* Plugins */,
 				3D9D181914BDF03D00DD2093 /* Resources */,
 				3D386C6A145EF95C00665327 /* Livingroom */,
@@ -640,6 +643,7 @@
 				3D6A9FD614DBF6C600AFC7D6 /* LEDGrid.xib in Resources */,
 				3D6A9FD814DBFBE000AFC7D6 /* chess.jpg in Resources */,
 				3D6A9FDC14DC312D00AFC7D6 /* icon.icns in Resources */,
+				3D9C8399150916AF007C53E2 /* Skærmbillede 2012-03-08 kl. 17.30.18.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
