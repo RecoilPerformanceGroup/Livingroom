@@ -53,15 +53,15 @@
 -(void)setup{
     [Prop(@"video") setFloatValue:0];
     ofSetCircleResolution(200);
-    
-    moviePlayer = [[QTKitMovieRenderer alloc] init];
+//    
+    /*moviePlayer = [[QTKitMovieRenderer alloc] init];
     BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mp4" allowTexture:YES allowPixels:NO];
     
     if(!loaded){
         NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
     }
     
-    [moviePlayer setLoops:NO];
+    [moviePlayer setLoops:NO];*/
 }
 
 //
@@ -171,7 +171,10 @@
     CachePropF(videoOffsetX);
     CachePropF(videoOffsetY);
     
-    if(spotVideo && [moviePlayer movieSize].width > 0){
+    int movieWidth = 616;
+    int movieHeight = 616;
+    
+    if(spotVideo && movieWidth > 0){
         ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
         trianglePoint = [surface convertToProjection:trianglePoint];
 //
@@ -184,7 +187,7 @@
 
 
         
-        float videoAspect = [moviePlayer movieSize].width / [moviePlayer movieSize].height;
+        float videoAspect = movieWidth / movieHeight;
  
         circleSize = videoAspect*(PropF(@"videoScale"));
 
@@ -258,6 +261,18 @@
     
     CachePropF(video);
     if(video){
+        if(moviePlayer == nil){
+            
+            moviePlayer = [[QTKitMovieRenderer alloc] init];
+            BOOL loaded = [moviePlayer loadMovie:@"~/Movies/Shadow/export/Prolog.mp4" allowTexture:YES allowPixels:NO];
+            
+            if(!loaded){
+                NSLog(@"Kunne ikke loade prolog video %@!!!!!!!!!!", [moviePlayer path]);
+            }
+            
+            [moviePlayer setLoops:NO];
+        }
+        
         ofEnableAlphaBlending();
         ofVec2f trianglePoint = [GetPlugin(Mask) triangleFloorCoordinate:0];
         trianglePoint = [surface convertToProjection:trianglePoint];
@@ -282,8 +297,9 @@
         
         glPopMatrix();
     } else {
-        [moviePlayer setPosition:0];
-        [moviePlayer setRate:0.0];
+        if( moviePlayer != nil){
+            moviePlayer = nil;
+        }
     }
     
     
