@@ -17,5 +17,7 @@
 -(vector<ofVec2f>) trackerFeetVector;
 
 -(ofxCvGrayscaleImage) trackerImageWithResolution:(int)res;
+-(ofxCvGrayscaleImage)trackerFeetCirclesWithResolution:(int)res circleDiameter:(float)radius;
+-(ofxCvGrayscaleImage)trackerLinesWithResolution:(int)res extend:(float)extension;
 
 @end

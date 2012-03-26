@@ -360,7 +360,75 @@
     return v;
 }
 
+-(ofxCvGrayscaleImage)trackerFeetCirclesWithResolution:(int)res circleDiameter:(float)radius{
+    ofxCvGrayscaleImage ret;
+    ret.allocate(res,res);
+    ret.set(0);
+    
+    CameraCalibrationObject * calib = [[GetPlugin(BlobTracker2d) getInstance:0] calibrator];
+    
+    ofPoint src[4];
+    ofPoint dst[4];
+    
+    
+    for(int i=0;i<4;i++){
+        src[i] = [calib camHandle:i]*ofVec2f([[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->width, [[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->height);   
+        dst[i] = [calib projHandle:i] * ofVec2f(res,res);   
+    }
+    
+    //ret.warpIntoMe(*[[GetPlugin(BlobTracker2d) getInstance:0] grayDiff], src, dst);
+    
+    vector<ofVec2f> trackerFeetVector = [self trackerFeetVector];
+    
+    for(int i=0;i<trackerFeetVector.size();i++){
 
+        CvPoint cp = cvPoint(trackerFeetVector[i].x*res, trackerFeetVector[i].y*res);
+        cvCircle(ret.getCvImage(), cp, roundf(radius*res), cvScalar(255), CV_FILLED);
+
+    }
+    
+    ret.flagImageChanged();
+    
+    
+    return ret;
+}
+
+-(ofxCvGrayscaleImage)trackerLinesWithResolution:(int)res extend:(float)extension{
+    ofxCvGrayscaleImage ret;
+    ret.allocate(res,res);
+    ret.set(0);
+    
+    CameraCalibrationObject * calib = [[GetPlugin(BlobTracker2d) getInstance:0] calibrator];
+    
+    ofPoint src[4];
+    ofPoint dst[4];
+    
+    
+    for(int i=0;i<4;i++){
+        src[i] = [calib camHandle:i]*ofVec2f([[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->width, [[GetPlugin(BlobTracker2d) getInstance:0] grayDiff]->height);   
+        dst[i] = [calib projHandle:i] * ofVec2f(res,res);   
+    }
+    
+    //ret.warpIntoMe(*[[GetPlugin(BlobTracker2d) getInstance:0] grayDiff], src, dst);
+    
+    vector<ofVec2f> trackerFeetVector = [self trackerFeetVector];
+
+    int nPoints = trackerFeetVector.size();
+
+    CvPoint _cp[nPoints];
+    
+    for(int i=0;i<trackerFeetVector.size();i++){
+    _cp[i] = cvPoint(trackerFeetVector[i].x*res, trackerFeetVector[i].y*res);
+    }
+
+    CvPoint* cp = _cp;    
+
+    cvPolyLine(ret.getCvImage(), &cp, &nPoints, 1, 0, cvScalar(255),roundf(res*extension));
+    
+    ret.flagImageChanged();
+    
+    return ret;
+}
 
 
 -(ofxCvGrayscaleImage)trackerImageWithResolution:(int)res{

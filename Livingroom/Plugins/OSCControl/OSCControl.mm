@@ -33,8 +33,9 @@
     }
     {    
         ofxOscMessage m;
-        m.setAddress( "/control/pushDestination" );    
-        m.addStringArg( "recoil.local:9090" );
+        m.setAddress( "/control/pushDestination" ); 
+        NSString *theName = [[NSHost currentHost] name];
+        m.addStringArg( [[theName stringByAppendingString:@":9090"] cString] );
         sender->sendMessage( m );
     }
 }

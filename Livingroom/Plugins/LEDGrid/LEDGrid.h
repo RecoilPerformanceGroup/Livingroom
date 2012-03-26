@@ -26,10 +26,13 @@ struct gradientVals {
     
     ofxCvFloatImage cvImage;
     ofxCvFloatImage trackerFloat;
+    ofxCvFloatImage circlesFloat;
+    ofxCvFloatImage linesFloat;
     ofxCvGrayscaleImage mask;
 
     ofxCvFloatImage cloudImage;
     ofxCvFloatImage tmpImage;
+    ofxCvFloatImage invertedImage;
 
     gradientVals * gradients;
     int numGradients;

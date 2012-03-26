@@ -1,17 +1,18 @@
 #import "LEDGrid.h"
 #import "Tracker.h"
+#import "colorramp.h"
 #import <ofxCocoaPlugins/OpenDMX.h>
 
 @implementation LEDGrid
 
 -(void)initPlugin{
     [self addPropF:@"fillAdd"];    
-    [self addPropF:@"fillAddMax"];    
+    [[self addPropF:@"fillAddMax"]setMinValue:0  maxValue:2];    
     [[self addPropF:@"fillSet"] setMidiSmoothing:0.7];    
-    [self addPropF:@"fade"];
+    [[self addPropF:@"fade"]setMidiSmoothing:0.95];
     [self addPropF:@"tracker"];
     
-    [[self addPropF:@"blur"] setMaxValue:20];
+    [[self addPropF:@"blur"] setMaxValue:40];
     [self addPropB:@"sendWhite"];
     [self addPropB:@"reset"];
     
@@ -23,6 +24,20 @@
     [self addPropF:@"clouds"];
     
     [self addPropF:@"maskTop"];
+    
+    [[self addPropF:@"trackerCircleAlpha"]setMidiSmoothing:0.95];
+    [[self addPropF:@"trackerCircleSize"]setMidiSmoothing:0.95];
+
+    [[self addPropF:@"trackerLinesAlpha"]setMidiSmoothing:0.95];
+    [self addPropF:@"trackerLinesSize"];
+        
+    [[self addPropF:@"lightPresenceTemp"]setMinValue:1000 maxValue:10000];
+    [[self addPropF:@"lightPresenceIntensity"] setMidiSmoothing:0.95];
+    [[self addPropF:@"lightEmptyTemp"]setMinValue:1000 maxValue:10000];
+    [[self addPropF:@"lightEmptyIntensity"]setMidiSmoothing:0.95];
+
+    [[self addPropF:@"invert"]setMidiSmoothing:0.95];
+
     
     numGradients = 0;
 }
@@ -59,12 +74,15 @@
     cvImage.set(0);
     
     trackerFloat.allocate(GRID,GRID);
+    circlesFloat.allocate(GRID,GRID);
+    linesFloat.allocate(GRID,GRID);
     
     mask.allocate(GRID,GRID);    
     
     cloudImage.allocate(GRID,GRID);
     tmpImage.allocate(GRID,GRID);
-    
+    invertedImage.allocate(GRID,GRID);
+
     NSBundle *framework=[NSBundle bundleForClass:[self class]];
     NSString * path = [framework pathForResource:@"chess" ofType:@"jpg"];
     chessImage = new ofImage();
@@ -95,14 +113,32 @@
     cvImage += PropF(@"fillAdd");
     cvImage -= PropF(@"fade");
     
+    // tracker silhouettes
+    
     ofxCvGrayscaleImage tracker = [GetPlugin(Tracker) trackerImageWithResolution:GRID];
     trackerFloat.set(0);
     trackerFloat = tracker;
     
     trackerFloat *= PropF(@"tracker");
     cvImage += trackerFloat;
+
+    // tracker feet circles
     
+    ofxCvGrayscaleImage circles = [GetPlugin(Tracker) trackerFeetCirclesWithResolution:GRID circleDiameter:PropF(@"trackerCircleSize")];
+    circlesFloat.set(0);
+    circlesFloat = circles;
     
+    circlesFloat *= PropF(@"trackerCircleAlpha");
+    cvImage += circlesFloat;
+
+    // tracker lines
+    
+    ofxCvGrayscaleImage lines = [GetPlugin(Tracker) trackerLinesWithResolution:GRID extend:PropF(@"trackerLinesSize")];
+    linesFloat.set(0);
+    linesFloat = lines;
+    
+    linesFloat *= PropF(@"trackerLinesAlpha");
+    cvImage += linesFloat;
     
     
     
@@ -114,8 +150,6 @@
             CachePropF(rectDrawA);
             CachePropF(rectDrawSize);
             
-            
-         //   tmpImage.set(0);
             int nPoints = 4;
             CvPoint _cp[4] = {
                 {rectDrawX*GRID-rectDrawSize*GRID*0.5,rectDrawY*GRID-rectDrawSize*GRID*0.5}, 
@@ -125,9 +159,7 @@
             
             CvPoint* cp = _cp; 
             cvFillPoly(cvImage.getCvImage(), &cp, &nPoints, 1, cvScalar(rectDrawA));
-            
-         //   cvImage += tmpImage;
-            
+                        
         }
     }
     
@@ -147,9 +179,7 @@
                 gradientVals gradient = gradients[i];
                 
                 if(gradient.val > 0){
-                    
-                    //  
-                    
+                                        
                     int nPoints = 4;
                     CvPoint _cp[4] = {
                         {gradient.x*GRID-0.8*gradient.size*GRID*0.5,gradient.y*GRID-0.8*gradient.size*GRID*0.5}, 
@@ -167,15 +197,25 @@
         }
     }
     
+    
     cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), PropF(@"fillAddMax"), 255, CV_THRESH_TRUNC);
 	cvThreshold(cvImage.getCvImage(), cvImage.getCvImage(), 0, 255, CV_THRESH_TOZERO);
     cvImage.flagImageChanged();
     
     if(PropF(@"blur"))
         cvImage.blur(PropF(@"blur"));
-   
     
+    invertedImage = cvImage;
     
+    if(PropF(@"invert")){
+        tmpImage.set(1.0);
+        tmpImage -= cvImage;
+        tmpImage *= PropF(@"invert");
+        invertedImage*= 1.0-PropF(@"invert");
+        invertedImage+= tmpImage;
+    }
+    
+
     //Mask top
     {
         CachePropF(maskTop);
@@ -198,7 +238,13 @@
     
     
     OpenDMX * dmx = GetPlugin(OpenDMX);
-    CachePropB(sendWhite);
+    CachePropF(lightPresenceTemp);
+    CachePropF(lightPresenceIntensity);
+    CachePropF(lightEmptyTemp);
+    CachePropF(lightEmptyIntensity);
+    
+    ofVec3f color;
+
     for(int i=0;i<NUM_LAMPS;i++){
         mask.set(0);
         int nPoints = 4;
@@ -214,27 +260,37 @@
         
         // cvImage = mask;
         
-        lamps[i].color[3] = cvMean(cvImage.getCvImage(),mask.getCvImage());
+        float brightness = cvMean(invertedImage.getCvImage(),mask.getCvImage());
+       
+        /**
         
-        if(sendWhite){
-            [dmx setValue:lamps[i].color[0]*255.0 forChannel:1+lamps[i].channel+0];
-            [dmx setValue:lamps[i].color[1]*255.0 forChannel:1+lamps[i].channel+1];
-            [dmx setValue:lamps[i].color[2]*255.0 forChannel:1+lamps[i].channel+2];
-        }
+        color = colorTemp(
+                          lightEmptyTemp + ((lightPresenceTemp-lightEmptyTemp)*brightness),
+                          lightEmptyIntensity + ((lightPresenceIntensity-lightEmptyIntensity)*brightness)
+                          );
+
+        **/
+        
+        color = colorTemp(lightEmptyTemp, lightEmptyIntensity) +
+        colorTemp(lightPresenceTemp, lightPresenceIntensity*brightness);
+        
+        lamps[i].color[0] = fminf(1.0,color[0]);
+        lamps[i].color[1] = fminf(1.0,color[1]);
+        lamps[i].color[2] = fminf(1.0,color[2]);
+        
+        lamps[i].color[3] = 1.0;
+        
+            [dmx setValue:lamps[i].color[0]*255.0 
+               forChannel:1+lamps[i].channel+0];
+            [dmx setValue:lamps[i].color[1]*255.0 
+               forChannel:1+lamps[i].channel+1];
+            [dmx setValue:lamps[i].color[2]*255.0 
+               forChannel:1+lamps[i].channel+2];
+
         [dmx setValue:lamps[i].color[3]*lamps[i].maxDim forChannel:1+lamps[i].channel+3];
         
     }
     
-    
-    
-    
-    
-    
-    /*
-     //  cvImage.setROI(0, 0, 50, 50);
-     
-     
-     */
 }
 
 //
@@ -265,7 +321,7 @@
     
     
     ofFill();
-    cvImage.draw(0,0,w,h);
+    invertedImage.draw(0,0,w,h);
     
     ofSetColor(50,50,50,150);
     ofRect(0,0,w,h);
@@ -281,8 +337,6 @@
         ofSetColor(0,0,0);
         ofRect(lamps[i].pos.x * w+5, lamps[i].pos.y * h + 5, 20, 20);
         ofSetLineWidth(1.0);
-        
-        
         
     }
 }
