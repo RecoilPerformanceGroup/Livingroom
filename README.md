@@ -7,7 +7,7 @@ The software continues the evolotion of our framework ofxCocoaPlugins, a midi an
 
 Here's a trailer:
 
-[![ScreenShot](http://ole.kristensen.name/images/ext/livingroom-vimeo.png)](https://vimeo.com/37093149)
+[![ScreenShot](http://ole.kristensen.name/images/ext/livingroom-vimeo.png)](https://vimeo.com/37093149?autoplay=1)
 
 
 
